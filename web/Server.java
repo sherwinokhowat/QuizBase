@@ -3,6 +3,9 @@ package web;
 import manager.QuizManager;
 import manager.UserManager;
 
+import java.util.ArrayList;
+import java.net.ServerSocket;
+
 public class Server {
 
     private UserManager userManager;
@@ -10,6 +13,8 @@ public class Server {
     private QuizManager quizManager;
 
     private ServerSocket serverSocket;// server socket for connection
+
+    private ArrayList<Thread> threadList;
 
     private static boolean running = true;  // controls if the server is accepting clients
     private static boolean accepting = true;
@@ -25,9 +30,13 @@ public class Server {
         quizManager = new QuizManager(dbName);
         userManager.connectToDatabase();
         quizManager.connectToDatabase();
+        /*
         System.out.println("Waiting for a client connection..");
 
+
         Socket client = null;//hold the client connection
+
+
 
         try {
             serverSocket = new ServerSocket(5000);  //assigns an port to the server
@@ -38,9 +47,10 @@ public class Server {
                 //Note: you might want to keep references to all clients if you plan to broadcast messages
                 //Also: Queues are good tools to buffer incoming/outgoing messages
                 Thread t = new Thread(new ConnectionHandler(client)); //create a thread for the new client and pass in the socket
+                threadList.add(t);
                 t.start(); //start the new thread
             }
-        }catch(Exception e) {
+        }catch(Exception e) { // what are the exceptions here???
             System.out.println("Error accepting connection");
             try {
                 client.close();
@@ -49,6 +59,6 @@ public class Server {
             }
             System.exit(-1);
         }
-
+        */
     }
 }
