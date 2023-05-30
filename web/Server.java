@@ -18,5 +18,7 @@ public class Server {
     public void start(int port, String dbName) {
         userManager = new UserManager(dbName);
         quizManager = new QuizManager(dbName);
+        userManager.connectToDatabase();
+        quizManager.connectToDatabase();
     }
 }
