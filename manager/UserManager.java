@@ -3,13 +3,13 @@ package manager;
 import utility.Pair;
 
 /**
- * A class that manages {@code Quiz} objects
+ * A class that manages {@code User} objects
  *
  * @author Ricky Qin
  */
-public class QuizManager extends DatabaseManager {
+public class UserManager extends DatabaseManager {
 
-    public QuizManager(String dbName) {
+    public UserManager(String dbName) {
         super(dbName);
         //TODO Auto-generated constructor stub
     }

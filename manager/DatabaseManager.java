@@ -13,17 +13,17 @@ import utility.Pair;
  */
 public abstract class DatabaseManager {
 
-    protected String name = null;
+    protected String dbName = null;
 
     protected Connection connection = null;
 
     /**
      * Constructs a DatabaseManager object
      *
-     * @param name The name of database to manage (must include {@code .db} file extension)
+     * @param dbName The name of database to manage (must include {@code .db} file extension)
      */
-    public DatabaseManager(String name) {
-        this.name = name;
+    public DatabaseManager(String dbName) {
+        this.dbName = dbName;
     }
 
     /**
@@ -33,7 +33,7 @@ public abstract class DatabaseManager {
      */
     public boolean connectToDatabase() {
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:"+name);
+            connection = DriverManager.getConnection("jdbc:sqlite:"+dbName);
             System.out.println("Connected to Database");
             return true;
         } catch(SQLException e) {
@@ -65,7 +65,7 @@ public abstract class DatabaseManager {
      *
      * @param table The table where the obj is located
      * @param id The id of the object to modify
-     * @param args The fields within the object to modify
+     * @param args The fields within the object to modify. Each first value in the pair is the name of the field and the second value is the new value.
      * @return {@code true} if the operation was successful
      */
     public abstract boolean writeToDatabase(String table, String id, Pair<String, Object>... args);
