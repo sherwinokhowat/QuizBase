@@ -1,3 +1,4 @@
 # Ignore temporary files, files that store data
 *.db
 *.class
+sources.txt

@@ -23,6 +23,8 @@ public class Server {
     public void start(int port, String dbName) {
         userManager = new UserManager(dbName);
         quizManager = new QuizManager(dbName);
+        userManager.connectToDatabase();
+        quizManager.connectToDatabase();
         System.out.println("Waiting for a client connection..");
 
         Socket client = null;//hold the client connection
@@ -47,5 +49,6 @@ public class Server {
             }
             System.exit(-1);
         }
+
     }
 }

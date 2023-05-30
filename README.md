@@ -1,8 +1,10 @@
 # QuizBase
 
-To start, run the following commands on the command line:
+For Windows, run the following commands on the command line:
 
 ```
-javac Main.java
-java -cp ".;sqlite-jdbc-3.21.0.jar" Main
+dir src /b /s *.java > sources.txt
+javac -d ./out/ @sources.txt
+cd out
+java -cp ".;../sqlite-jdbc-3.21.0.jar" Main
 ```
