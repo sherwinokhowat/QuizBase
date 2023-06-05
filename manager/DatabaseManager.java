@@ -2,7 +2,10 @@ package manager;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 import utility.Pair;
 
@@ -43,39 +46,61 @@ public abstract class DatabaseManager {
     }
 
     /**
-     * Inserts the specified object into the database
+     * Runs a SQL statement that is one of {@code CREATE TABLE}, {@code DROP TABLE},
+     * {@code INSERT INTO}, {@code UPDATE} or {@code DELETE FROM}
      *
-     * @param table The table to add the object to
-     * @param obj The obj to add
+     * @param statement The SQL statement
      * @return {@code true} if the operation was successful
      */
-    public abstract boolean insertToDatabase(String table, Object obj);
+    public boolean executeWriteOperation(String statement) {
+        Statement transaction = null;
+        try {
+            transaction = connection.createStatement();
+            transaction.executeUpdate(statement);
+            transaction.close();
+            return true;
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     /**
-     * Selects the specified object into the database
+     * An internal method that Runs a SQL {@code SELECT} statement and retrieves the returned
+     * ResultSet.
      *
-     * @param table The table to select the object from
-     * @param id The id of the object to retrieve
-     * @return The selected object or {@code null} if it was not found
+     * @param statement The SQL statement
+     * @return A Pair object storing two values:
+     * <ul>
+     *  <li>A ResultSet representing the results of the
+     * execution.</li>
+     *  <li>The Transaction object.</li>
+     * </ul>
+     * {@code null} is returned if an exception occurred.
      */
-    public abstract Object selectFromDatabase(String table, String id);
+    protected Pair<ResultSet, Statement> getReadOperationResultSet(String statement) {
+        Statement transaction = null;
+        try {
+            transaction = connection.createStatement();
+            return new Pair<>(transaction.executeQuery(statement), transaction);
+            // transaction.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     /**
-     * Writes (modifies) the specified object in the database
+     * Runs a SQL {@code SELECT} statement. Implementing classes must ensure that
+     * <ul>
+     *  <li>{@code .getReadOperationResultSet(String statement)} is called</li>
+     *  <li>This method correct parses the ResultSet into the appropriate class object</li>
+     *  <li>At the end of this method, {@code Transaction.close()} is called on the
+     * Transaction object</li>
+     * </ul>
      *
-     * @param table The table where the obj is located
-     * @param id The id of the object to modify
-     * @param args The fields within the object to modify. Each first value in the pair is the name of the field and the second value is the new value.
-     * @return {@code true} if the operation was successful
+     * @param statement The SQL statement
+     * @return An array of objects or {@code null} if an exception occurred.
      */
-    public abstract boolean writeToDatabase(String table, String id, Pair<String, Object>... args);
-
-    /**
-     * Writes (modifies) the specified object in the database
-     *
-     * @param table The table where the obj is located
-     * @param id The id of the object to remove
-     * @return {@code true} if the operation was successful
-     */
-    public abstract boolean deleteFromDatabase(String table, String id);
+    public abstract ArrayList<? extends Object> executeReadOperation(String statement);
 }

@@ -36,6 +36,15 @@ public class SQLStatementBuilder {
     public SQLStatementBuilder() {}
 
     /**
+     * Gets the type of SQL Statement.
+     *
+     * @return The type
+     */
+    public int getType() {
+        return type;
+    }
+
+    /**
      * Appends the {@code INSERT TO} clause to this statement
      *
      * @param table The table to insert the new row
@@ -44,6 +53,9 @@ public class SQLStatementBuilder {
      * @return This SQL statement
      */
     public SQLStatementBuilder insertInto(String table, String... cols) {
+        if(type != -1) {
+            throw new SQLStatementBuilderException("Starting clause already exists");
+        }
         type = INSERT_INTO;
         insertInto = new Pair<>(table, cols);
         return this;
@@ -69,6 +81,9 @@ public class SQLStatementBuilder {
      * @return This SQL statement
      */
     public SQLStatementBuilder select(String... cols) {
+        if(type != -1) {
+            throw new SQLStatementBuilderException("Starting clause already exists");
+        }
         type = SELECT;
         select = cols;
         return this;
@@ -128,6 +143,9 @@ public class SQLStatementBuilder {
      * @return This SQL statement
      */
     public SQLStatementBuilder update(String table) {
+        if(type != -1) {
+            throw new SQLStatementBuilderException("Starting clause already exists");
+        }
         type = UPDATE;
         update = table;
         return this;
@@ -152,6 +170,9 @@ public class SQLStatementBuilder {
      * @return This SQL statement
      */
     public SQLStatementBuilder deleteFrom(String table) {
+        if(type != -1) {
+            throw new SQLStatementBuilderException("Starting clause already exists");
+        }
         type = DELETE_FROM;
         deleteFrom = table;
         return this;
