@@ -22,9 +22,13 @@ public class User {
      * Default constructor for a user
      *
      * @param username the user's username
+     * @param manager the user manager
+     * @param id the unique id
      */
-    public User(String username) {
-        throw new UnsupportedOperationException("Unimplemented constructor 'User'");
+    public User(String username, UserManager manager, int id) {
+        this.username = username;
+        this.id = id;
+        this.manager = manager;
     }
 
      // ------------------------ Functionality Methods ----------------------------
