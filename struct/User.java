@@ -1,10 +1,8 @@
 package struct;
 
 import java.util.Set;
-
-import manager.UserManager;
-
 import java.util.HashSet;
+import manager.UserManager;
 import manager.UserManager;
 
 /**
@@ -96,9 +94,9 @@ public class User {
     /**
      * Retrieves the liked quizzes from the database
      *
-     * @return whether the retrieval was successful or not
+     * @return the liked quizzes
      */
-    private boolean getLikedQuizzesFromDB() {
+    private HashSet<Quiz> getLikedQuizzesFromDB() {
         throw new UnsupportedOperationException("Unimplemented constructor 'getLikedQuizzesFromDB'");
     }
 
