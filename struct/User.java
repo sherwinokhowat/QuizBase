@@ -5,6 +5,7 @@ import java.util.Set;
 import manager.UserManager;
 
 import java.util.HashSet;
+import manager.UserManager;
 
 /**
  * A class that represents a User object in the program
