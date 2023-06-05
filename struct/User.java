@@ -1,10 +1,8 @@
 package struct;
 
 import java.util.Set;
-
-import manager.UserManager;
-
 import java.util.HashSet;
+import manager.UserManager;
 import manager.UserManager;
 
 /**
@@ -16,15 +14,18 @@ public class User {
     private String username;
     private int id;
     private UserManager manager;
-    private Set<Quiz> likedQuizzes;
 
     /**
      * Default constructor for a user
      *
      * @param username the user's username
+     * @param manager the user manager
+     * @param id the unique id
      */
-    public User(String username) {
-        throw new UnsupportedOperationException("Unimplemented constructor 'User'");
+    public User(String username, UserManager manager, int id) {
+        this.username = username;
+        this.id = id;
+        this.manager = manager;
     }
 
      // ------------------------ Functionality Methods ----------------------------
@@ -48,6 +49,15 @@ public class User {
     }
 
      // ------------------------ Setter Methods ----------------------------
+    
+    /**
+    * Setter for the id
+    *
+    * @param id the id
+    */
+    public void setID(int id) {
+        this.id = id;
+    }
 
     /**
      * Sets the username to a new username
@@ -68,18 +78,7 @@ public class User {
     public String getUsername() {
         return this.username;
     }
-
-    /**
-     * Getter for the collection of liked quizzes
-     *
-     * @return the collection of liked quizzes
-     */
-    public Set<Quiz> getLikedQuizzes() {
-        return this.likedQuizzes;
-    }
-
-    // ------------------------ Database Methods ----------------------------
-
+    
     /**
     * Getter for the id
     *
@@ -89,21 +88,15 @@ public class User {
         return this.id;
     }
 
-    /**
-    * Setter for the id
-    *
-    * @param id the id
-    */
-    public void setID(int id) {
-        this.id = id;
-    }
 
+    // ------------------------ Database Methods ----------------------------
+    
     /**
      * Retrieves the liked quizzes from the database
      *
-     * @return whether the retrieval was successful or not
+     * @return the liked quizzes
      */
-    private boolean getLikedQuizzesFromDB() {
+    private HashSet<Quiz> getLikedQuizzesFromDB() {
         throw new UnsupportedOperationException("Unimplemented constructor 'getLikedQuizzesFromDB'");
     }
 
