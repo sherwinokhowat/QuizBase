@@ -10,6 +10,7 @@ import java.util.HashSet;
  */
 public class User {
     private String username;
+    private int id;
     private UserManager manager;
     private Set<Quiz> likedQuizzes;
 
@@ -74,6 +75,24 @@ public class User {
     }
 
     // ------------------------ Database Methods ----------------------------
+    
+    /**
+    * Getter for the id 
+    *
+    * @return the id
+    */
+    public int getID() {
+        return this.id;
+    }
+    
+    /**
+    * Setter for the id 
+    *
+    * @param id the id
+    */
+    public void setID(int id) {
+        this.id = id;
+    }
 
     /**
      * Retrieves the liked quizzes from the database
