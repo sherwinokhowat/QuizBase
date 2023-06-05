@@ -92,6 +92,15 @@ public class User {
 
 
     // ------------------------ Database Methods ----------------------------
+    
+    /**
+     * Retrieves the liked quizzes from the database
+     *
+     * @return whether the retrieval was successful or not
+     */
+    private boolean getLikedQuizzesFromDB() {
+        throw new UnsupportedOperationException("Unimplemented constructor 'getLikedQuizzesFromDB'");
+    }
 
 
 }
