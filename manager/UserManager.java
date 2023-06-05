@@ -1,5 +1,12 @@
 package manager;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import struct.User;
+
 import utility.Pair;
 
 /**
@@ -15,27 +22,22 @@ public class UserManager extends DatabaseManager {
     }
 
     @Override
-    public boolean insertToDatabase(String table, Object obj) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'insertToDatabase'");
-    }
-
-    @Override
-    public Object selectFromDatabase(String table, String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'selectFromDatabase'");
-    }
-
-    @Override
-    public boolean writeToDatabase(String table, String id, Pair<String, Object>... args) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'writeToDatabase'");
-    }
-
-    @Override
-    public boolean deleteFromDatabase(String table, String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteFromDatabase'");
+    public ArrayList<? extends Object> executeReadOperation(String statement) {
+        Pair<ResultSet, Statement> result = getReadOperationResultSet(statement);
+        try {
+            ResultSet rs = result.first();
+            ArrayList<User> list = new ArrayList<User>();
+            while(rs.next()) {
+                int id = rs.getInt("id");
+                String username = rs.getString("username");
+                list.add(new User(username));
+            }
+            result.second().close();
+            return list;
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

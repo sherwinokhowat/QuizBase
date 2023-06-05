@@ -2,3 +2,4 @@
 *.db
 *.class
 sources.txt
+*.DS_Store

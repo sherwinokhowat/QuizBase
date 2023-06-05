@@ -1,11 +1,14 @@
 package struct;
 
 import java.util.Set;
+
+import manager.UserManager;
+
 import java.util.HashSet;
 
 /**
  * A class that represents a User object in the program
- * 
+ *
  * @author Sherwin Okhowat
  */
 public class User {
@@ -16,7 +19,7 @@ public class User {
 
     /**
      * Default constructor for a user
-     * 
+     *
      * @param username the user's username
      */
     public User(String username) {
@@ -27,7 +30,7 @@ public class User {
 
     /**
      * Method to add a quiz to liked quizzes collection
-     * 
+     *
      * @param quiz the quiz to add
      */
     public void addLikedQuiz(Quiz quiz) {
@@ -36,7 +39,7 @@ public class User {
 
     /**
      * Method to remove a quiz from the liked quizzes collection
-     * 
+     *
      * @param quiz the quiz to remove
      */
     public void removeLikedQuiz(Quiz quiz) {
@@ -47,7 +50,7 @@ public class User {
 
     /**
      * Sets the username to a new username
-     * 
+     *
      * @param username the new username
      */
     public void setUsername(String username) {
@@ -58,7 +61,7 @@ public class User {
 
     /**
      * Returns the username
-     * 
+     *
      * @return the username
      */
     public String getUsername() {
@@ -67,7 +70,7 @@ public class User {
 
     /**
      * Getter for the collection of liked quizzes
-     * 
+     *
      * @return the collection of liked quizzes
      */
     public Set<Quiz> getLikedQuizzes() {
@@ -75,18 +78,18 @@ public class User {
     }
 
     // ------------------------ Database Methods ----------------------------
-    
+
     /**
-    * Getter for the id 
+    * Getter for the id
     *
     * @return the id
     */
     public int getID() {
         return this.id;
     }
-    
+
     /**
-    * Setter for the id 
+    * Setter for the id
     *
     * @param id the id
     */
@@ -96,7 +99,7 @@ public class User {
 
     /**
      * Retrieves the liked quizzes from the database
-     * 
+     *
      * @return whether the retrieval was successful or not
      */
     private boolean getLikedQuizzesFromDB() {
