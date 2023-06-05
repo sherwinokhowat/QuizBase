@@ -16,7 +16,6 @@ public class User {
     private String username;
     private int id;
     private UserManager manager;
-    private Set<Quiz> likedQuizzes;
 
     /**
      * Default constructor for a user
@@ -52,6 +51,15 @@ public class User {
     }
 
      // ------------------------ Setter Methods ----------------------------
+    
+    /**
+    * Setter for the id
+    *
+    * @param id the id
+    */
+    public void setID(int id) {
+        this.id = id;
+    }
 
     /**
      * Sets the username to a new username
@@ -72,18 +80,7 @@ public class User {
     public String getUsername() {
         return this.username;
     }
-
-    /**
-     * Getter for the collection of liked quizzes
-     *
-     * @return the collection of liked quizzes
-     */
-    public Set<Quiz> getLikedQuizzes() {
-        return this.likedQuizzes;
-    }
-
-    // ------------------------ Database Methods ----------------------------
-
+    
     /**
     * Getter for the id
     *
@@ -93,23 +90,8 @@ public class User {
         return this.id;
     }
 
-    /**
-    * Setter for the id
-    *
-    * @param id the id
-    */
-    public void setID(int id) {
-        this.id = id;
-    }
 
-    /**
-     * Retrieves the liked quizzes from the database
-     *
-     * @return whether the retrieval was successful or not
-     */
-    private boolean getLikedQuizzesFromDB() {
-        throw new UnsupportedOperationException("Unimplemented constructor 'getLikedQuizzesFromDB'");
-    }
+    // ------------------------ Database Methods ----------------------------
 
 
 }
