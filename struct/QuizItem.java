@@ -21,7 +21,7 @@ public abstract class QuizItem implements Comparable<QuizItem>, WebComponent {
      */
     public void increaseFrequency() {
         this.frequency++;
-        this.frequency*=1.1;
+        this.frequency*=0.9;
     }
     
     /**
