@@ -1,8 +1,8 @@
 package struct;
 
 import java.util.Set;
+import java.util.ArrayList;
 import java.util.HashSet;
-import manager.UserManager;
 import manager.UserManager;
 
 /**
@@ -36,7 +36,7 @@ public class User {
      * @param quiz the quiz to add
      */
     public void addLikedQuiz(Quiz quiz) {
-        this.likedQuizzes.add(quiz);
+        throw new UnsupportedOperationException("Unimplemented method 'addLikedQuiz'");
     }
 
     /**
@@ -45,7 +45,7 @@ public class User {
      * @param quiz the quiz to remove
      */
     public void removeLikedQuiz(Quiz quiz) {
-        this.likedQuizzes.remove(quiz);
+        throw new UnsupportedOperationException("Unimplemented method 'removeLikedQuiz'");
     }
 
      // ------------------------ Setter Methods ----------------------------
@@ -96,8 +96,12 @@ public class User {
      *
      * @return the liked quizzes
      */
-    private HashSet<Quiz> getLikedQuizzesFromDB() {
-        throw new UnsupportedOperationException("Unimplemented constructor 'getLikedQuizzesFromDB'");
+    public HashSet<Quiz> getLikedQuizzesFromDB() {
+        throw new UnsupportedOperationException("Unimplemented method 'getLikedQuizzesFromDB'");
+    }
+
+    public ArrayList<Quiz> getCreatedQuizzesFromDB() {
+        throw new UnsupportedOperationException("Unimplemented method 'getCreatedQuizzesFromDB'");
     }
 
 
