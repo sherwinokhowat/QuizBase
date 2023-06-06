@@ -5,26 +5,26 @@ import manager.QuizManager;
 
 public class Quiz {
     private PriorityQueue<QuizItem> quizItems;
+    private int likes = -1;
+    private int id;
     private String name;
     private String description;
-    private int id;
-    private int likes;
     private User creator;
     private QuizManager manager;
 
     /**
      * Constructor for a quiz
-     * 
+     *
      * @param manager the quiz manager for this quiz
      */
-    public Quiz(QuizManager manager) {
+    public Quiz(int id, String name, String description, int creatorId, QuizManager manager) {
         this.manager = manager;
         // unimplemented
     }
 
     /**
      * Returns the number of likes associated with this quiz
-     * 
+     *
      * @return the number of likes
      */
     public int getLikes() {
@@ -33,7 +33,7 @@ public class Quiz {
 
     /**
      * Method for adding a like to a quiz
-     * 
+     *
      * @param user the user liking the quiz
      */
     public void addLike(User user) {
@@ -43,7 +43,7 @@ public class Quiz {
 
     /**
      * Returns the name of the quiz
-     * 
+     *
      * @return the name of the quiz
      */
     public String getName() {
@@ -52,7 +52,7 @@ public class Quiz {
 
     /**
      * Sets the name of the quiz to a new name
-     * 
+     *
      * @param name the new name of the quiz
      */
     public void setName(String name) {
@@ -61,7 +61,7 @@ public class Quiz {
 
     /**
      * Returns the description of the quiz
-     * 
+     *
      * @return the description of the quiz
      */
     public String getDescription() {
@@ -70,7 +70,7 @@ public class Quiz {
 
     /**
      * Sets the description of the quiz
-     * 
+     *
      * @param description the new description of the quiz
      */
     public void setDescription(String description) {
@@ -79,7 +79,7 @@ public class Quiz {
 
     /**
      * Returns the id of the quiz
-     * 
+     *
      * @return the unique id of the quiz
      */
     public int getID() {
@@ -88,7 +88,7 @@ public class Quiz {
 
     /**
      * Sets the id of the quiz
-     * 
+     *
      * @param id the id of the quiz
      */
     public void setID(int id) {
@@ -97,7 +97,7 @@ public class Quiz {
 
     /**
      * Returns the creator of the quiz
-     * 
+     *
      * @return the creator of the quiz
      */
     public User getCreator() {
@@ -106,7 +106,7 @@ public class Quiz {
 
     /**
      * Adds a quiz item to the quiz
-     * 
+     *
      * @param item the item to be added to the quiz
      */
      public void addItem(QuizItem item) {
@@ -121,6 +121,6 @@ public class Quiz {
       */
      public void removeItem(QuizItem item) {
          this.quizItems.remove(item);
-     }     
-    
+     }
+
 }

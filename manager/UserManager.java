@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import struct.User;
 
@@ -16,6 +17,25 @@ import utility.SQLStatementBuilder;
  * @author Ricky Qin
  */
 public class UserManager extends DatabaseManager {
+
+    private HashMap<Integer, User> cache;
+
+    @Override
+    public Object getById(int id) {
+        User cacheResult = cache.get(id);
+        if(cacheResult != null) {
+            return cacheResult;
+        }
+        ArrayList<? extends Object> dbResult = executeReadOperation(new SQLStatementBuilder()
+                .select().from("USERS").where("ID="+id).toString());
+        if(dbResult.size() == 1) {
+            User user = (User)(dbResult.get(1));
+            cache.put(user.getID(), user);
+            return user;
+        } else {
+            return null;
+        }
+    }
 
     /**
      * Constructs a UserManager class for the specified database
@@ -36,7 +56,10 @@ public class UserManager extends DatabaseManager {
             while(rs.next()) {
                 int id = rs.getInt("ID");
                 String username = rs.getString("USERNAME");
-                list.add(new User(id, username, this));
+
+                User user = new User(id, username, this);
+                cache.put(id, user);
+                list.add(user);
             }
             result.second().close();
             return list;

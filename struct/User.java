@@ -49,7 +49,7 @@ public class User {
     }
 
      // ------------------------ Setter Methods ----------------------------
-    
+
     /**
     * Setter for the id
     *
@@ -78,7 +78,7 @@ public class User {
     public String getUsername() {
         return this.username;
     }
-    
+
     /**
     * Getter for the id
     *
@@ -90,7 +90,7 @@ public class User {
 
 
     // ------------------------ Database Methods ----------------------------
-    
+
     /**
      * Retrieves the liked quizzes from the database
      *
