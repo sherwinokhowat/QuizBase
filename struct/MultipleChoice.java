@@ -95,14 +95,4 @@ public class MultipleChoice extends QuizItem {
         throw new UnsupportedOperationException("Unimplemented method 'toHTMLString'");
     }
 
-    /**
-     * Returns the number of bytes
-     * 
-     * @return the number of bytes
-     */
-    @Override
-    public int getLength() {
-        return this.toHTMLString().length();
-    }
-
 }

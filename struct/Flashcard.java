@@ -68,13 +68,4 @@ public class Flashcard extends QuizItem {
     public String toHTMLString() {
         throw new UnsupportedOperationException("Unimplemented method 'toHTMLString'");
     }
-
-    /**
-     * Returns the number of bytes
-     * 
-     * @return the number of bytes
-     */
-    public int getLength() {
-        throw new UnsupportedOperationException("Unimplemented method 'getLength'");
-    }
 }

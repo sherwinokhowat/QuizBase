@@ -76,4 +76,15 @@ public abstract class QuizItem implements Comparable<QuizItem>, WebComponent {
         return 0;
     }
 
+    /**
+     * Returns the number of bytes
+     * 
+     * @return the number of bytes
+     */
+    @Override
+    public int getLength() {
+        return this.toHTMLString().length();
+    }
+
+    public abstract String toHTMLString();
 }
