@@ -8,9 +8,9 @@ package struct;
  */
 public abstract class QuizItem implements Comparable<QuizItem>, WebComponent {
     private int id;
-    private int frequency;
+    private double frequency;
 
-    public QuizItem(int id, int frequency) {
+    public QuizItem(int id, double frequency) {
         this.id = id;
         this.frequency = frequency;
     }
@@ -21,6 +21,16 @@ public abstract class QuizItem implements Comparable<QuizItem>, WebComponent {
      */
     public void increaseFrequency() {
         this.frequency++;
+        this.frequency*=1.1;
+    }
+    
+    /**
+     * Decreasing the frequency of this quiz item. If the user gets this quiz item
+     * right, it will decrease the frequency in which this quiz item appears
+     */
+    public void decreaseFrequency() {
+        this.frequency--;
+        this.frequency*=0.9;
     }
 
     /**
@@ -46,7 +56,7 @@ public abstract class QuizItem implements Comparable<QuizItem>, WebComponent {
      * 
      * @return this quiz item's frequency
      */
-    public int getFrequency() {
+    public double getFrequency() {
         return this.frequency;
     }
 
