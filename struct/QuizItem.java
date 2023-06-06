@@ -6,7 +6,7 @@ package struct;
  * 
  * @author Sherwin Okhowat
  */
-public abstract class QuizItem implements Comparable<QuizItem> {
+public abstract class QuizItem implements Comparable<QuizItem>, WebComponent {
     private int id;
     private int frequency;
 
