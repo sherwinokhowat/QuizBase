@@ -18,7 +18,7 @@ public class Flashcard extends QuizItem {
      * @param question the question this flashcard bears
      * @param answer the answer this flashcard bears
      */
-    public Flashcard(int id, int frequency, String question, String answer) {
+    public Flashcard(int id, double frequency, String question, String answer) {
         super(id, frequency);
         this.question = question;
         this.answer = answer;
