@@ -4,6 +4,14 @@ public class Flashcard extends QuizItem {
     private String question;
     private String answer;
 
+    /**
+     * Constructor for a flashcard
+     * 
+     * @param id the flashcard's id
+     * @param frequency the frequency in which this flashcard should appear
+     * @param question the question this flashcard bears
+     * @param answer the answer this flashcard bears
+     */
     public Flashcard(int id, int frequency, String question, String answer) {
         super(id, frequency);
         this.question = question;
