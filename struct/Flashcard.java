@@ -45,4 +45,22 @@ public class Flashcard extends QuizItem {
     public void setAnswer(String answer) {
         this.answer = answer;
     }
+
+    /**
+     * Converts the component to an HTML string
+     * 
+     * @return the HTML string representation of the component
+     */
+    public String toHTMLString() {
+        throw new UnsupportedOperationException("Unimplemented method 'toHTMLString'");
+    }
+
+    /**
+     * Returns the number of bytes
+     * 
+     * @return the number of bytes
+     */
+    public int getLength() {
+        throw new UnsupportedOperationException("Unimplemented method 'getLength'");
+    }
 }
