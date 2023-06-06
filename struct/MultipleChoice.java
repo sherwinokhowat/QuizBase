@@ -102,7 +102,7 @@ public class MultipleChoice extends QuizItem {
      */
     @Override
     public int getLength() {
-        throw new UnsupportedOperationException("Unimplemented method 'getLength'");
+        return this.toHTMLString().length();
     }
 
 }
