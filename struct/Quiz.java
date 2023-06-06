@@ -12,6 +12,11 @@ public class Quiz {
     private User creator;
     private QuizManager manager;
 
+    /**
+     * Constructor for a quiz
+     * 
+     * @param manager the quiz manager for this quiz
+     */
     public Quiz(QuizManager manager) {
         this.manager = manager;
         // unimplemented
