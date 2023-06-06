@@ -30,6 +30,15 @@ public abstract class DatabaseManager {
     }
 
     /**
+     * Retrieves the object with the specified id. If it exists in the cache, that reference is returned.
+     * If it does not exist in the cache, it fetches the database for the object and returns the result.
+     *
+     * @param id The object id
+     * @return The found object or {@null} if it does not exist in the database
+     */
+    public abstract Object getById(int id);
+
+    /**
      * Attempts to connect to the database with the name {@code name}.
      *
      * @return {@code true} if connection is successful and {@code false} if an {@code SQLException} occurs
@@ -83,7 +92,6 @@ public abstract class DatabaseManager {
         try {
             transaction = connection.createStatement();
             return new Pair<>(transaction.executeQuery(statement), transaction);
-            // transaction.close();
         } catch(SQLException e) {
             e.printStackTrace();
             return null;
@@ -97,6 +105,8 @@ public abstract class DatabaseManager {
      *  <li>This method correct parses the ResultSet into the appropriate class object</li>
      *  <li>At the end of this method, {@code Transaction.close()} is called on the
      * Transaction object</li>
+     * <li>A caching mechanism is used to ensure that there is one instance of each object.
+     * Objects retrieved from the database should be stored in the cache</li>
      * </ul>
      *
      * @param statement The SQL statement
