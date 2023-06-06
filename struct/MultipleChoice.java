@@ -2,8 +2,8 @@ package struct;
 
 /**
  * This class represents a multiple choice quiz item, which holds four possible
- * answers and the index of the correct answer. It also has web component
- * methods since this is a quiz item
+ * answers and the index of the correct answer. Contains web component
+ * methods since this is a quiz item.
  * 
  * @author Sherwin Okhowat
  */

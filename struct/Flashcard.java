@@ -1,5 +1,11 @@
 package struct;
 
+/**
+ * This class represents a flashcard quiz item. Contains a question and respective answer. Contains web component
+ * methods since this is a quiz item.
+ * 
+ * @author Sherwin Okhowat
+ */
 public class Flashcard extends QuizItem {
     private String question;
     private String answer;
