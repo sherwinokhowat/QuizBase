@@ -1,5 +1,11 @@
 package struct;
 
+/**
+ * Abstract class for an item in a quiz. Contains a unique id, and the frequency
+ * in which this quiz item should appear.
+ * 
+ * @author Sherwin Okhowat
+ */
 public abstract class QuizItem implements Comparable<QuizItem> {
     private int id;
     private int frequency;
