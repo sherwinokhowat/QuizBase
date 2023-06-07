@@ -124,4 +124,10 @@ public class Quiz implements WebComponent {
          this.quizItems.remove(item);
      }
 
+    @Override
+    public String toHTMLString() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
