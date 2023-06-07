@@ -116,11 +116,24 @@ public class UserManager extends DatabaseManager {
         }
     }
 
+    /**
+     * Changes the user's respective username in the database and placeholder user
+     * object after authenticating the user
+     * 
+     * @param username    the user's current username
+     * @param newUsername the user's requested username change
+     * @param password    the user's current password
+     * @return
+     */
     public boolean changeUsername(String username, String newUsername, String password) {
         User user = authenticateUser(username, password);
         if (user != null) {
-            user.setUsername(username);
-            return true;
+            boolean isSuccessful = executeWriteOperation(new SQLStatementBuilder().update("USERS")
+                    .set(new Pair<String, String>("USERNAME", newUsername)).where("USERNAME=" + username).toString());
+            if (isSuccessful) {
+                user.setUsername(newUsername);
+                return true;
+            }
         }
         return false;
     }
@@ -129,7 +142,7 @@ public class UserManager extends DatabaseManager {
      * Changes the user's respective password in the database after authenticating
      * the user
      * 
-     * @param username    the user's username
+     * @param username    the user's current username
      * @param password    the user's current password
      * @param newPassword the user's requested password change
      * @return whether or not the password change was successful
