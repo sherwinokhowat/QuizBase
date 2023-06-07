@@ -2,6 +2,7 @@ package struct;
 
 import java.util.PriorityQueue;
 import manager.QuizManager;
+import web.WebComponent;
 
 public class Quiz {
     private PriorityQueue<QuizItem> quizItems;
