@@ -14,7 +14,7 @@ import utility.SQLStatementBuilder;
 /**
  * A class that manages {@code User} objects
  *
- * @author Ricky Qin
+ * @author Ricky Qin, Sherwin Okhowat, and Avery Chan
  */
 public class UserManager extends DatabaseManager {
 
