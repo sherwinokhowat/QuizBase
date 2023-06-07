@@ -73,6 +73,10 @@ public class MultipleChoice extends QuizItem {
      */
     @Override
     public String toHTMLString() {
+        // add <form> tag and <submit button> tags!
+        // add <form> tag and <submit button> tags!
+        // add <form> tag and <submit button> tags!
+
         StringBuilder html = new StringBuilder("<div class='multipleChoice'>");
         html.append("<p>" + this.question + ("?".equals(this.question.substring(this.question.length()-1)) ? "": "?") + "</p>");
         html.append("div class = 'answerOptions'>"); 
