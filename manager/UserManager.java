@@ -132,8 +132,8 @@ public class UserManager extends DatabaseManager {
                     .set(new Pair<String, String>("USERNAME", newUsername)).where("USERNAME=" + username).toString());
             if (isSuccessful) {
                 user.setUsername(newUsername);
-                return true;
             }
+            return isSuccessful;
         }
         return false;
     }
