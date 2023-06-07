@@ -139,14 +139,29 @@ public class Server {
             if(request.get(0).startsWith("GET")) {
                 String[] firstLine = request.get(0).split(" ");
                 // resource path is stored in firstLine[1]
-                System.out.println(firstLine[1]);
+                String path = firstLine[1];
+                System.out.println(path);
 
-                String content = "content goes here";
+                if(path.equals("/favicon.ico")) {
+                    output.println("404 Not Found");
+                    output.flush();
+                    return;
+                }
+                StringBuilder content = new StringBuilder();
+                content.append("<html>");
+                content.append("<head>");
+                content.append("</head>");
+                content.append("<body>");
+                content.append(new Hyperlink("/login/", "Log in").toHTMLString());
+                content.append("</body>");
+                content.append("</html>");
+
+
                 output.println("HTTP/1.1 200 OK");
                 output.println("Content-Type: text/html");
                 output.println("Content-Length: " + content.length());
                 output.println();
-                output.println(content);
+                output.println(content.toString());
                 output.flush();
             }
         }

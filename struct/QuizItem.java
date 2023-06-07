@@ -1,9 +1,11 @@
 package struct;
 
+import web.WebComponent;
+
 /**
  * Abstract class for an item in a quiz. Contains a unique id, and the frequency
  * in which this quiz item should appear.
- * 
+ *
  * @author Sherwin Okhowat
  */
 public abstract class QuizItem implements Comparable<QuizItem>, WebComponent {
@@ -23,7 +25,7 @@ public abstract class QuizItem implements Comparable<QuizItem>, WebComponent {
         this.frequency++;
         this.frequency*=0.9;
     }
-    
+
     /**
      * Decreasing the frequency of this quiz item. If the user gets this quiz item
      * right, it will decrease the frequency in which this quiz item appears
@@ -35,7 +37,7 @@ public abstract class QuizItem implements Comparable<QuizItem>, WebComponent {
 
     /**
      * Returns the quiz item's id
-     * 
+     *
      * @return the id of this quiz item
      */
     public int getId() {
@@ -44,7 +46,7 @@ public abstract class QuizItem implements Comparable<QuizItem>, WebComponent {
 
     /**
      * Sets the quiz item's id
-     * 
+     *
      * @param id the quiz item's id
      */
     public void setId(int id) {
@@ -53,7 +55,7 @@ public abstract class QuizItem implements Comparable<QuizItem>, WebComponent {
 
     /**
      * Returns this quiz item's frequency
-     * 
+     *
      * @return this quiz item's frequency
      */
     public double getFrequency() {
@@ -62,7 +64,7 @@ public abstract class QuizItem implements Comparable<QuizItem>, WebComponent {
 
     /**
      * Method that defines the compare method as one which compares the frequencies
-     * 
+     *
      * @param other the other quiz item being compared
      * @return the order
      */
@@ -76,15 +78,6 @@ public abstract class QuizItem implements Comparable<QuizItem>, WebComponent {
         return 0;
     }
 
-    /**
-     * Returns the number of bytes
-     * 
-     * @return the number of bytes
-     */
     @Override
-    public int getLength() {
-        return this.toHTMLString().length();
-    }
-
     public abstract String toHTMLString();
 }
