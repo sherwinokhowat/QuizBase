@@ -22,9 +22,9 @@ public class User {
      * @param manager the user manager
      * @param id the unique id
      */
-    public User(String username, UserManager manager, int id) {
-        this.username = username;
+    public User(int id, String username, UserManager manager) {
         this.id = id;
+        this.username = username;
         this.manager = manager;
     }
 
@@ -49,7 +49,7 @@ public class User {
     }
 
      // ------------------------ Setter Methods ----------------------------
-    
+
     /**
     * Setter for the id
     *
@@ -78,7 +78,7 @@ public class User {
     public String getUsername() {
         return this.username;
     }
-    
+
     /**
     * Getter for the id
     *
@@ -90,7 +90,7 @@ public class User {
 
 
     // ------------------------ Database Methods ----------------------------
-    
+
     /**
      * Retrieves the liked quizzes from the database
      *

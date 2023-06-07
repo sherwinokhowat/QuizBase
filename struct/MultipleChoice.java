@@ -3,7 +3,7 @@ package struct;
 /**
  * This class represents a multiple choice quiz item, which holds four possible
  * answers and the index of the correct answer. Contains web component
- * methods since this is a quiz item.
+ * methods since this is a quiz item. Answer options index begins at 0 index.
  * 
  * @author Sherwin Okhowat
  */
@@ -85,16 +85,6 @@ public class MultipleChoice extends QuizItem {
         html.append("</div>"); 
 
         throw new UnsupportedOperationException("Unimplemented method 'toHTMLString'");
-    }
-
-    /**
-     * Returns the number of bytes
-     * 
-     * @return the number of bytes
-     */
-    @Override
-    public int getLength() {
-        throw new UnsupportedOperationException("Unimplemented method 'getLength'");
     }
 
 }
