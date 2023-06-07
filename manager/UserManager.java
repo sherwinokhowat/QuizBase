@@ -82,28 +82,18 @@ public class UserManager extends DatabaseManager {
      * */
     public boolean registerUser (String username, String password) {
         String valueList = "(" + username + ", "+ password + ")";
-        try {
-            return executeWriteOperation(new SQLStatementBuilder().insertInto("USERS", "(USERNAME, PASSWORD)").values(valueList).toString());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return executeWriteOperation(new SQLStatementBuilder().insertInto("USERS", "(USERNAME, PASSWORD)").values(valueList).toString());
     }
 
     public boolean deleteUser (User user) {
-        try {
-            return executeWriteOperation(new SQLStatementBuilder().deleteFrom("USERS").where("USERNAME="+user.getUsername()).toString());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return executeWriteOperation(new SQLStatementBuilder().deleteFrom("USERS").where("USERNAME="+user.getUsername()).toString());
     }
 
     public User login (String username, String password) {
         ArrayList<? extends Object> dbResult = executeReadOperation(new SQLStatementBuilder()
                 .select().from("USERS").where("USERNAME="+username+" AND PASSWORD="+password).toString()); // SELECT FROM USERS WHERE USERNAME = 123 AND PASSWORD = 123
         if(dbResult.size() == 1) {
-            User user = (User)(dbeRsult.get(1));
+            User user = (User)(dbResult.get(1));
             cache.put(user.getID(), user);
             return user;
         } else {
@@ -112,7 +102,7 @@ public class UserManager extends DatabaseManager {
     }
 
     public boolean changeUsername (String username, String newUsername, String password) {
-        
+
         return false;
     }
 
