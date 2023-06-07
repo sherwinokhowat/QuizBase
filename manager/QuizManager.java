@@ -46,6 +46,7 @@ public class QuizManager extends DatabaseManager {
         }
     }
 
+    @Override
     public ArrayList<? extends Object> executeReadOperation(String statement) {
         Pair<ResultSet, Statement> result = getReadOperationResultSet(statement);
         try {
