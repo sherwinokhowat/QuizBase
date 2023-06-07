@@ -4,7 +4,7 @@ import java.util.PriorityQueue;
 import manager.QuizManager;
 import web.WebComponent;
 
-public class Quiz {
+public class Quiz implements WebComponent {
     private PriorityQueue<QuizItem> quizItems;
     private int likes = -1;
     private int id;
