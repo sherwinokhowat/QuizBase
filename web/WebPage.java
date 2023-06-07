@@ -3,7 +3,6 @@ package web;
 /**
  * 
  * 
- * @author Sherwin Okhowat and Ricky Qin
  */
 public class WebPage implements WebComponent {
 
