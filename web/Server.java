@@ -213,27 +213,17 @@ public class Server {
                 // resource path is stored in firstLine[1]
                 String path = request.getFileName();
 
-                if(path.equals("/favicon.ico")) {
-                    output.println("HTTP/1.1 404 Not Found");
-                    output.flush();
-                    return;
-                }
-
                 StringBuilder content = new StringBuilder();
 
                 if(path.equals("/")) {// homepage
-                    content.append("<html>");
-                    content.append("<head>");
-                    content.append("</head>");
-                    content.append("<body>");
-                    content.append(new Hyperlink("/login/", "Log in").toHTMLString());
-                    content.append(new Hyperlink("/signup/", "Sign up").toHTMLString());
-                    content.append("</body>");
-                    content.append("</html>");
-                } else if(path.equals("/login/")) {// login page
+                    WebPage webPage = new WebPage().appendBodyComponents(
+                        new Hyperlink("/login", "Log in"),
+                        new Hyperlink("/signup", "Sign up"));
+                    content.append(webPage.toHTMLString());
+                } else if(path.equals("/login")) {// login page
                     LoginPage loginPage = new LoginPage();
                     content.append(loginPage.toHTMLString());
-                } else if(path.equals("/signup/")) {// signup page
+                } else if(path.equals("/signup")) {// signup page
                     SignUpPage signUp = new SignUpPage();
                     content.append(signUp.toHTMLString());
                 } else if(path.startsWith("/images/")) {
@@ -249,73 +239,44 @@ public class Server {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                } else {
+                    output.println("HTTP/1.1 404 Not Found");
+                    output.flush();
+                    return;
                 }
+                sendRequest(content.toString());
 
-
-
-                output.println("HTTP/1.1 200 OK");
-                output.println("Content-Type: text/html");
-                output.println("Content-Length: " + content.length());
-                output.println();
-                output.println(content.toString());
-                output.flush();
             } else if(request.getRequestType().equals("POST")) {
                 System.out.println("["+Thread.currentThread()+"] "+request);
 
                 HashMap<String, String> entries = request.returnPostData();
 
-                if(request.getFileName().equals("/login/submit/")) {
+                if(request.getFileName().equals("/login/submit")) {
                     User user = userManager.authenticateUser(entries.get("username"), entries.get("password"));
 
                     StringBuilder content = new StringBuilder();
-                    content.append("<html>");
-                    content.append("<head>");
-                    content.append("</head>");
-                    content.append("<body>");
+                    WebPage webPage = new WebPage();
                     if(user == null) {
-                        content.append("Invalid credentials!");
+                        webPage.appendBodyComponents("Invalid credentials!");
                     } else {
-                        content.append("Logged in!");
-                        content.append("<br>");
-                        content.append(user.toString());
+                        webPage.appendBodyComponents("Logged in!", "<br>", user.toString());
                     }
-                    content.append("</body>");
-                    content.append("</html>");
-
-                    output.println("HTTP/1.1 200 OK");
-                    output.println("Content-Type: text/html"); // keep it as text/html for now, not enough time to support CSS / JS.
-                    output.println("Content-Length: " + content.length());
-                    output.println();
-                    output.println("Logged in!");
-                    output.flush();
-                } else if(request.getFileName().equals("/signup/submit/")) {
-                    boolean isSuccessful = userManager.registerUser(entries.get("username"), entries.get("password"));
-                    StringBuilder content = new StringBuilder();
-                    content.append("<html>");
-                    content.append("<head>");
-                    content.append("</head>");
-                    content.append("<body>");
-                    if(isSuccessful) {
-                        content.append("Account created!");
-                        // account is created but does not log in on purpose
-                    } else {
-                        content.append("Something went wrong!");
-                        content.append("<br>");
-                    }
-                    content.append("</body>");
-                    content.append("</html>");
-
-                    output.println("HTTP/1.1 200 OK");
-                    output.println("Content-Type: text/html");
-                    output.println("Content-Length: " + content.length());
-                    output.println();
-                    output.println("Signed up!");
-                    output.flush();
+                    content.append(webPage.toHTMLString());
+                    sendRequest(content.toString());
                 }
             } else {
                 output.println("HTTP/1.1 400 Bad Request");
                 output.flush();
             }
+        }
+
+        private void sendRequest(String content) {
+            output.println("HTTP/1.1 200 OK");
+            output.println("Content-Type: text/html"); // keep it as text/html for now, not enough time to support CSS / JS.
+            output.println("Content-Length: " + content.length());
+            output.println();
+            output.println(content);
+            output.flush();
         }
 
     }
