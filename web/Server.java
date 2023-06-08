@@ -167,8 +167,10 @@ public class Server {
                     content.append(new Hyperlink("/signup/", "Sign up").toHTMLString());
 
                 } else if(path.equals("/login/")) {// login page
-                    content.append("<p>Username</p>");
-                    content.append("<p>Password</p>");
+                    LoginPage loginPage = new LoginPage();
+                    content.append(loginPage.toHTMLString());
+//                    content.append("<p>Username</p>");
+//                    content.append("<p>Password</p>");
                 } else if(path.equals("/signup/")) {// signup page
                     SignUpPage signUp = new SignUpPage();
                     content.append(signUp.toHTMLString());
