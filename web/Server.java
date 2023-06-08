@@ -8,9 +8,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.File; 
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -146,6 +149,22 @@ public class Server {
         }
 
         /**
+         * Gets the extension of a file path (e.g. "/", "/style.css")
+         * @param filePath the file path
+         * @return the extension (e.g. "html", "css")
+         */
+        public String getExtension (String filePath) {
+            if (filePath.charAt(filePath.length()-1) == '/') {
+                filePath += "index.html"; 
+            }
+            String[] pathArr = filePath.split("[.]");
+            if (pathArr.length <= 1) {
+                return "";
+            }
+            return pathArr[pathArr.length-1];
+        }
+
+        /**
          * Returns the MIME type of a given file extension.
          * @param extension The extension (e.g. html, css). Doesn't contain the period before the extension.
          * @return a string representing the MIME type of the extension, or "invalid" if it can't find the type.
@@ -182,15 +201,16 @@ public class Server {
                 }
 
                 StringBuilder content = new StringBuilder();
-                content.append("<html>");
-                content.append("<head>");
-                content.append("</head>");
-                content.append("<body>");
+                
                 if(path.equals("/")) {// homepage
-
+                    content.append("<html>");
+                    content.append("<head>");
+                    content.append("</head>");
+                    content.append("<body>");
                     content.append(new Hyperlink("/login/", "Log in").toHTMLString());
                     content.append(new Hyperlink("/signup/", "Sign up").toHTMLString());
-
+                    content.append("</body>");
+                    content.append("</html>");
                 } else if(path.equals("/login/")) {// login page
                     LoginPage loginPage = new LoginPage();
                     content.append(loginPage.toHTMLString());
@@ -198,10 +218,20 @@ public class Server {
                     SignUpPage signUp = new SignUpPage();
                     content.append(signUp.toHTMLString());
                 } else if(path.startsWith("/images/")) {
-                    
+                    File imgFile = new File(path); 
+                    BufferedInputStream in = null; 
+                    try {
+                        in = new BufferedInputStream(new FileInputStream(imgFile));
+                        int data;
+
+                        System.out.println("File Size: " +imgFile.length());
+                        byte[] d = new byte[(int)imgFile.length()];
+                        // need to send this byte array over here. 
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-                content.append("</body>");
-                content.append("</html>");
+                
 
 
                 output.println("HTTP/1.1 200 OK");
