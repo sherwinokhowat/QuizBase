@@ -4,7 +4,7 @@ public class SignUpPage extends WebPage {
     @Override
     public String toHTMLString() {
         StringBuilder html = new StringBuilder();
-        html.append("<form action='/submit-signup' method='post'>");
+        html.append("<form action='/submit-signup' method='POST'>");
         html.append("<label for='username'>Username</label>");
         html.append("<br>");
         html.append("<input type='text' id='username' name='username'");
