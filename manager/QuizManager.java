@@ -17,7 +17,7 @@ import utility.SQLStatementBuilder;
  */
 public class QuizManager extends DatabaseManager {
 
-    private HashMap<Integer, Quiz> cache;
+    private HashMap<Integer, Quiz> cache = new HashMap<Integer, Quiz>();
 
     /**
      * Constructs a QuizManager class for the specified database
@@ -33,7 +33,7 @@ public class QuizManager extends DatabaseManager {
     public void initialize() {
         StringBuilder statement = new StringBuilder();
         statement.append("CREATE TABLE IF NOT EXISTS QUIZZES (");
-        statement.append("ID INTEGER PRIMARY KEY,");
+        statement.append("ID INTEGER PRIMARY KEY AUTOINCREMENT,");
         statement.append("NAME TEXT NOT NULL,");
         statement.append("DESCRIPTION TEXT NOT NULL,");
         statement.append("CREATOR_ID INTEGER NOT NULL,");

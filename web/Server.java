@@ -208,7 +208,6 @@ public class Server {
          */
         private void processRequest(Request request) {
             if(request.getRequestType().equals("GET")) {
-                System.out.println("["+Thread.currentThread()+"] "+request);
 
                 // resource path is stored in firstLine[1]
                 String path = request.getFileName();
@@ -220,12 +219,15 @@ public class Server {
                         new Hyperlink("/login", "Log in"),
                         new Hyperlink("/signup", "Sign up"));
                     content.append(webPage.toHTMLString());
+
                 } else if(path.equals("/login")) {// login page
                     LoginPage loginPage = new LoginPage();
                     content.append(loginPage.toHTMLString());
+
                 } else if(path.equals("/signup")) {// signup page
                     SignUpPage signUp = new SignUpPage();
                     content.append(signUp.toHTMLString());
+
                 } else if(path.startsWith("/images/")) {
                     File imgFile = new File(path);
                     BufferedInputStream in = null;
@@ -247,7 +249,6 @@ public class Server {
                 sendRequest(content.toString());
 
             } else if(request.getRequestType().equals("POST")) {
-                System.out.println("["+Thread.currentThread()+"] "+request);
 
                 HashMap<String, String> entries = request.returnPostData();
 
@@ -258,6 +259,17 @@ public class Server {
                     WebPage webPage = new WebPage();
                     if(user == null) {
                         webPage.appendBodyComponents("Invalid credentials!");
+                    } else {
+                        webPage.appendBodyComponents("Logged in!", "<br>", user.toString());
+                    }
+                    content.append(webPage.toHTMLString());
+                    sendRequest(content.toString());
+                } else if(request.getFileName().equals("/signup/submit")) {
+                    User user = userManager.registerUser(entries.get("username"), entries.get("password"));
+                    StringBuilder content = new StringBuilder();
+                    WebPage webPage = new WebPage();
+                    if(user == null) {
+                        webPage.appendBodyComponents("Unable to signup!");
                     } else {
                         webPage.appendBodyComponents("Logged in!", "<br>", user.toString());
                     }

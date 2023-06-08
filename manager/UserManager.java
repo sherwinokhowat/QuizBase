@@ -18,7 +18,7 @@ import utility.SQLStatementBuilder;
  */
 public class UserManager extends DatabaseManager {
 
-    private HashMap<Integer, User> cache;
+    private HashMap<Integer, User> cache = new HashMap<Integer, User>();
 
     @Override
     public Object getById(int id) {
@@ -52,7 +52,7 @@ public class UserManager extends DatabaseManager {
     public void initialize() {
         StringBuilder statement = new StringBuilder();
         statement.append("CREATE TABLE IF NOT EXISTS USERS (");
-        statement.append("ID INTEGER PRIMARY KEY,");
+        statement.append("ID INTEGER PRIMARY KEY AUTOINCREMENT,");
         statement.append("USERNAME TEXT NOT NULL UNIQUE,");
         statement.append("PASSWORD TEXT NOT NULL");
         statement.append(");");
@@ -92,12 +92,19 @@ public class UserManager extends DatabaseManager {
      *
      * @param username The user's username
      * @param password The user's password
-     * @return Whether the entering of information is successful or not.
+     * @return The User object or {@code null} if registration was not successful.
      */
-    public boolean registerUser(String username, String password) {
-        return executeWriteOperation(
+    public User registerUser(String username, String password) {
+        boolean successful = executeWriteOperation(
                 new SQLStatementBuilder().insertInto("USERS", "USERNAME", "PASSWORD")
-                .values(username, password).toString());
+                .values("'"+username+"'", "'"+password+"'").toString());
+        if(successful) {
+            ArrayList<? extends Object> list = executeReadOperation(new SQLStatementBuilder().select()
+                    .from("USERS").where("USERNAME='"+username+"'").toString());
+            return (User)list.get(0);
+        } else {
+            return null;
+        }
     }
 
     public boolean deleteUser(User user) {

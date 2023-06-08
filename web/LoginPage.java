@@ -12,6 +12,6 @@ public class LoginPage extends WebPage {
         "<input style='margin-bottom: 5px;' type='password' id='password' name='password' placeholder='Password'>",
         "<input type='submit' value='Login'>",
         "</form>");
-        setBodyAttributes("style='background-color: lightblue; display: flex; flex-direction: column; justify-content: center; align-items: center;");
+        setBodyAttributes("style='background-color: lightblue; display: flex; flex-direction: column; justify-content: center; align-items: center;'");
     }
 }
