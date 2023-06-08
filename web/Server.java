@@ -146,6 +146,24 @@ public class Server {
         }
 
         /**
+         * Returns the MIME type of a given file extension.
+         * @param extension The extension (e.g. html, css). Doesn't contain the period before the extension.
+         * @return a string representing the MIME type of the extension, or "invalid" if it can't find the type.
+         * */
+        public String contentType (String extension) {
+            return switch (extension) {
+                case "html" -> "text/html";
+                case "css" -> "text/css";
+                case "js" -> "application/javascript";
+                case "png" -> "image/png"; 
+                case "jpg" -> "image/jpeg";
+                case "jpeg" -> "image/jpeg"; 
+                case "gif" -> "image/gif"; 
+                default -> "invalid";
+            };
+        }
+
+        /**
          * Processes a request and sends a response to the client
          *
          * @param request The request, split by the line separator
@@ -180,7 +198,7 @@ public class Server {
                     SignUpPage signUp = new SignUpPage();
                     content.append(signUp.toHTMLString());
                 } else if(path.startsWith("/images/")) {
-
+                    
                 }
                 content.append("</body>");
                 content.append("</html>");
