@@ -60,16 +60,21 @@ public class Request {
         return rawRequest.size(); 
     }
 
+    /**
+     * Takes the form data (provided this request is a POST request) and returns it as a HashMap.
+     * @return the form data, in HashMap format
+     */
     public HashMap<String, String> returnPostData() {
         if (this.requestType.equals("POST")) {
             HashMap<String, String> entries = new HashMap<String, String>();
-            StringTokenizer st = new StringTokenizer(request.get(request.size()-1), "&");
+            StringTokenizer st = new StringTokenizer(rawRequest.get(rawRequest.size()-1), "&");
             while(st.hasMoreTokens()) {
                 String entry = st.nextToken();
                 String key = entry.substring(0, entry.indexOf("="));
                 String value = entry.substring(entry.indexOf("=")+1);
                 entries.put(key, value);
             }
+            return entries; 
         } else {
             return null;
         }
