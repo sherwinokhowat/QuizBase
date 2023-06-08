@@ -288,6 +288,29 @@ public class Server {
                     output.println();
                     output.println("Logged in!");
                     output.flush();
+                } else if(request.getFileName().equals("/signup/submit/")) {
+                    boolean isSuccessful = userManager.registerUser(entries.get("username"), entries.get("password"));
+                    StringBuilder content = new StringBuilder();
+                    content.append("<html>");
+                    content.append("<head>");
+                    content.append("</head>");
+                    content.append("<body>");
+                    if(isSuccessful) {
+                        content.append("Account created!");
+                        // account is created but does not log in on purpose
+                    } else {
+                        content.append("Something went wrong!");
+                        content.append("<br>");
+                    }
+                    content.append("</body>");
+                    content.append("</html>");
+
+                    output.println("HTTP/1.1 200 OK");
+                    output.println("Content-Type: text/html");
+                    output.println("Content-Length: " + content.length());
+                    output.println();
+                    output.println("Signed up!");
+                    output.flush();
                 }
             } else {
                 output.println("HTTP/1.1 400 Bad Request");
