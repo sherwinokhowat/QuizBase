@@ -1,4 +1,4 @@
-/**
+package web; /**
  * Stores all the stuff related to the request (e.g. the file it's asking for, the host, etc. etc. etc.) Only accepts the raw request as the argument.
  * */
 

@@ -155,7 +155,7 @@ public class Server {
                 System.out.println("["+Thread.currentThread()+"] "+request);
 
                 // resource path is stored in firstLine[1]
-                String path = request.getFileName(); 
+                String path = request.getFileName();
 
                 if(path.equals("/favicon.ico")) {
                     output.println("HTTP/1.1 404 Not Found");
@@ -197,29 +197,32 @@ public class Server {
 
                 HashMap<String, String> entries = request.returnPostData(); 
 
-                User user = userManager.authenticateUser(entries.get("username"), entries.get("password"));
+                if(request.getFileName().equals("/login/submit/")) {
+                    User user = userManager.authenticateUser(entries.get("username"), entries.get("password"));
 
-                StringBuilder content = new StringBuilder();
-                content.append("<html>");
-                content.append("<head>");
-                content.append("</head>");
-                content.append("<body>");
-                if(user == null) {
-                    content.append("Invalid credentials!");
-                } else {
-                    content.append("Logged in!");
-                    content.append("<br>");
-                    content.append(user.toString());
+                    StringBuilder content = new StringBuilder();
+                    content.append("<html>");
+                    content.append("<head>");
+                    content.append("</head>");
+                    content.append("<body>");
+                    if(user == null) {
+                        content.append("Invalid credentials!");
+                    } else {
+                        content.append("Logged in!");
+                        content.append("<br>");
+                        content.append(user.toString());
+                    }
+                    content.append("</body>");
+                    content.append("</html>");
+
+                    output.println("HTTP/1.1 200 OK");
+                    output.println("Content-Type: text/html");
+                    output.println("Content-Length: " + content.length());
+                    output.println();
+                    output.println("Logged in!");
+                    output.flush();
                 }
-                content.append("</body>");
-                content.append("</html>");
 
-                output.println("HTTP/1.1 200 OK");
-                output.println("Content-Type: text/html"); // keep it as text/html for now, not enough time to support CSS / JS. 
-                output.println("Content-Length: " + content.length());
-                output.println();
-                output.println("Logged in!");
-                output.flush();
             } else {
                 output.println("HTTP/1.1 400 Bad Request");
                 output.flush();
