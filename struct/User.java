@@ -104,5 +104,8 @@ public class User {
         throw new UnsupportedOperationException("Unimplemented method 'getCreatedQuizzesFromDB'");
     }
 
+    public String toString() {
+        return "ID: " + this.id + ", USERNAME: " + this.username;
+    }
 
 }
