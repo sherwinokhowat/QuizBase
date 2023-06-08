@@ -193,7 +193,7 @@ public class Server {
                 output.println(content.toString());
                 output.flush();
             } else if(request.getRequestType().equals("POST")) {
-                System.out.println("["+Thread.currentThread()+"] "+request.toString());
+                System.out.println("["+Thread.currentThread()+"] "+request);
 
                 HashMap<String, String> entries = request.returnPostData(); 
 
