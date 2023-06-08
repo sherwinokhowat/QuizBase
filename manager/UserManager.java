@@ -27,7 +27,7 @@ public class UserManager extends DatabaseManager {
             return cacheResult;
         }
         ArrayList<? extends Object> dbResult = executeReadOperation(new SQLStatementBuilder()
-                .select().from("USERS").where("ID=" + id).toString());
+                .select().from("USERS").where("ID='" + id + "'").toString());
         if (dbResult.size() == 1) {
             User user = (User) (dbResult.get(1));
             cache.put(user.getID(), user);
@@ -48,9 +48,20 @@ public class UserManager extends DatabaseManager {
         // TODO Auto-generated constructor stub
     }
 
+    @Override
+    public void initialize() {
+        StringBuilder statement = new StringBuilder();
+        statement.append("CREATE TABLE IF NOT EXISTS USERS (");
+        statement.append("ID INTEGER PRIMARY KEY,");
+        statement.append("USERNAME TEXT NOT NULL UNIQUE,");
+        statement.append("PASSWORD TEXT NOT NULL");
+        statement.append(");");
+        executeWriteOperation(statement.toString());
+    }
+
     /**
      * Executes an operation that reads from the database
-     * 
+     *
      * @param statement An SQL statement.
      * @return An ArrayList containing all the data.
      */
@@ -78,35 +89,27 @@ public class UserManager extends DatabaseManager {
 
     /**
      * Puts a user's information in the database.
-     * 
+     *
      * @param username The user's username
      * @param password The user's password
      * @return Whether the entering of information is successful or not.
      */
     public boolean registerUser(String username, String password) {
-        String valueList = "(" + username + ", " + password + ")";
         return executeWriteOperation(
-                new SQLStatementBuilder().insertInto("USERS", "(USERNAME, PASSWORD)").values(valueList).toString());
+                new SQLStatementBuilder().insertInto("USERS", "USERNAME", "PASSWORD")
+                .values(username, password).toString());
     }
 
     public boolean deleteUser(User user) {
         return executeWriteOperation(
-                new SQLStatementBuilder().deleteFrom("USERS").where("USERNAME=" + user.getUsername()).toString());
+                new SQLStatementBuilder().deleteFrom("USERS")
+                .where("USERNAME='" + user.getUsername() + "'").toString());
     }
 
     public User login(String username, String password) {
         ArrayList<? extends Object> dbResult = executeReadOperation(new SQLStatementBuilder()
-                .select().from("USERS").where("USERNAME=" + username + " AND PASSWORD=" + password).toString()); // SELECT
-                                                                                                                 // FROM
-                                                                                                                 // USERS
-                                                                                                                 // WHERE
-                                                                                                                 // USERNAME
-                                                                                                                 // =
-                                                                                                                 // 123
-                                                                                                                 // AND
-                                                                                                                 // PASSWORD
-                                                                                                                 // =
-                                                                                                                 // 123
+                .select().from("USERS")
+                .where("USERNAME='" + username + "' AND PASSWORD='" + password + "'").toString());
         if (dbResult.size() == 1) {
             User user = (User) (dbResult.get(1));
             cache.put(user.getID(), user);
@@ -119,7 +122,7 @@ public class UserManager extends DatabaseManager {
     /**
      * Changes the user's respective username in the database and placeholder user
      * object after authenticating the user
-     * 
+     *
      * @param username    the user's current username
      * @param newUsername the user's requested username change
      * @param password    the user's current password
@@ -129,7 +132,8 @@ public class UserManager extends DatabaseManager {
         User user = authenticateUser(username, password);
         if (user != null) {
             boolean isSuccessful = executeWriteOperation(new SQLStatementBuilder().update("USERS")
-                    .set(new Pair<String, String>("USERNAME", newUsername)).where("USERNAME=" + username).toString());
+                    .set(new Pair<String, String>("USERNAME", newUsername))
+                    .where("USERNAME='" + username + "'").toString());
             if (isSuccessful) {
                 user.setUsername(newUsername);
             }
@@ -141,7 +145,7 @@ public class UserManager extends DatabaseManager {
     /**
      * Changes the user's respective password in the database after authenticating
      * the user
-     * 
+     *
      * @param username    the user's current username
      * @param password    the user's current password
      * @param newPassword the user's requested password change
@@ -151,7 +155,8 @@ public class UserManager extends DatabaseManager {
         if (this.authenticateUser(username, password) != null) {
             // change password in the database
             boolean isSuccessful = executeWriteOperation(new SQLStatementBuilder().update("USERS")
-                    .set(new Pair<String, String>("PASSWORD", newPassword)).where("USERNAME=" + username).toString());
+                    .set(new Pair<String, String>("PASSWORD", newPassword))
+                    .where("USERNAME='" + username + "'").toString());
             return isSuccessful;
         }
         return false;
@@ -167,8 +172,9 @@ public class UserManager extends DatabaseManager {
      */
     public User authenticateUser(String username, String password) {
         ArrayList<? extends Object> list = executeReadOperation(new SQLStatementBuilder().select()
-                .from("USERS").where("USERNAME=" + username + " AND PASSWORD=" + password).toString());
-        if (list != null) {
+                .from("USERS").where("USERNAME='" + username + "' AND PASSWORD='" + password + "'")
+                .toString());
+        if (list.size() == 1) {
             return (User) (list.get(0));
         } else {
             return null;

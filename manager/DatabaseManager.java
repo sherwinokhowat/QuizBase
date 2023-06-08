@@ -55,6 +55,11 @@ public abstract class DatabaseManager {
     }
 
     /**
+     * Initializes the database with the specified tables (if the tables do not exist)
+     */
+    public abstract void initialize();
+
+    /**
      * Runs a SQL statement that is one of {@code CREATE TABLE}, {@code DROP TABLE},
      * {@code INSERT INTO}, {@code UPDATE} or {@code DELETE FROM}
      *

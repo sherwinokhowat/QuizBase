@@ -1,21 +1,22 @@
 package web;
-/**
- * Stores all the stuff related to the request (e.g. the file it's asking for, the host, etc. etc. etc.) Only accepts the raw request as the argument.
- * */
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
+/**
+ * Stores all the stuff related to the request (e.g. the file it's asking for, the host, etc. etc. etc.) Only accepts the raw request as the argument.
+ */
 public class Request {
     private ArrayList<String> rawRequest; // stores everything, line by line.
     private String host; // e.g. 127.0.0.1:5000
     private String fileRequested; // e.g. /index2.html
 
-    private String requestType; // e.g. POST, GET 
+    private String requestType; // e.g. POST, GET
 
     /**
      * Store useful information about the request
+     *
      * @param rawRequest An ArrayList containing all the lines in the request, line by line.
      * */
     public Request (ArrayList<String> rawRequest) {
@@ -39,18 +40,23 @@ public class Request {
         return fileRequested;
     }
 
-    public String getRequestType() { return requestType; }
+    public String getRequestType() {
+        return requestType;
+    }
 
     /**
      * Returns the original request
      * @return the original request, separated line by line like the original.
      * */
     public String toString() {
-        String totalString = "";
+        StringBuilder str = new StringBuilder();
         for (int i = 0; i < rawRequest.size(); i++) {
-            totalString += rawRequest.get(i);
+            str.append(rawRequest.get(i));
+            if(i != rawRequest.size()-1) {
+                str.append("\n");
+            }
         }
-        return totalString;
+        return str.toString();
     }
 
     /**
@@ -58,7 +64,7 @@ public class Request {
      * @return number of lines in the request
      */
     public int size() {
-        return rawRequest.size(); 
+        return rawRequest.size();
     }
 
     /**
@@ -75,7 +81,7 @@ public class Request {
                 String value = entry.substring(entry.indexOf("=")+1);
                 entries.put(key, value);
             }
-            return entries; 
+            return entries;
         } else {
             return null;
         }

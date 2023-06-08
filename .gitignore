@@ -6,3 +6,4 @@ sources.txt
 .vscode/*
 .idea/*
 out/*
+*.iml

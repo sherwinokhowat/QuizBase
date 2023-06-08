@@ -4,7 +4,7 @@ package web;
  * Interface that represents the methods that an object with web components
  * requires and can be rendered as HTML.
  *
- * @author Sherwin Okhowat and
+ * @author Sherwin Okhowat
  */
 public interface WebComponent {
 

@@ -30,6 +30,19 @@ public class QuizManager extends DatabaseManager {
     }
 
     @Override
+    public void initialize() {
+        StringBuilder statement = new StringBuilder();
+        statement.append("CREATE TABLE IF NOT EXISTS QUIZZES (");
+        statement.append("ID INTEGER PRIMARY KEY,");
+        statement.append("NAME TEXT NOT NULL,");
+        statement.append("DESCRIPTION TEXT NOT NULL,");
+        statement.append("CREATOR_ID INTEGER NOT NULL,");
+        statement.append("FOREIGN KEY (CREATOR_ID) REFERENCES USERS (ID)");
+        statement.append(");");
+        executeWriteOperation(statement.toString());
+    }
+
+    @Override
     public Object getById(int id) {
         Quiz cacheResult = cache.get(id);
         if(cacheResult != null) {

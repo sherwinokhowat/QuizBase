@@ -10,7 +10,7 @@ public class Quiz implements WebComponent {
     private int id;
     private String name;
     private String description;
-    private User creator;
+    private int creatorId;
     private QuizManager manager;
 
     /**
@@ -19,8 +19,11 @@ public class Quiz implements WebComponent {
      * @param manager the quiz manager for this quiz
      */
     public Quiz(int id, String name, String description, int creatorId, QuizManager manager) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.creatorId = creatorId;
         this.manager = manager;
-        // unimplemented
     }
 
     /**
@@ -97,12 +100,12 @@ public class Quiz implements WebComponent {
     }
 
     /**
-     * Returns the creator of the quiz
+     * Returns the user id of the creator of the quiz
      *
-     * @return the creator of the quiz
+     * @return the user id
      */
-    public User getCreator() {
-        return this.creator;
+    public int getCreatorId() {
+        return this.creatorId;
     }
 
     /**

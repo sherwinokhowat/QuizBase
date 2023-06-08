@@ -13,7 +13,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.File; 
+import java.io.File;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -43,6 +43,8 @@ public class Server {
         quizManager = new QuizManager(dbName);
         userManager.connectToDatabase();
         quizManager.connectToDatabase();
+        userManager.initialize();// must be initialized before quizManager
+        quizManager.initialize();
 
         // hold the client connection
         Socket client = null;
@@ -131,7 +133,7 @@ public class Server {
                 if(request.size() != 0) {
                     // process request here
                     System.out.println("["+Thread.currentThread()+"] "+request.get(0));
-                    Request requestObj = new Request(request); 
+                    Request requestObj = new Request(request);
                     processRequest(requestObj);
                     System.out.println("["+Thread.currentThread()+"] "+"processed request");
                 }
@@ -155,7 +157,7 @@ public class Server {
          */
         public String getExtension (String filePath) {
             if (filePath.charAt(filePath.length()-1) == '/') {
-                filePath += "index.html"; 
+                filePath += "index.html";
             }
             String[] pathArr = filePath.split("[.]");
             if (pathArr.length <= 1) {
@@ -218,7 +220,7 @@ public class Server {
                 }
 
                 StringBuilder content = new StringBuilder();
-                
+
                 if(path.equals("/")) {// homepage
                     content.append("<html>");
                     content.append("<head>");
@@ -235,20 +237,20 @@ public class Server {
                     SignUpPage signUp = new SignUpPage();
                     content.append(signUp.toHTMLString());
                 } else if(path.startsWith("/images/")) {
-                    File imgFile = new File(path); 
-                    BufferedInputStream in = null; 
+                    File imgFile = new File(path);
+                    BufferedInputStream in = null;
                     try {
                         in = new BufferedInputStream(new FileInputStream(imgFile));
                         int data;
 
                         System.out.println("File Size: " +imgFile.length());
                         byte[] d = new byte[(int)imgFile.length()];
-                        // need to send this byte array over here. 
+                        // need to send this byte array over here.
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
-                
+
 
 
                 output.println("HTTP/1.1 200 OK");
@@ -260,7 +262,7 @@ public class Server {
             } else if(request.getRequestType().equals("POST")) {
                 System.out.println("["+Thread.currentThread()+"] "+request);
 
-                HashMap<String, String> entries = request.returnPostData(); 
+                HashMap<String, String> entries = request.returnPostData();
 
                 if(request.getFileName().equals("/login/submit/")) {
                     User user = userManager.authenticateUser(entries.get("username"), entries.get("password"));
@@ -281,13 +283,12 @@ public class Server {
                     content.append("</html>");
 
                     output.println("HTTP/1.1 200 OK");
-                    output.println("Content-Type: text/html");
+                    output.println("Content-Type: text/html"); // keep it as text/html for now, not enough time to support CSS / JS.
                     output.println("Content-Length: " + content.length());
                     output.println();
                     output.println("Logged in!");
                     output.flush();
                 }
-
             } else {
                 output.println("HTTP/1.1 400 Bad Request");
                 output.flush();
