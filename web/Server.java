@@ -2,8 +2,11 @@ package web;
 
 import manager.QuizManager;
 import manager.UserManager;
+import struct.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.StringTokenizer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -54,7 +57,7 @@ public class Server {
                 // Also: Queues are good tools to buffer incoming/outgoing messages
 
                 Thread t = new Thread(new ConnectionHandler(client));// create a thread for the new client and pass in the socket
-                System.out.println("["+Thread.currentThread()+"] "+" about to start new thread");
+                System.out.println("["+Thread.currentThread()+"] "+"about to start new thread");
                 t.start(); //start the new thread
 
             }
@@ -76,7 +79,6 @@ public class Server {
         private PrintWriter output;// assign printwriter to network stream
         private BufferedReader input;// Stream for network input
         private Socket client;// keeps track of the client socket
-        private boolean running;
 
         /**
          * Constructs a ConnectionHandler
@@ -92,7 +94,6 @@ public class Server {
             } catch(IOException e) {
                 e.printStackTrace();
             }
-            running = true;
         }
 
         /**
@@ -100,42 +101,46 @@ public class Server {
          */
         @Override
         public void run() {
-            System.out.println("["+Thread.currentThread()+"] "+" this thread just started");
+            System.out.println("["+Thread.currentThread()+"] "+"this thread just started");
             // Get a message from the client
             ArrayList<String> request = new ArrayList<>();
 
             // Get a message from the client, loops until a message is received
-            while(running) {
-                System.out.println("["+Thread.currentThread()+"] "+"checking for response");
-                try {
-                    // check for incoming responses
-                    while(input.ready()) {
-                        request.add(input.readLine());
-                    }
-
-                    if(request.size() != 0) {
-                        // process request here
-                        System.out.println("["+Thread.currentThread()+"] "+request.get(0));
-                        processRequest(request);
-                        request.clear();
-                        System.out.println("["+Thread.currentThread()+"] "+"processed request");
-                    }
-                    running = false;
-
-                } catch (IOException e) {
-                    System.out.println("Failed to receive msg from the client");
-                    e.printStackTrace();
-                }
-            }
-
-            // close the socket
             try {
+                // check for incoming responses
+                int contentLength = 0;
+                while(input.ready()) {
+                    String line = input.readLine();
+                    request.add(line);
+                    if(line.startsWith("Content-Length:")) {// get the length of the body content, if it exists
+                        contentLength = Integer.parseInt(line.substring(line.indexOf(" ")+1));
+                    } else if(line.equals("")) {// indicates end of header
+                        if(contentLength > 0) {
+                            // we must read the body byte by byte, since it may not end in a newline
+                            char[] chars = new char[contentLength];
+                            input.read(chars, 0, contentLength);
+                            request.add(new String(chars));
+                        }
+                        break;
+                    }
+                }
+
+                if(request.size() != 0) {
+                    // process request here
+                    System.out.println("["+Thread.currentThread()+"] "+request.get(0));
+                    processRequest(request);
+                    System.out.println("["+Thread.currentThread()+"] "+"processed request");
+                }
+
                 input.close();
                 output.close();
                 client.close();
-            } catch (Exception e) {
-                System.out.println("Failed to close socket");
+
+            } catch (IOException e) {
+                System.out.println("Failed to receive response from the client");
+                e.printStackTrace();
             }
+
             System.out.println("["+Thread.currentThread()+"] "+"Ending thread");
         }
 
@@ -145,8 +150,10 @@ public class Server {
          * @param request The request, split by the line separator
          */
         private void processRequest(ArrayList<String> request) {
-            if(request.get(0).startsWith("GET")) {
-                String[] firstLine = request.get(0).split(" ");
+            String[] firstLine = request.get(0).split(" ");
+            if(firstLine[0].equals("GET")) {
+                System.out.println("["+Thread.currentThread()+"] "+request);
+
                 // resource path is stored in firstLine[1]
                 String path = firstLine[1];
 
@@ -169,11 +176,11 @@ public class Server {
                 } else if(path.equals("/login/")) {// login page
                     LoginPage loginPage = new LoginPage();
                     content.append(loginPage.toHTMLString());
-//                    content.append("<p>Username</p>");
-//                    content.append("<p>Password</p>");
                 } else if(path.equals("/signup/")) {// signup page
                     SignUpPage signUp = new SignUpPage();
                     content.append(signUp.toHTMLString());
+                } else if(path.startsWith("/images/")) {
+
                 }
                 content.append("</body>");
                 content.append("</html>");
@@ -184,6 +191,44 @@ public class Server {
                 output.println("Content-Length: " + content.length());
                 output.println();
                 output.println(content.toString());
+                output.flush();
+            } else if(firstLine[0].equals("POST")) {
+                System.out.println("["+Thread.currentThread()+"] "+request);
+
+                HashMap<String, String> entries = new HashMap<String, String>();
+                StringTokenizer st = new StringTokenizer(request.get(request.size()-1), "&");
+                while(st.hasMoreTokens()) {
+                    String entry = st.nextToken();
+                    String key = entry.substring(0, entry.indexOf("="));
+                    String value = entry.substring(entry.indexOf("=")+1);
+                    entries.put(key, value);
+                }
+
+                User user = userManager.authenticateUser(entries.get("username"), entries.get("password"));
+
+                StringBuilder content = new StringBuilder();
+                content.append("<html>");
+                content.append("<head>");
+                content.append("</head>");
+                content.append("<body>");
+                if(user == null) {
+                    content.append("Invalid credentials!");
+                } else {
+                    content.append("Logged in!");
+                    content.append("<br>");
+                    content.append(user.toString());
+                }
+                content.append("</body>");
+                content.append("</html>");
+
+                output.println("HTTP/1.1 200 OK");
+                output.println("Content-Type: text/html");
+                output.println("Content-Length: " + content.length());
+                output.println();
+                output.println("Logged in!");
+                output.flush();
+            } else {
+                output.println("HTTP/1.1 400 Bad Request");
                 output.flush();
             }
         }
