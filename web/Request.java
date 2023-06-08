@@ -3,6 +3,8 @@
  * */
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.StringTokenizer;
 
 public class Request {
     private ArrayList<String> rawRequest; // stores everything, line by line.
@@ -48,6 +50,29 @@ public class Request {
             totalString += rawRequest.get(i);
         }
         return totalString;
+    }
+
+    /**
+     * Returns the number of lines in the request
+     * @return number of lines in the request
+     */
+    public int size() {
+        return rawRequest.size(); 
+    }
+
+    public HashMap<String, String> returnPostData() {
+        if (this.requestType.equals("POST")) {
+            HashMap<String, String> entries = new HashMap<String, String>();
+            StringTokenizer st = new StringTokenizer(request.get(request.size()-1), "&");
+            while(st.hasMoreTokens()) {
+                String entry = st.nextToken();
+                String key = entry.substring(0, entry.indexOf("="));
+                String value = entry.substring(entry.indexOf("=")+1);
+                entries.put(key, value);
+            }
+        } else {
+            return null;
+        }
     }
 }
 

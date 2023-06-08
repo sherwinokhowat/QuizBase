@@ -128,7 +128,8 @@ public class Server {
                 if(request.size() != 0) {
                     // process request here
                     System.out.println("["+Thread.currentThread()+"] "+request.get(0));
-                    processRequest(request);
+                    Request requestObj = new Request(request); 
+                    processRequest(requestObj);
                     System.out.println("["+Thread.currentThread()+"] "+"processed request");
                 }
 
@@ -149,13 +150,12 @@ public class Server {
          *
          * @param request The request, split by the line separator
          */
-        private void processRequest(ArrayList<String> request) {
-            String[] firstLine = request.get(0).split(" ");
-            if(firstLine[0].equals("GET")) {
+        private void processRequest(Request request) {
+            if(request.getRequestType().equals("GET")) {
                 System.out.println("["+Thread.currentThread()+"] "+request);
 
                 // resource path is stored in firstLine[1]
-                String path = firstLine[1];
+                String path = request.getFileName(); 
 
                 if(path.equals("/favicon.ico")) {
                     output.println("HTTP/1.1 404 Not Found");
@@ -192,17 +192,10 @@ public class Server {
                 output.println();
                 output.println(content.toString());
                 output.flush();
-            } else if(firstLine[0].equals("POST")) {
-                System.out.println("["+Thread.currentThread()+"] "+request);
+            } else if(request.getRequestType().equals("POST")) {
+                System.out.println("["+Thread.currentThread()+"] "+request.toString());
 
-                HashMap<String, String> entries = new HashMap<String, String>();
-                StringTokenizer st = new StringTokenizer(request.get(request.size()-1), "&");
-                while(st.hasMoreTokens()) {
-                    String entry = st.nextToken();
-                    String key = entry.substring(0, entry.indexOf("="));
-                    String value = entry.substring(entry.indexOf("=")+1);
-                    entries.put(key, value);
-                }
+                HashMap<String, String> entries = request.returnPostData(); 
 
                 User user = userManager.authenticateUser(entries.get("username"), entries.get("password"));
 
