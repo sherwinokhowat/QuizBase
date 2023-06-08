@@ -4,15 +4,19 @@ package web;
  * 
  * 
  */
-public class WebPage implements WebComponent {
+public abstract class WebPage implements WebComponent {
 
-    // one for login page
-    // one for sign in page
-    // one for list of quizzes page
+    // common functionality for all webpages
 
-    @Override
-    public String toHTMLString() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+//    @Override
+//    public String toHTMLString() {
+//        // TODO Auto-generated method stub
+//        return "<form action='/submit-signup' method='post'>"
+//                + "<label for='username'>Username:</label><br>"
+//                + "<input type='text' id='username' name='username'><br>"
+//                + "<label for='password'>Password:</label><br>"
+//                + "<input type='password' id='password' name='password'><br>"
+//                + "<input type='submit' value='Sign Up'>"
+//                + "</form>";
+//    }
 }

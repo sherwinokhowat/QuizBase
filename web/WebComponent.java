@@ -7,6 +7,8 @@ package web;
  * @author Sherwin Okhowat and
  */
 public interface WebComponent {
+
+
     /**
      * Converts the component to an HTML string
      *

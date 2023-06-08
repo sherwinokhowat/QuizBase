@@ -170,7 +170,8 @@ public class Server {
                     content.append("<p>Username</p>");
                     content.append("<p>Password</p>");
                 } else if(path.equals("/signup/")) {// signup page
-
+                    SignUpPage signUp = new SignUpPage();
+                    content.append(signUp.toHTMLString());
                 }
                 content.append("</body>");
                 content.append("</html>");
