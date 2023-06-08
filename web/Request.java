@@ -2,16 +2,18 @@
  * Stores all the stuff related to the request (e.g. the file it's asking for, the host, etc. etc. etc.) Only accepts the raw request as the argument.
  * */
 
+package web; 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class Request {
     private ArrayList<String> rawRequest; // stores everything, line by line.
-    private String host;
-    private String fileRequested;
+    private String host; // e.g. 127.0.0.1:5000
+    private String fileRequested; // e.g. /index2.html
 
-    private String requestType;
+    private String requestType; // e.g. POST, GET 
 
     /**
      * Store useful information about the request

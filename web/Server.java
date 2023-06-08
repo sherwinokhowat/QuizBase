@@ -215,7 +215,7 @@ public class Server {
                 content.append("</html>");
 
                 output.println("HTTP/1.1 200 OK");
-                output.println("Content-Type: text/html");
+                output.println("Content-Type: text/html"); // keep it as text/html for now, not enough time to support CSS / JS. 
                 output.println("Content-Length: " + content.length());
                 output.println();
                 output.println("Logged in!");

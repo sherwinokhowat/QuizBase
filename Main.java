@@ -1,6 +1,6 @@
 import utility.Pair;
 import utility.SQLStatementBuilder;
-import web.Server;
+import web.*;
 
 public class Main {
     public static void main(String[] args) {
