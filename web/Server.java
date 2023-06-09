@@ -229,7 +229,9 @@ public class Server {
                     content.append(signUp.toHTMLString());
 
                 } else if(path.equals("/home")) {
-
+                    User user = userManager.authenticateUser("sok", "Sok123");
+                    Homepage homepage = new Homepage(user);
+                    content.append(homepage.toHTMLString());
                 } else if(path.startsWith("/images/")) {
                     File imgFile = new File(path);
                     BufferedInputStream in = null;
