@@ -294,5 +294,19 @@ public class Server {
             output.flush();
         }
 
+        private void sendByteRequest(byte[] byteArray, String extension) {
+            output.println("HTTP/1.1 200 OK");
+            output.println("Content-Type: " + contentType(extension)); // keep it as text/html for now, not enough time to support CSS / JS.
+            output.println("Content-Length: " + byteArray.length); // 1 byte = 1 character
+            output.println();
+            try {
+                client.getOutputStream().write(byteArray); // we already defined the output stream so this is probably not going to throw an exception.
+            } catch (IOException e) {
+                System.out.println("Error created when getting socket output stream - sendByteRequest()");
+                e.printStackTrace();
+            }
+            output.flush();
+        }
+
     }
 }
