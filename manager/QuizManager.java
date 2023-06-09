@@ -34,8 +34,8 @@ public class QuizManager extends DatabaseManager {
         StringBuilder statement = new StringBuilder();
         statement.append("CREATE TABLE IF NOT EXISTS QUIZZES (");
         statement.append("ID INTEGER PRIMARY KEY AUTOINCREMENT,");
-        statement.append("NAME TEXT NOT NULL,");
-        statement.append("DESCRIPTION TEXT NOT NULL,");
+        statement.append("NAME TEXT NOT NULL CHECK(LENGTH(NAME) > 0),");
+        statement.append("DESCRIPTION TEXT,");
         statement.append("CREATOR_ID INTEGER NOT NULL,");
         statement.append("FOREIGN KEY (CREATOR_ID) REFERENCES USERS (ID)");
         statement.append(");");

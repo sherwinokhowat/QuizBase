@@ -53,8 +53,8 @@ public class UserManager extends DatabaseManager {
         StringBuilder statement = new StringBuilder();
         statement.append("CREATE TABLE IF NOT EXISTS USERS (");
         statement.append("ID INTEGER PRIMARY KEY AUTOINCREMENT,");
-        statement.append("USERNAME TEXT NOT NULL UNIQUE,");
-        statement.append("PASSWORD TEXT NOT NULL");
+        statement.append("USERNAME TEXT NOT NULL UNIQUE CHECK(LENGTH(USERNAME) > 0),");
+        statement.append("PASSWORD TEXT NOT NULL CHECK(LENGTH(PASSWORD) > 0)");
         statement.append(");");
         executeWriteOperation(statement.toString());
     }

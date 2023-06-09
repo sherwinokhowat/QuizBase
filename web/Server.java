@@ -178,7 +178,7 @@ public class Server {
                     result = "text/html";
                     break;
                 case "css":
-                    result = "text/css"; // could look into CSS support for.
+                    result = "text/css";// could look into CSS support for.
                     break;
                 case "js":
                     result = "application/javascript";
@@ -204,20 +204,20 @@ public class Server {
         /**
          * Processes a request and sends a response to the client
          *
-         * @param request The request, split by the line separator
+         * @param request The request object
          */
         private void processRequest(Request request) {
             if(request.getRequestType().equals("GET")) {
 
-                // resource path is stored in firstLine[1]
                 String path = request.getFileName();
 
                 StringBuilder content = new StringBuilder();
 
                 if(path.equals("/")) {// homepage
                     WebPage webPage = new WebPage().appendBodyComponents(
-                        new Hyperlink("/login", "Log in", false),
-                        new Hyperlink("/signup", "Sign up", false));
+                        new Hyperlink("/login", "Log in", true),
+                        WebPage.BR_TAG,
+                        new Hyperlink("/signup", "Sign up", true));
                     content.append(webPage.toHTMLString());
 
                 } else if(path.equals("/login")) {// login page
@@ -228,12 +228,15 @@ public class Server {
                     SignUpPage signUp = new SignUpPage();
                     content.append(signUp.toHTMLString());
 
+                } else if(path.equals("/home")) {
+
                 } else if(path.startsWith("/images/")) {
                     File imgFile = new File(path);
                     BufferedInputStream in = null;
                     try {
                         in = new BufferedInputStream(new FileInputStream(imgFile));
                         int data;
+
                         System.out.println("File Size: " +imgFile.length());
                         byte[] d = new byte[(int)imgFile.length()];
                         // need to send this byte array over here.
@@ -259,21 +262,26 @@ public class Server {
                     if(user == null) {
                         webPage.appendBodyComponents("Invalid credentials!");
                     } else {
-                        webPage.appendBodyComponents("Logged in!", "<br>", user.toString());
+                        webPage.appendBodyComponents("Logged in!", WebPage.BR_TAG, user.toString(),
+                                WebPage.BR_TAG, new Hyperlink("../../home", "Continue", true));
                     }
                     content.append(webPage.toHTMLString());
                     sendRequest(content.toString(), "html");
+
                 } else if(request.getFileName().equals("/signup/submit")) {
                     User user = userManager.registerUser(entries.get("username"), entries.get("password"));
+
                     StringBuilder content = new StringBuilder();
                     WebPage webPage = new WebPage();
                     if(user == null) {
-                        webPage.appendBodyComponents("Unable to signup!");
+                        webPage.appendBodyComponents("Unable to sign up! This may be because your username has already been taken or a network error occurred.");
                     } else {
-                        webPage.appendBodyComponents("Logged in!", "<br>", user.toString());
+                        webPage.appendBodyComponents("Sign up successful!", WebPage.BR_TAG,
+                                new Hyperlink("../../login", "Log in", true));
                     }
                     content.append(webPage.toHTMLString());
                     sendRequest(content.toString(), "html");
+
                 }
             } else {
                 output.println("HTTP/1.1 400 Bad Request");
