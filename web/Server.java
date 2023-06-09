@@ -324,6 +324,7 @@ public class Server {
 
                         System.out.println("File Size: " +imgFile.length());
                         d = new byte[(int)imgFile.length()];
+                        in.read(d,0,(int)imgFile.length());
                         textRequest = false;
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -424,11 +425,6 @@ public class Server {
                 System.out.println("HTTP/1.1 200 OK");
                 System.out.println("Content-Type: " + contentType(extension));
                 System.out.println("Content-Length: " + byteArray.length);
-                System.out.println();
-                for (byte b : byteArray) {
-                    System.out.print(b + " ");
-                }
-                System.out.println(); 
                 System.out.println();
                 System.out.println("[" + Thread.currentThread() + "]" + " sent image request back.");
             } catch (IOException e) {
