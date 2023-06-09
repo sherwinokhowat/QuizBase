@@ -89,7 +89,7 @@ public class Request {
         if(index == -1) {
             return path;
         } else {
-            return path.substring(index+1);
+            return path.substring(0, index);
         }
     }
 

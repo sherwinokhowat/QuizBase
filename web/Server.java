@@ -2,6 +2,7 @@ package web;
 
 import manager.QuizManager;
 import manager.UserManager;
+import struct.Quiz;
 import struct.User;
 import utility.Pair;
 
@@ -305,13 +306,21 @@ public class Server {
                      String query = request.getQueryString();
                      User user = userManager.authenticateUser("sok", "Sok123");
                      HomePage homepage = new HomePage(user);
-//                     if(query.equals("quizzes=my")) {
-//                         // List<Quiz> list = get the quizzes from the quizmanager for the current user
-                    // loop through the list and do content.append(the iterated quiz)
-//                     } else if(query.equals("quizzes=all")) {
-//  // List<Quiz> list = get the quizzes from the quizmanager for all the users
-//                    // loop through the list and do content.append(the iterated quiz)
-//                     }
+                     if("quizzes=my".equals(query)) { // display user's quizzes
+                         ArrayList<? extends Object> quizzes = quizManager.getUserCreatedQuizzes(user);
+                         for(Object quiz : quizzes) {
+                             if(quiz instanceof Quiz) {
+                                 content.append(((Quiz) quiz).toHTMLString());
+                             }
+                         }
+                     } else { // display all quizzes
+                         ArrayList<? extends Object> quizzes = quizManager.getAllCreatedQuizzes();
+                         for(Object quiz : quizzes) {
+                             if(quiz instanceof Quiz) {
+                                 content.append(((Quiz) quiz).toHTMLString());
+                             }
+                         }
+                     }
 
                      content.append(homepage.toHTMLString());
                 } else if(path.startsWith("/images/")) {// any path that references stuff inside the images directory
