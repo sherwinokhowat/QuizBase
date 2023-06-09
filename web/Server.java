@@ -305,24 +305,29 @@ public class Server {
                 } else if(path.equals("/home")) {
                      String query = request.getQueryString();
                      User user = userManager.authenticateUser("sok", "Sok123");
-                     HomePage homepage = new HomePage(user);
+
                      if("quizzes=my".equals(query)) { // display user's quizzes
+                         HomePage homepage = new HomePage(user, false);
                          ArrayList<? extends Object> quizzes = quizManager.getUserCreatedQuizzes(user);
                          for(Object quiz : quizzes) {
                              if(quiz instanceof Quiz) {
                                  content.append(((Quiz) quiz).toHTMLString());
                              }
                          }
+                         content.append(homepage.toHTMLString());
+
                      } else { // display all quizzes
+                         HomePage homepage = new HomePage(user, true);
                          ArrayList<? extends Object> quizzes = quizManager.getAllCreatedQuizzes();
                          for(Object quiz : quizzes) {
                              if(quiz instanceof Quiz) {
                                  content.append(((Quiz) quiz).toHTMLString());
                              }
                          }
+                         content.append(homepage.toHTMLString());
+
                      }
 
-                     content.append(homepage.toHTMLString());
                 } else if(path.startsWith("/images/")) {// any path that references stuff inside the images directory
                     File imgFile = new File(System.getProperty("user.dir"), path);
                     BufferedInputStream in = null;
