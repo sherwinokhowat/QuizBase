@@ -13,7 +13,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.File;
+import java.io.File; 
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -137,11 +137,13 @@ public class Server {
          */
         @Override
         public void run() {
-            // Get the request from the client
+            System.out.println("["+Thread.currentThread()+"] "+"this thread just started");
+            // Get a message from the client
             ArrayList<String> request = new ArrayList<>();
 
+            // Get a message from the client, loops until a message is received
             try {
-                // check for incoming requests
+                // check for incoming responses
                 int contentLength = 0;
                 while(input.ready()) {
                     String line = input.readLine();
@@ -159,8 +161,12 @@ public class Server {
                     }
                 }
 
-                if(request.size() != 0) {// process request here
-                    processRequest(new Request(request));
+                if(request.size() != 0) {
+                    // process request here
+                    System.out.println("["+Thread.currentThread()+"] "+request.get(0));
+                    Request requestObj = new Request(request); 
+                    processRequest(requestObj);
+                    System.out.println("["+Thread.currentThread()+"] "+"processed request");
                 }
 
                 input.close();
@@ -180,7 +186,7 @@ public class Server {
          */
         public String getExtension (String filePath) {
             if (filePath.charAt(filePath.length()-1) == '/') {
-                filePath += "index.html";
+                filePath += "index.html"; 
             }
             String[] pathArr = filePath.split("[.]");
             if (pathArr.length <= 1) {
@@ -219,24 +225,29 @@ public class Server {
                 default:
                     result = "invalid";
                     break;
-            }
-            return result;
         }
-
 
         /**
          * Processes a request and sends a response to the client
          *
-         * @param request The request object
+         * @param request The request, split by the line separator
          */
         private void processRequest(Request request) {
             System.out.println(request);
             if(request.getRequestType().equals("GET")) {
+                System.out.println("["+Thread.currentThread()+"] "+request);
 
+                // resource path is stored in firstLine[1]
                 String path = request.getFileName();
 
-                StringBuilder content = new StringBuilder();
+                if(path.equals("/favicon.ico")) {
+                    output.println("HTTP/1.1 404 Not Found");
+                    output.flush();
+                    return;
+                }
 
+                StringBuilder content = new StringBuilder();
+                
                 if(path.equals("/")) {// homepage
                     WebPage webPage = new WebPage().appendBodyComponents(
                         new Hyperlink("/login", "Log in", true),
@@ -247,8 +258,7 @@ public class Server {
                 } else if(path.equals("/login")) {// login page
                     LoginPage loginPage = new LoginPage();
                     content.append(loginPage.toHTMLString());
-
-                } else if(path.equals("/signup")) {// signup page
+                } else if(path.equals("/signup/")) {// signup page
                     SignUpPage signUp = new SignUpPage();
                     content.append(signUp.toHTMLString());
 
@@ -257,15 +267,16 @@ public class Server {
                     Homepage homepage = new Homepage(user);
                     content.append(homepage.toHTMLString());
                 } else if(path.startsWith("/images/")) {
-                    File imgFile = new File(path);
-                    BufferedInputStream in = null;
+                    File imgFile = new File(System.getProperty("user.dir"), path); 
+                    BufferedInputStream in = null; 
                     try {
-                        in = new BufferedInputStream(new FileInputStream(imgFile));
+                        System.out.println("Opening file: " + imgFile.getCanonicalPath());
+                        in = new BufferedInputStream(new FileInputStream(imgFile)); 
                         int data;
 
                         System.out.println("File Size: " +imgFile.length());
                         byte[] d = new byte[(int)imgFile.length()];
-                        // need to send this byte array over here.
+                        // need to send this byte array over here. 
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -275,10 +286,19 @@ public class Server {
                     return;
                 }
                 sendResponse(content.toString(), "Content-Type: "+contentType("html"));
+                
 
+
+                output.println("HTTP/1.1 200 OK");
+                output.println("Content-Type: text/html");
+                output.println("Content-Length: " + content.length());
+                output.println();
+                output.println(content.toString());
+                output.flush();
             } else if(request.getRequestType().equals("POST")) {
+                System.out.println("["+Thread.currentThread()+"] "+request);
 
-                HashMap<String, String> entries = request.returnPostData();
+                HashMap<String, String> entries = request.returnPostData(); 
 
                 if(request.getFileName().equals("/login/submit")) {
                     String username = entries.get("username");
@@ -307,7 +327,7 @@ public class Server {
                     } else {
                         webPage.appendBodyComponents("Sign up successful!", WebPage.BR_TAG,
                                 new Hyperlink("../../login", "Log in", true));
-                    }
+                }
                     content.append(webPage.toHTMLString());
                     sendResponse(content.toString(), "Content-Type: "+contentType("html"));
 
