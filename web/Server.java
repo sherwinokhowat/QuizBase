@@ -12,8 +12,8 @@ import java.io.FileInputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.DataOutputStream; 
-import java.io.File; 
+import java.io.DataOutputStream;
+import java.io.File;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -37,6 +37,9 @@ public class Server {
      * The cookie will last for the duration of the browser session or while the server is running.
      */
     private HashMap<String, Pair<String, String>> cookies;
+
+    public Server() {
+    }
 
     /**
      * Starts this server.
@@ -84,12 +87,40 @@ public class Server {
     }
 
     /**
+     * Gets this UserManager
+     *
+     * @return The UserManager
+     */
+    public UserManager getUserManager() {
+        return userManager;
+    }
+
+    /**
+     * Gets this QuizManager
+     *
+     * @return The QuizManager
+     */
+    public QuizManager getQuizManager() {
+        return quizManager;
+    }
+
+    /**
+     * Validates the provided id
+     *
+     * @param id The session id
+     * @return The user's username and password
+     */
+    public Pair<String, String> checkSessionID(String id) {
+        return cookies.get(id);
+    }
+
+    /**
      * Generates a unique 20 character session ID, containing AZaz09 characters.
      * Upon generation, it is stored as a cookie.
      *
      * @return The ID
      */
-    private String sessionID(String username, String password) {
+    public String createSessionID(String username, String password) {
         char[] chars = new char[20];
         String id = null;
         do {
@@ -325,7 +356,7 @@ public class Server {
                     }
                     content.append(webPage.toHTMLString());
                     sendResponse(content.toString(), "Content-Type: "+contentType("html"),
-                            "Set-Cookie: sessionId="+sessionID(username, password)+"; Path=../../");
+                            "Set-Cookie: sessionId="+createSessionID(username, password)+"; Path=../../");
 
                 } else if(request.getFileName().equals("/signup/submit")) {
                     User user = userManager.registerUser(entries.get("username"), entries.get("password"));
@@ -387,7 +418,7 @@ public class Server {
                 System.out.println("Error created when getting socket output stream - sendByteRequest()");
                 e.printStackTrace();
             }
-            
+
         }
 
     }
