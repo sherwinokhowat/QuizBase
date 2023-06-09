@@ -252,12 +252,12 @@ public class Server {
                 
                 if(path.equals("/")) {// homepage
                     WebPage webPage = new WebPage().appendBodyComponents(
-                        new Hyperlink("/login", "Log in", true),
+                        new Hyperlink("/login/", "Log in", true),
                         WebPage.BR_TAG,
-                        new Hyperlink("/signup", "Sign up", true));
+                        new Hyperlink("/signup/", "Sign up", true));
                     content.append(webPage.toHTMLString());
 
-                } else if(path.equals("/login")) {// login page
+                } else if(path.equals("/login/")) {// login page
                     LoginPage loginPage = new LoginPage();
                     content.append(loginPage.toHTMLString());
                 } else if(path.equals("/signup/")) {// signup page
@@ -266,8 +266,8 @@ public class Server {
 
                 } else if(path.equals("/home")) {
                     User user = userManager.authenticateUser("sok", "Sok123");
-                    HomePage homepage = new HomePage(user);
-                    content.append(homepage.toHTMLString());
+                    // HomePage homepage = new HomePage(user);
+                    // content.append(homepage.toHTMLString());
                 } else if(path.startsWith("/images/")) {
                     File imgFile = new File(System.getProperty("user.dir"), path); 
                     BufferedInputStream in = null; 
