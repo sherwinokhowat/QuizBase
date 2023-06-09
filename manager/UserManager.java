@@ -95,9 +95,6 @@ public class UserManager extends DatabaseManager {
      * @return The User object or {@code null} if registration was not successful.
      */
     public User registerUser(String username, String password) {
-        if (username.length() < 0 || password.length() < 1) { // MySQL doesn't enforce minimum length. 
-            return null; 
-        }
         boolean successful = executeWriteOperation(
                 new SQLStatementBuilder().insertInto("USERS", "USERNAME", "PASSWORD")
                 .values("'"+username+"'", "'"+password+"'").toString());

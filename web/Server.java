@@ -276,7 +276,7 @@ public class Server {
                     StringBuilder content = new StringBuilder();
                     WebPage webPage = new WebPage();
                     if(user == null) {
-                        webPage.appendBodyComponents("Unable to sign up! This may be because your username has already been taken or a network error occurred.");
+                        webPage.appendBodyComponents("Unable to sign up! This may be because your username has already been taken, credentials are invalid or a network error occurred.");
                     } else {
                         webPage.appendBodyComponents("Sign up successful!", WebPage.BR_TAG,
                                 new Hyperlink("../../login", "Log in", true));
