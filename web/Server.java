@@ -216,8 +216,8 @@ public class Server {
 
                 if(path.equals("/")) {// homepage
                     WebPage webPage = new WebPage().appendBodyComponents(
-                        new Hyperlink("/login", "Log in"),
-                        new Hyperlink("/signup", "Sign up"));
+                        new Hyperlink("/login", "Log in", false),
+                        new Hyperlink("/signup", "Sign up", false));
                     content.append(webPage.toHTMLString());
 
                 } else if(path.equals("/login")) {// login page
@@ -283,7 +283,7 @@ public class Server {
 
         private void sendRequest(String content, String extension) {
             output.println("HTTP/1.1 200 OK");
-            output.println("Content-Type: text/html"); // keep it as text/html for now, not enough time to support CSS / JS.
+            output.println("Content-Type: " + contentType(extension)); // keep it as text/html for now, not enough time to support CSS / JS.
             output.println("Content-Length: " + content.length());
             output.println();
             output.println(content);

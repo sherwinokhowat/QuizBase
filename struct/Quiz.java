@@ -129,8 +129,20 @@ public class Quiz implements WebComponent {
 
     @Override
     public String toHTMLString() {
-        // TODO Auto-generated method stub
-        return null;
+        StringBuilder html = new StringBuilder();
+        html.append("<html>");
+        html.append("<div style='border: 1px solid black; padding: 20px; margin: 20px; max-width: 300px;'>");
+        html.append("<h1 style='margin: 0;'>").append(this.name).append("</h1>");
+        html.append("<h3 style='margin: 0; color: gray;'>Created by User ID: ").append(this.creatorId).append("</h3>");
+        String shortenedDescription = this.description;
+        if(this.description.length() > 50) { // adjust the number here as per your requirement
+            shortenedDescription = this.description.substring(0, 50) + "...";
+        }
+        html.append("<p style='margin: 0;'>").append(shortenedDescription).append("</p>");
+        html.append("</div>");
+        html.append("</html>");
+        return html.toString();
     }
+
 
 }

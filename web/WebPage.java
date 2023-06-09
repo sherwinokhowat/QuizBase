@@ -11,6 +11,8 @@ import java.util.ArrayList;
  */
 public class WebPage implements WebComponent {
 
+    public static String BR_TAG = "<br>";
+
     protected ArrayList<Object> headComponents = new ArrayList<Object>();
     protected ArrayList<Object> bodyComponents = new ArrayList<Object>();
     protected String bodyAttributes;

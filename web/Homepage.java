@@ -1,0 +1,17 @@
+package web;
+import struct.User;
+
+// shows a list of quizzes with their descriptions
+public class Homepage extends WebPage {
+
+    public Homepage(User user) {
+        // need to display all the quizzes and their descriptions. first work on the quiz class's toHTMLString
+        appendBodyComponents("<img src='../images/logo.png' style='width: 400px; height: auto;'>",
+                "<form style='display: flex; flex-direction: column; width: 200px; margin-top: 50px; padding: 20px;' action='/login/submit' method='POST' style='background-color: lightgray;'>",
+                "<input style='margin-bottom: 3px;' type='text' id='username' name='username' placeholder='Username'>",
+                "<input style='margin-bottom: 5px;' type='password' id='password' name='password' placeholder='Password'>",
+                "<input type='submit' value='Login'>",
+                "</form>");
+        setBodyAttributes("style='background-color: lightblue; display: flex; flex-direction: column; justify-content: center; align-items: center;'");
+    }
+}
