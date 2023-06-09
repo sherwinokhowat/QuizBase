@@ -84,7 +84,7 @@ public class Request {
         return str.toString();
     }
 
-    public String removeQueryString(String path) {
+    public String getPathWithoutQueryString() {
         int index = path.indexOf('?');
         if(index == -1) {
             return path;
