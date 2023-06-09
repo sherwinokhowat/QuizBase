@@ -3,10 +3,10 @@ package web;
 import manager.QuizManager;
 import manager.UserManager;
 import struct.User;
+import utility.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.StringTokenizer;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.BufferedInputStream;
@@ -33,6 +33,12 @@ public class Server {
     private static boolean accepting = true;
 
     /**
+     * Each cookie is mapped to the user's username and password.
+     * The cookie will last for the duration of the browser session or while the server is running.
+     */
+    private HashMap<String, Pair<String, String>> cookies;
+
+    /**
      * Starts this server.
      *
      * @param port The port number
@@ -45,6 +51,7 @@ public class Server {
         quizManager.connectToDatabase();
         userManager.initialize();// must be initialized before quizManager
         quizManager.initialize();
+        cookies = new HashMap<>();
 
         // hold the client connection
         Socket client = null;
@@ -52,17 +59,15 @@ public class Server {
         try {
             serverSock = new ServerSocket(5000);// assigns an port to the server
             serverSock.setSoTimeout(0);// will never timeout while waiting for connections
+            System.out.println("Accepting Connections");
 
             while(accepting) {
-                System.out.println("["+Thread.currentThread()+"] "+"waiting for connection");
                 client = serverSock.accept();// wait for connection
-                System.out.println("["+Thread.currentThread()+"] "+"Client connected");
 
                 // Note: you might want to keep references to all clients if you plan to broadcast messages
                 // Also: Queues are good tools to buffer incoming/outgoing messages
 
                 Thread t = new Thread(new ConnectionHandler(client));// create a thread for the new client and pass in the socket
-                System.out.println("["+Thread.currentThread()+"] "+"about to start new thread");
                 t.start(); //start the new thread
 
             }
@@ -76,6 +81,32 @@ public class Server {
             }
             System.exit(-1);
         }
+    }
+
+    /**
+     * Generates a unique 20 character session ID, containing AZaz09 characters.
+     * Upon generation, it is stored as a cookie.
+     *
+     * @return The ID
+     */
+    private String sessionID(String username, String password) {
+        char[] chars = new char[20];
+        String id = null;
+        do {
+            for(int i = 0; i < 20; i++) {
+                int randInt = (int)(Math.random()*62);
+                if(randInt < 10) {
+                    chars[i] = (char)('0'+randInt);
+                } else if(randInt < 36) {
+                    chars[i] = (char)('A'+randInt-10);
+                } else {
+                    chars[i] = (char)('a'+randInt-36);
+                }
+            }
+            id = new String(chars);
+        } while(cookies.containsKey(id));
+        cookies.put(id, new Pair<>(username, password));
+        return id;
     }
 
     //***** Inner class - thread for client connection
@@ -106,13 +137,11 @@ public class Server {
          */
         @Override
         public void run() {
-            System.out.println("["+Thread.currentThread()+"] "+"this thread just started");
-            // Get a message from the client
+            // Get the request from the client
             ArrayList<String> request = new ArrayList<>();
 
-            // Get a message from the client, loops until a message is received
             try {
-                // check for incoming responses
+                // check for incoming requests
                 int contentLength = 0;
                 while(input.ready()) {
                     String line = input.readLine();
@@ -130,12 +159,8 @@ public class Server {
                     }
                 }
 
-                if(request.size() != 0) {
-                    // process request here
-                    System.out.println("["+Thread.currentThread()+"] "+request.get(0));
-                    Request requestObj = new Request(request);
-                    processRequest(requestObj);
-                    System.out.println("["+Thread.currentThread()+"] "+"processed request");
+                if(request.size() != 0) {// process request here
+                    processRequest(new Request(request));
                 }
 
                 input.close();
@@ -146,8 +171,6 @@ public class Server {
                 System.out.println("Failed to receive response from the client");
                 e.printStackTrace();
             }
-
-            System.out.println("["+Thread.currentThread()+"] "+"Ending thread");
         }
 
         /**
@@ -207,6 +230,7 @@ public class Server {
          * @param request The request object
          */
         private void processRequest(Request request) {
+            System.out.println(request);
             if(request.getRequestType().equals("GET")) {
 
                 String path = request.getFileName();
@@ -250,14 +274,16 @@ public class Server {
                     output.flush();
                     return;
                 }
-                sendRequest(content.toString(), "html");
+                sendResponse(content.toString(), "Content-Type: "+contentType("html"));
 
             } else if(request.getRequestType().equals("POST")) {
 
                 HashMap<String, String> entries = request.returnPostData();
 
                 if(request.getFileName().equals("/login/submit")) {
-                    User user = userManager.authenticateUser(entries.get("username"), entries.get("password"));
+                    String username = entries.get("username");
+                    String password = entries.get("password");
+                    User user = userManager.authenticateUser(username, password);
 
                     StringBuilder content = new StringBuilder();
                     WebPage webPage = new WebPage();
@@ -268,7 +294,8 @@ public class Server {
                                 WebPage.BR_TAG, new Hyperlink("../../home", "Continue", true));
                     }
                     content.append(webPage.toHTMLString());
-                    sendRequest(content.toString(), "html");
+                    sendResponse(content.toString(), "Content-Type: "+contentType("html"),
+                            "Set-Cookie: sessionId="+sessionID(username, password));
 
                 } else if(request.getFileName().equals("/signup/submit")) {
                     User user = userManager.registerUser(entries.get("username"), entries.get("password"));
@@ -282,7 +309,7 @@ public class Server {
                                 new Hyperlink("../../login", "Log in", true));
                     }
                     content.append(webPage.toHTMLString());
-                    sendRequest(content.toString(), "html");
+                    sendResponse(content.toString(), "Content-Type: "+contentType("html"));
 
                 }
             } else {
@@ -291,9 +318,19 @@ public class Server {
             }
         }
 
-        private void sendRequest(String content, String extension) {
+        /**
+         * Sends a HTTP response to the client
+         *
+         * @param content The body (empty String indicates an empty body)
+         * @param headerFields Some number of strings representing the header fields.
+         * Note that The "Content-Length" field is always generated, whether or not it is passed in.
+         */
+        private void sendResponse(String content, String... headerFields) {
             output.println("HTTP/1.1 200 OK");
-            output.println("Content-Type: " + contentType(extension)); // keep it as text/html for now, not enough time to support CSS / JS.
+            for(String field: headerFields) {
+                output.println(field);
+            }
+            // keep content type as text/html for now, not enough time to support CSS / JS.
             output.println("Content-Length: " + content.length());
             output.println();
             output.println(content);
