@@ -266,6 +266,8 @@ public class Server {
          * @param request The request, split by the line separator
          */
         private void processRequest(Request request) {
+            boolean textRequest = true; // if an image this is false
+            
             System.out.println(request);
             if(request.getRequestType().equals("GET")) {
                 System.out.println("["+Thread.currentThread()+"] "+request);
@@ -284,7 +286,7 @@ public class Server {
                 }
 
                 StringBuilder content = new StringBuilder();
-
+                byte[] d = null; // byte array for images
                 if(path.equals("/")) {// homepage
                     WebPage webPage = new WebPage().appendBodyComponents(
                         new Hyperlink("/login/", "Log in", true),
@@ -321,8 +323,8 @@ public class Server {
                         int data;
 
                         System.out.println("File Size: " +imgFile.length());
-                        byte[] d = new byte[(int)imgFile.length()];
-                        // need to send this byte array over here.
+                        d = new byte[(int)imgFile.length()];
+                        textRequest = false;
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -335,7 +337,12 @@ public class Server {
                     }
                     return;
                 }
-                sendResponse(content.toString(), "Content-Type: "+contentType("html"));
+                if (textRequest) {
+                    sendResponse(content.toString(), "Content-Type: "+contentType("html"));
+                } else {
+                    sendByteRequest(d, "html");
+                }
+                
             } else if(request.getRequestType().equals("POST")) {
                 System.out.println("["+Thread.currentThread()+"] "+request);
 
