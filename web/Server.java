@@ -12,7 +12,6 @@ import java.io.FileInputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.io.DataOutputStream; 
 import java.io.File; 
 import java.net.ServerSocket;
@@ -165,7 +164,7 @@ public class Server {
                 if(request.size() != 0) {
                     // process request here
                     System.out.println("["+Thread.currentThread()+"] "+request.get(0));
-                    Request requestObj = new Request(request); 
+                    Request requestObj = new Request(request);
                     processRequest(requestObj);
                     System.out.println("["+Thread.currentThread()+"] "+"processed request");
                 }
@@ -187,7 +186,7 @@ public class Server {
          */
         public String getExtension (String filePath) {
             if (filePath.charAt(filePath.length()-1) == '/') {
-                filePath += "index.html"; 
+                filePath += "index.html";
             }
             String[] pathArr = filePath.split("[.]");
             if (pathArr.length <= 1) {
@@ -227,7 +226,7 @@ public class Server {
                     result = "invalid";
                     break;
             }
-            return result; 
+            return result;
         }
 
         /**
@@ -254,7 +253,7 @@ public class Server {
                 }
 
                 StringBuilder content = new StringBuilder();
-                
+
                 if(path.equals("/")) {// homepage
                     WebPage webPage = new WebPage().appendBodyComponents(
                         new Hyperlink("/login/", "Log in", true),
@@ -274,16 +273,16 @@ public class Server {
                     HomePage homePage = new HomePage(user);
                     content.append(homePage.toHTMLString());
                 } else if(path.startsWith("/images/")) {
-                    File imgFile = new File(System.getProperty("user.dir"), path); 
-                    BufferedInputStream in = null; 
+                    File imgFile = new File(System.getProperty("user.dir"), path);
+                    BufferedInputStream in = null;
                     try {
                         System.out.println("Opening file: " + imgFile.getCanonicalPath());
-                        in = new BufferedInputStream(new FileInputStream(imgFile)); 
+                        in = new BufferedInputStream(new FileInputStream(imgFile));
                         int data;
 
                         System.out.println("File Size: " +imgFile.length());
                         byte[] d = new byte[(int)imgFile.length()];
-                        // need to send this byte array over here. 
+                        // need to send this byte array over here.
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -297,22 +296,10 @@ public class Server {
                     return;
                 }
                 sendResponse(content.toString(), "Content-Type: "+contentType("html"));
-                
-                try {
-                    output.writeBytes("HTTP/1.1 200 OK" + "\n");
-                    output.writeBytes("Content-Type: text/html" + "\n");
-                    output.writeBytes("Content-Length: " + content.length() + "\n");
-                    output.writeBytes("\n");
-                    output.writeBytes(content.toString() + "\n");
-                    output.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                
             } else if(request.getRequestType().equals("POST")) {
                 System.out.println("["+Thread.currentThread()+"] "+request);
 
-                HashMap<String, String> entries = request.returnPostData(); 
+                HashMap<String, String> entries = request.returnPostData();
 
                 if(request.getFileName().equals("/login/submit")) {
                     String username = entries.get("username");
@@ -329,7 +316,7 @@ public class Server {
                     }
                     content.append(webPage.toHTMLString());
                     sendResponse(content.toString(), "Content-Type: "+contentType("html"),
-                            "Set-Cookie: sessionId="+sessionID(username, password));
+                            "Set-Cookie: sessionId="+sessionID(username, password)+"; Path=../../");
 
                 } else if(request.getFileName().equals("/signup/submit")) {
                     User user = userManager.registerUser(entries.get("username"), entries.get("password"));
@@ -357,7 +344,7 @@ public class Server {
         }
 
         /**
-         * Sends a HTTP response to the client
+         * Sends a HTTP 200 (OK) response to the client
          *
          * @param content The body (empty String indicates an empty body)
          * @param headerFields Some number of strings representing the header fields.
