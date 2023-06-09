@@ -6,9 +6,9 @@ import struct.User;
  *
  * @author Sherwin Okhowat
  */
-public class Homepage extends WebPage {
+public class HomePage extends WebPage {
 
-    public Homepage(User user) {
+    public HomePage(User user) {
         // I WILL MAKE THIS ALL INTO ONE METHOD LATER ITS JUST LIKE THIS FOR NOW FOR READABILITY
         // DO NOT CHANGE THE FORMATTING. IT IS LIKE THIS ON PURPOSE CURRENTLY FOR READABILITY
         setBodyAttributes("style='background-color: lightblue; display: flex; flex-direction: column; justify-content: center; align-items: center;'");
