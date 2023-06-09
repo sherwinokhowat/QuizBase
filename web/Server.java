@@ -240,7 +240,7 @@ public class Server {
                 System.out.println("["+Thread.currentThread()+"] "+request);
 
                 // resource path is stored in firstLine[1]
-                String path = request.getFileName();
+                String path = request.removeQueryString(request.getFileName());
 
                 if(path.equals("/favicon.ico")) {
                     try {
@@ -267,10 +267,20 @@ public class Server {
                 } else if(path.equals("/signup/")) {// signup page
                     SignUpPage signUp = new SignUpPage();
                     content.append(signUp.toHTMLString());
-                } else if(path.equals("/home/")) {
-                    User user = userManager.authenticateUser("sok", "Sok123");
-                    HomePage homePage = new HomePage(user);
-                    content.append(homePage.toHTMLString());
+
+                } else if(path.equals("/home")) {
+                     String query = request.getQueryString();
+                     User user = userManager.authenticateUser("sok", "Sok123");
+                     HomePage homepage = new HomePage(user);
+//                     if(query.equals("quizzes=my")) {
+//                         // List<Quiz> list = get the quizzes from the quizmanager for the current user
+                    // loop through the list and do content.append(the iterated quiz)
+//                     } else if(query.equals("quizzes=all")) {
+//  // List<Quiz> list = get the quizzes from the quizmanager for all the users
+//                    // loop through the list and do content.append(the iterated quiz)
+//                     }
+
+                     content.append(homepage.toHTMLString());
                 } else if(path.startsWith("/images/")) {
                     File imgFile = new File(System.getProperty("user.dir"), path);
                     BufferedInputStream in = null;

@@ -86,6 +86,26 @@ public class Request {
             return null;
         }
     }
+
+    public String removeQueryString(String path) {
+        int index = path.indexOf('?');
+        if(index == -1) {
+            return path;
+        } else {
+            return path.substring(index+1);
+        }
+    }
+
+    public String getQueryString() {
+        int index = this.fileRequested.indexOf('?');
+        if (index == -1) {
+            // No query string in this request
+            return null;
+        } else {
+            return this.fileRequested.substring(index + 1);
+        }
+    }
+
 }
 
 /*

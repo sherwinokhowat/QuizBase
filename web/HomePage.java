@@ -22,8 +22,8 @@ public class HomePage extends WebPage {
         content.append("<hr style='border: 2px solid black; width: 150%;'>");
 
         content.append("<div style='display: flex; justify-content: center; margin-bottom: 20px;'>");
-        content.append("<a href='/all-quizzes' style='margin-right: 10px; background-color: lightgray; color: black; padding: 10px; text-decoration: none; border: 1px solid black;'>All Quizzes</a>");
-        content.append("<a href='/my-quizzes' style='background-color: lightgray; color: black; padding: 10px; text-decoration: none; border: 1px solid black;'>My Quizzes</a>");
+        content.append("<a href='/home?quizzes=all' style='margin-right: 10px; background-color: lightgray; color: black; padding: 10px; text-decoration: none; border: 1px solid black;'>All Quizzes</a>");
+        content.append("<a href='/home?quizzes=my' style='background-color: lightgray; color: black; padding: 10px; text-decoration: none; border: 1px solid black;'>My Quizzes</a>");
         content.append("</div>");
 
         appendBodyComponents(content.toString());
