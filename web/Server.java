@@ -225,6 +225,8 @@ public class Server {
                 default:
                     result = "invalid";
                     break;
+            }
+            return result; 
         }
 
         /**
@@ -264,7 +266,7 @@ public class Server {
 
                 } else if(path.equals("/home")) {
                     User user = userManager.authenticateUser("sok", "Sok123");
-                    Homepage homepage = new Homepage(user);
+                    HomePage homepage = new HomePage(user);
                     content.append(homepage.toHTMLString());
                 } else if(path.startsWith("/images/")) {
                     File imgFile = new File(System.getProperty("user.dir"), path); 
