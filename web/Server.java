@@ -267,13 +267,13 @@ public class Server {
          */
         private void processRequest(Request request) {
             boolean textRequest = true; // if an image this is false
-            
+
             System.out.println(request);
-            if(request.getRequestType().equals("GET")) {
+            if(request.getType().equals("GET")) {
                 System.out.println("["+Thread.currentThread()+"] "+request);
 
                 // resource path is stored in firstLine[1]
-                String path = request.removeQueryString(request.getFileName());
+                String path = request.removeQueryString(request.getPath());
 
                 if(path.equals("/favicon.ico")) {
                     try {
@@ -289,15 +289,15 @@ public class Server {
                 byte[] d = null; // byte array for images
                 if(path.equals("/")) {// homepage
                     WebPage webPage = new WebPage().appendBodyComponents(
-                        new Hyperlink("/login/", "Log in", true),
+                        new Hyperlink("/login", "Log in", true),
                         WebPage.BR_TAG,
-                        new Hyperlink("/signup/", "Sign up", true));
+                        new Hyperlink("/signup", "Sign up", true));
                     content.append(webPage.toHTMLString());
 
-                } else if(path.equals("/login/")) {// login page
+                } else if(path.equals("/login")) {// login page
                     LoginPage loginPage = new LoginPage();
                     content.append(loginPage.toHTMLString());
-                } else if(path.equals("/signup/")) {// signup page
+                } else if(path.equals("/signup")) {// signup page
                     SignUpPage signUp = new SignUpPage();
                     content.append(signUp.toHTMLString());
 
@@ -314,7 +314,7 @@ public class Server {
 //                     }
 
                      content.append(homepage.toHTMLString());
-                } else if(path.startsWith("/images/")) {
+                } else if(path.startsWith("/images/")) {// any path that references stuff inside the images directory
                     File imgFile = new File(System.getProperty("user.dir"), path);
                     BufferedInputStream in = null;
                     try {
@@ -343,15 +343,13 @@ public class Server {
                 } else {
                     sendByteRequest(d, "html");
                 }
-                
-            } else if(request.getRequestType().equals("POST")) {
+
+            } else if(request.getType().equals("POST")) {
                 System.out.println("["+Thread.currentThread()+"] "+request);
 
-                HashMap<String, String> entries = request.returnPostData();
-
-                if(request.getFileName().equals("/login/submit")) {
-                    String username = entries.get("username");
-                    String password = entries.get("password");
+                if(request.getPath().equals("/login/submit")) {
+                    String username = request.getPostBody("username");
+                    String password = request.getPostBody("password");
                     User user = userManager.authenticateUser(username, password);
 
                     StringBuilder content = new StringBuilder();
@@ -366,8 +364,10 @@ public class Server {
                     sendResponse(content.toString(), "Content-Type: "+contentType("html"),
                             "Set-Cookie: sessionId="+createSessionID(username, password)+"; Path=../../");
 
-                } else if(request.getFileName().equals("/signup/submit")) {
-                    User user = userManager.registerUser(entries.get("username"), entries.get("password"));
+                } else if(request.getPath().equals("/signup/submit")) {
+                    String username = request.getPostBody("username");
+                    String password = request.getPostBody("password");
+                    User user = userManager.registerUser(username, password);
 
                     StringBuilder content = new StringBuilder();
                     WebPage webPage = new WebPage();
@@ -375,7 +375,7 @@ public class Server {
                         webPage.appendBodyComponents("Unable to sign up! This may be because your username has already been taken, credentials are invalid or a network error occurred.");
                     } else {
                         webPage.appendBodyComponents("Sign up successful!", WebPage.BR_TAG,
-                                new Hyperlink("../../login/", "Log in", true));
+                                new Hyperlink("../../login", "Log in", true));
                 }
                     content.append(webPage.toHTMLString());
                     sendResponse(content.toString(), "Content-Type: "+contentType("html"));

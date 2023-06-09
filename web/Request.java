@@ -6,13 +6,18 @@ import java.util.StringTokenizer;
 
 /**
  * Stores all the stuff related to the request (e.g. the file it's asking for, the host, etc. etc. etc.) Only accepts the raw request as the argument.
+ *
+ * @author Avery Chan, Ricky Qin
  */
 public class Request {
-    private ArrayList<String> rawRequest; // stores everything, line by line.
-    private String host; // e.g. 127.0.0.1:5000
-    private String fileRequested; // e.g. /index2.html
 
-    private String requestType; // e.g. POST, GET
+    private String type; // e.g. POST, GET
+    private String path; // e.g. /index2.html
+    private String body;
+
+    private ArrayList<String> rawRequest;// stores everything, line by line.
+    private HashMap<String, String> fields;
+    private HashMap<String, String> postBody;// The contents of the body (only for POST)
 
     /**
      * Store useful information about the request
@@ -22,32 +27,52 @@ public class Request {
     public Request (ArrayList<String> rawRequest) {
         this.rawRequest = rawRequest;
         // System.out.println("DEBUG: request has " + rawRequest.size() + " lines in it.");
-        String firstLine = rawRequest.get(0);
-        String[] getRequestArray = firstLine.split(" ");
-        this.requestType = getRequestArray[0];
-        this.fileRequested = getRequestArray[1];
-        String secondLine = rawRequest.get(1);
-        String[] hostArray = secondLine.split(" ");
-        // do some processing in here.
-        this.host = hostArray[1];
+
+        String[] firstLine = rawRequest.get(0).split(" ");
+        this.type = firstLine[0];
+        this.path = firstLine[1];
+
+        fields = new HashMap<String, String>();
+        for(int i = 1; i < rawRequest.size()-2; i++) {
+            int idx = rawRequest.get(i).indexOf(':');
+            String fieldName = rawRequest.get(i).substring(0, idx).trim();
+            String fieldValue = rawRequest.get(i).substring(idx+1).trim();
+            fields.put(fieldName, fieldValue);
+        }
+
+        this.body = rawRequest.get(rawRequest.size()-1);
+        if(this.type.equals("POST")) {
+            postBody = new HashMap<String, String>();
+            StringTokenizer st = new StringTokenizer(body, "&");
+            while(st.hasMoreTokens()) {
+                String entry = st.nextToken();
+                String key = entry.substring(0, entry.indexOf("="));
+                String value = entry.substring(entry.indexOf("=")+1);
+                postBody.put(key, value);
+            }
+        }
     }
 
-    public String getHost() {
-        return host;
+    public String getType() {
+        return type;
     }
 
-    public String getFileName() {
-        return fileRequested;
+    public String getPath() {
+        return path;
     }
 
-    public String getRequestType() {
-        return requestType;
+    public String getField(String fieldName) {
+        return fields.get(fieldName);
+    }
+
+    public String getPostBody(String key) {
+        return postBody.get(key);
     }
 
     /**
      * Returns the original request
      * @return the original request, separated line by line like the original.
-     * */
+     */
     public String toString() {
         StringBuilder str = new StringBuilder();
         for (int i = 0; i < rawRequest.size(); i++) {
@@ -57,34 +82,6 @@ public class Request {
             }
         }
         return str.toString();
-    }
-
-    /**
-     * Returns the number of lines in the request
-     * @return number of lines in the request
-     */
-    public int size() {
-        return rawRequest.size();
-    }
-
-    /**
-     * Takes the form data (provided this request is a POST request) and returns it as a HashMap.
-     * @return the form data, in HashMap format
-     */
-    public HashMap<String, String> returnPostData() {
-        if (this.requestType.equals("POST")) {
-            HashMap<String, String> entries = new HashMap<String, String>();
-            StringTokenizer st = new StringTokenizer(rawRequest.get(rawRequest.size()-1), "&");
-            while(st.hasMoreTokens()) {
-                String entry = st.nextToken();
-                String key = entry.substring(0, entry.indexOf("="));
-                String value = entry.substring(entry.indexOf("=")+1);
-                entries.put(key, value);
-            }
-            return entries;
-        } else {
-            return null;
-        }
     }
 
     public String removeQueryString(String path) {
@@ -97,12 +94,12 @@ public class Request {
     }
 
     public String getQueryString() {
-        int index = this.fileRequested.indexOf('?');
+        int index = this.path.indexOf('?');
         if (index == -1) {
             // No query string in this request
             return null;
         } else {
-            return this.fileRequested.substring(index + 1);
+            return this.path.substring(index + 1);
         }
     }
 
