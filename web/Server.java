@@ -266,8 +266,8 @@ public class Server {
 
                 } else if(path.equals("/home")) {
                     User user = userManager.authenticateUser("sok", "Sok123");
-                    // HomePage homepage = new HomePage(user);
-                    // content.append(homepage.toHTMLString());
+                    HomePage homePage = new HomePage(user);
+                    content.append(homePage.toHTMLString());
                 } else if(path.startsWith("/images/")) {
                     File imgFile = new File(System.getProperty("user.dir"), path); 
                     BufferedInputStream in = null; 
