@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import struct.Quiz;
+import struct.QuizItem; 
 import struct.User; 
 import utility.Pair;
 import utility.SQLStatementBuilder;
@@ -53,6 +54,38 @@ public class QuizManager extends DatabaseManager {
     public boolean addQuiz(User creator, String name, String description) {
         return executeWriteOperation(new SQLStatementBuilder().insertInto("QUIZZES", "NAME", "DESCRIPTION", "CREATOR_ID").values("'" + name + "'", "'" + description + "'", Integer.toString(creator.getID())).toString());
     }
+
+    /**
+     * Deletes a quiz based on the User who made it and 
+     * @param requestor
+     * @param quiz
+     * @return whether deletion was successful or not. 
+     */
+    public boolean deleteQuiz (User requestor, Quiz quiz) {
+        return executeWriteOperation(new SQLStatementBuilder().deleteFrom("QUIZZES").where("ID='"+quiz.getID() + "' AND CREATOR_ID='" + requestor.getID() + "'").toString());
+    }
+
+    /**
+     * Returns the quiz with a certain ID and Name
+     * @param id the quiz's ID
+     * @param name the name of the quiz (case sensitive)
+     * @return
+     */
+    public Quiz getQuiz (int id, String name) {
+        ArrayList<? extends Object> dbResult = executeReadOperation(new SQLStatementBuilder()
+        .select().from("QUIZZES")
+        .where("ID='" + id + "' AND NAME='" + name + "'").toString());
+        if (dbResult.size() == 1) {
+            return (Quiz) dbResult.get(1); 
+        } else {
+            return null;
+        }
+    }
+
+    public void addQuizItems (Quiz quiz, QuizItem... items) {
+        
+    }
+
 
     @Override
     public Object getById(int id) {
