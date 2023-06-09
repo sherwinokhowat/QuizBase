@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import struct.Quiz;
+import struct.User; 
 import utility.Pair;
 import utility.SQLStatementBuilder;
 
@@ -78,6 +79,15 @@ public class QuizManager extends DatabaseManager {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * Returns all the quizzes created by a user.
+     * @param user The user
+     * @return an ArrayList containing all the quizzes returned by a user. 
+     */
+    public ArrayList<? extends Object> getCreatedQuizzes (User user) {
+        return null;
     }
 
 }
