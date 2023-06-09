@@ -91,11 +91,9 @@ public class User {
 
     // ------------------------ Database Methods ----------------------------
 
-    /**
-     * Retrieves the liked quizzes from the database
-     *
-     * @return the liked quizzes
-     */
+    /* 
+
+    we removed likes and we moved this to QuizManager 
     public HashSet<Quiz> getLikedQuizzesFromDB() {
         throw new UnsupportedOperationException("Unimplemented method 'getLikedQuizzesFromDB'");
     }
@@ -103,6 +101,7 @@ public class User {
     public ArrayList<Quiz> getCreatedQuizzesFromDB() {
         throw new UnsupportedOperationException("Unimplemented method 'getCreatedQuizzesFromDB'");
     }
+    */
 
     public String toString() {
         return "ID: " + this.id + ", USERNAME: " + this.username;
