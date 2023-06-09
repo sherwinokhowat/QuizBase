@@ -33,10 +33,14 @@ public class Request {
         this.path = firstLine[1];
 
         fields = new HashMap<String, String>();
-        for(int i = 1; i < rawRequest.size()-2; i++) {
-            int idx = rawRequest.get(i).indexOf(':');
-            String fieldName = rawRequest.get(i).substring(0, idx).trim();
-            String fieldValue = rawRequest.get(i).substring(idx+1).trim();
+        for(int i = 1; i < rawRequest.size(); i++) {
+            String line = rawRequest.get(i);
+            if(line.equals("")) {
+                break;
+            }
+            int idx = line.indexOf(':');
+            String fieldName = line.substring(0, idx).trim();
+            String fieldValue = line.substring(idx+1).trim();
             fields.put(fieldName, fieldValue);
         }
 

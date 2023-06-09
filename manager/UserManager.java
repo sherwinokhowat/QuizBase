@@ -45,7 +45,6 @@ public class UserManager extends DatabaseManager {
      */
     public UserManager(String dbName) {
         super(dbName);
-        // TODO Auto-generated constructor stub
     }
 
     @Override

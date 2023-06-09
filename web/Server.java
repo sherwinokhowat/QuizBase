@@ -267,87 +267,70 @@ public class Server {
          * @param request The request, split by the line separator
          */
         private void processRequest(Request request) {
-            boolean textRequest = true; // if an image this is false
 
             System.out.println(request);
-            Response response;
+            Response response = new Response().setStatus(200)
+                    // default content type is text/html
+                    .setHeaderField("Content-Type", contentType("html"));
 
             if(request.getType().equals("GET")) {
                 System.out.println("["+Thread.currentThread()+"] "+request);
 
                 String path = request.getPathWithoutQueryString();
 
-                StringBuilder content = new StringBuilder();
-                byte[] d = null; // byte array for images
                 if(path.equals("/")) {// homepage
+
                     WebPage webPage = new WebPage().appendBodyComponents(
                         new Hyperlink("/login", "Log in", true),
                         WebPage.BR_TAG,
                         new Hyperlink("/signup", "Sign up", true));
-                    content.append(webPage.toHTMLString());
+                    response.appendBody(webPage.toHTMLString());
 
                 } else if(path.equals("/login")) {// login page
-                    LoginPage loginPage = new LoginPage();
-                    content.append(loginPage.toHTMLString());
+                    response.appendBody(new LoginPage().toHTMLString());
+
                 } else if(path.equals("/signup")) {// signup page
-                    SignUpPage signUp = new SignUpPage();
-                    content.append(signUp.toHTMLString());
+                    response.appendBody(new SignUpPage().toHTMLString());
 
                 } else if(path.equals("/home")) {
-                     String query = request.getQueryString();
-                     User user = userManager.authenticateUser("sok", "Sok123");
+                    String cookieFieldValue = request.getField("Cookie");
+                    String cookie = cookieFieldValue.substring(cookieFieldValue.indexOf("=")+1);
+                    Pair<String, String> credentials = checkSessionID(cookie);
+                    User user = userManager.authenticateUser(credentials.first(), credentials.second());
 
-                     if("quizzes=my".equals(query)) { // display user's quizzes
-                         HomePage homepage = new HomePage(user, false);
-                         ArrayList<? extends Object> quizzes = quizManager.getUserCreatedQuizzes(user);
-                         for(Object quiz : quizzes) {
-                             if(quiz instanceof Quiz) {
-                                 content.append(((Quiz) quiz).toHTMLString());
-                             }
-                         }
-                         content.append(homepage.toHTMLString());
-
-                     } else { // display all quizzes
-                         HomePage homepage = new HomePage(user, true);
-                         ArrayList<? extends Object> quizzes = quizManager.getAllCreatedQuizzes();
-                         for(Object quiz : quizzes) {
-                             if(quiz instanceof Quiz) {
-                                 content.append(((Quiz) quiz).toHTMLString());
-                             }
-                         }
-                         content.append(homepage.toHTMLString());
-
-                     }
+                    String query = request.getQueryString();
+                    HomePage homepage = new HomePage(user, false);
+                    if("quizzes=my".equals(query)) { // display user's quizzes
+                        ArrayList<? extends Object> quizzes = quizManager.getUserCreatedQuizzes(user);
+                        for(Object quiz : quizzes) {
+                            homepage.appendBodyComponents(((Quiz) quiz).toHTMLString());
+                        }
+                    } else { // display all quizzes
+                        ArrayList<? extends Object> quizzes = quizManager.getAllCreatedQuizzes();
+                        for(Object quiz : quizzes) {
+                            homepage.appendBodyComponents(((Quiz) quiz).toHTMLString());
+                        }
+                    }
+                    response.appendBody(homepage.toHTMLString());
 
                 } else if(path.startsWith("/images/")) {// any path that references stuff inside the images directory
+                    byte[] d = null; // byte array for images
                     File imgFile = new File(System.getProperty("user.dir"), path);
                     BufferedInputStream in = null;
                     try {
                         System.out.println("Opening file: " + imgFile.getCanonicalPath());
                         in = new BufferedInputStream(new FileInputStream(imgFile));
-                        int data;
 
                         System.out.println("File Size: " +imgFile.length());
                         d = new byte[(int)imgFile.length()];
                         in.read(d,0,(int)imgFile.length());
-                        textRequest = false;
+                        response.appendBody(d);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                } else {
-                    try {
-                        output.writeBytes("HTTP/1.1 404 Not Found");
-                        output.flush();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return;
-                }
 
-                if (textRequest) {
-                    sendResponse(content.toString(), "Content-Type: "+contentType("html"));
                 } else {
-                    sendByteRequest(d, "html");
+                    response.setStatus(404);
                 }
 
             } else if(request.getType().equals("POST")) {
@@ -358,7 +341,6 @@ public class Server {
                     String password = request.getPostBody("password");
                     User user = userManager.authenticateUser(username, password);
 
-                    StringBuilder content = new StringBuilder();
                     WebPage webPage = new WebPage();
                     if(user == null) {
                         webPage.appendBodyComponents("Invalid credentials!");
@@ -366,80 +348,28 @@ public class Server {
                         webPage.appendBodyComponents("Logged in!", WebPage.BR_TAG, user.toString(),
                                 WebPage.BR_TAG, new Hyperlink("../../home", "Continue", true));
                     }
-                    content.append(webPage.toHTMLString());
-                    sendResponse(content.toString(), "Content-Type: "+contentType("html"),
-                            "Set-Cookie: sessionId="+createSessionID(username, password)+"; Path=../../");
+                    response.appendBody(webPage.toHTMLString());
+                    response.setHeaderField("Set-Cookie", "sessionId="+createSessionID(username, password)+"; Path=/");
 
                 } else if(request.getPath().equals("/signup/submit")) {
                     String username = request.getPostBody("username");
                     String password = request.getPostBody("password");
                     User user = userManager.registerUser(username, password);
 
-                    StringBuilder content = new StringBuilder();
                     WebPage webPage = new WebPage();
                     if(user == null) {
                         webPage.appendBodyComponents("Unable to sign up! This may be because your username has already been taken, credentials are invalid or a network error occurred.");
                     } else {
                         webPage.appendBodyComponents("Sign up successful!", WebPage.BR_TAG,
                                 new Hyperlink("../../login", "Log in", true));
-                }
-                    content.append(webPage.toHTMLString());
-                    sendResponse(content.toString(), "Content-Type: "+contentType("html"));
+                    }
+                    response.appendBody(webPage.toHTMLString());
 
                 }
             } else {
-                response = new Response(400);
-                try {
-                    output.writeBytes(response.toString());
-                    output.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                response.setStatus(400);
             }
+            response.writeResponse(output);
         }
-
-        /**
-         * Sends a HTTP 200 (OK) response to the client
-         *
-         * @param content The body (empty String indicates an empty body)
-         * @param headerFields Some number of strings representing the header fields.
-         * Note that The "Content-Length" field is always generated, whether or not it is passed in.
-         */
-        private void sendResponse(String content, String... headerFields) {
-            try {
-                output.writeBytes("HTTP/1.1 200 OK" + "\n");
-                for(String field: headerFields) {
-                    output.writeBytes(field + "\n");
-                }
-                // keep content type as text/html for now, not enough time to support CSS / JS.
-                output.writeBytes("Content-Length: " + content.length() + "\n");
-                output.writeBytes("\n");
-                output.writeBytes(content);
-                output.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        private void sendByteRequest(byte[] byteArray, String extension) {
-            try {
-                output.writeBytes("HTTP/1.1 200 OK" + "\n");
-                output.writeBytes("Content-Type: " + contentType(extension) + "\n"); // keep it as text/html for now, not enough time to support CSS / JS.
-                output.writeBytes("Content-Length: " + byteArray.length + "\n"); // 1 byte = 1 character
-                output.writeBytes("\n");
-                output.write(byteArray); // we already defined the output stream so this is probably not going to throw an exception.
-                output.flush();
-                System.out.println("HTTP/1.1 200 OK");
-                System.out.println("Content-Type: " + contentType(extension));
-                System.out.println("Content-Length: " + byteArray.length);
-                System.out.println();
-                System.out.println("[" + Thread.currentThread() + "]" + " sent image request back.");
-            } catch (IOException e) {
-                System.out.println("Error created when getting socket output stream - sendByteRequest()");
-                e.printStackTrace();
-            }
-
-        }
-
     }
 }
