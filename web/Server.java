@@ -270,21 +270,12 @@ public class Server {
             boolean textRequest = true; // if an image this is false
 
             System.out.println(request);
+            Response response;
+
             if(request.getType().equals("GET")) {
                 System.out.println("["+Thread.currentThread()+"] "+request);
 
-                // resource path is stored in firstLine[1]
-                String path = request.removeQueryString(request.getPath());
-
-                if(path.equals("/favicon.ico")) {
-                    try {
-                        output.writeBytes("HTTP/1.1 404 Not Found");
-                        output.flush();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return;
-                }
+                String path = request.getPathWithoutQueryString();
 
                 StringBuilder content = new StringBuilder();
                 byte[] d = null; // byte array for images
@@ -347,6 +338,7 @@ public class Server {
                     }
                     return;
                 }
+
                 if (textRequest) {
                     sendResponse(content.toString(), "Content-Type: "+contentType("html"));
                 } else {
@@ -391,8 +383,9 @@ public class Server {
 
                 }
             } else {
+                response = new Response(400);
                 try {
-                    output.writeBytes("HTTP/1.1 400 Bad Request");
+                    output.writeBytes(response.toString());
                     output.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
