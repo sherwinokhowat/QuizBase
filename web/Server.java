@@ -178,7 +178,7 @@ public class Server {
                     result = "text/html";
                     break;
                 case "css":
-                    result = "text/css";
+                    result = "text/css"; // could look into CSS support for.
                     break;
                 case "js":
                     result = "application/javascript";
@@ -234,7 +234,6 @@ public class Server {
                     try {
                         in = new BufferedInputStream(new FileInputStream(imgFile));
                         int data;
-
                         System.out.println("File Size: " +imgFile.length());
                         byte[] d = new byte[(int)imgFile.length()];
                         // need to send this byte array over here.
@@ -246,7 +245,7 @@ public class Server {
                     output.flush();
                     return;
                 }
-                sendRequest(content.toString());
+                sendRequest(content.toString(), "html");
 
             } else if(request.getRequestType().equals("POST")) {
 
@@ -263,7 +262,7 @@ public class Server {
                         webPage.appendBodyComponents("Logged in!", "<br>", user.toString());
                     }
                     content.append(webPage.toHTMLString());
-                    sendRequest(content.toString());
+                    sendRequest(content.toString(), "html");
                 } else if(request.getFileName().equals("/signup/submit")) {
                     User user = userManager.registerUser(entries.get("username"), entries.get("password"));
                     StringBuilder content = new StringBuilder();
@@ -274,7 +273,7 @@ public class Server {
                         webPage.appendBodyComponents("Logged in!", "<br>", user.toString());
                     }
                     content.append(webPage.toHTMLString());
-                    sendRequest(content.toString());
+                    sendRequest(content.toString(), "html");
                 }
             } else {
                 output.println("HTTP/1.1 400 Bad Request");
@@ -282,7 +281,7 @@ public class Server {
             }
         }
 
-        private void sendRequest(String content) {
+        private void sendRequest(String content, String extension) {
             output.println("HTTP/1.1 200 OK");
             output.println("Content-Type: text/html"); // keep it as text/html for now, not enough time to support CSS / JS.
             output.println("Content-Length: " + content.length());
