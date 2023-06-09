@@ -13,6 +13,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.DataOutputStream; 
 import java.io.File; 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -112,7 +113,7 @@ public class Server {
     //***** Inner class - thread for client connection
     class ConnectionHandler implements Runnable {
 
-        private PrintWriter output;// assign printwriter to network stream
+        private DataOutputStream output;// assign printwriter to network stream
         private BufferedReader input;// Stream for network input
         private Socket client;// keeps track of the client socket
 
@@ -124,7 +125,7 @@ public class Server {
         ConnectionHandler(Socket sock) {
             this.client = sock;// constructor assigns client to this
             try {// assign all connections to client
-                this.output = new PrintWriter(client.getOutputStream());
+                this.output = new DataOutputStream(client.getOutputStream());
                 InputStreamReader stream = new InputStreamReader(client.getInputStream());
                 this.input = new BufferedReader(stream);
             } catch(IOException e) {
@@ -243,8 +244,12 @@ public class Server {
                 String path = request.getFileName();
 
                 if(path.equals("/favicon.ico")) {
-                    output.println("HTTP/1.1 404 Not Found");
-                    output.flush();
+                    try {
+                        output.writeBytes("HTTP/1.1 404 Not Found");
+                        output.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     return;
                 }
 
@@ -283,20 +288,27 @@ public class Server {
                         e.printStackTrace();
                     }
                 } else {
-                    output.println("HTTP/1.1 404 Not Found");
-                    output.flush();
+                    try {
+                        output.writeBytes("HTTP/1.1 404 Not Found");
+                        output.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     return;
                 }
                 sendResponse(content.toString(), "Content-Type: "+contentType("html"));
                 
-
-
-                output.println("HTTP/1.1 200 OK");
-                output.println("Content-Type: text/html");
-                output.println("Content-Length: " + content.length());
-                output.println();
-                output.println(content.toString());
-                output.flush();
+                try {
+                    output.writeBytes("HTTP/1.1 200 OK" + "\n");
+                    output.writeBytes("Content-Type: text/html" + "\n");
+                    output.writeBytes("Content-Length: " + content.length() + "\n");
+                    output.writeBytes("\n");
+                    output.writeBytes(content.toString() + "\n");
+                    output.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                
             } else if(request.getRequestType().equals("POST")) {
                 System.out.println("["+Thread.currentThread()+"] "+request);
 
@@ -335,8 +347,12 @@ public class Server {
 
                 }
             } else {
-                output.println("HTTP/1.1 400 Bad Request");
-                output.flush();
+                try {
+                    output.writeBytes("HTTP/1.1 400 Bad Request");
+                    output.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -348,29 +364,34 @@ public class Server {
          * Note that The "Content-Length" field is always generated, whether or not it is passed in.
          */
         private void sendResponse(String content, String... headerFields) {
-            output.println("HTTP/1.1 200 OK");
-            for(String field: headerFields) {
-                output.println(field);
+            try {
+                output.writeBytes("HTTP/1.1 200 OK" + "\n");
+                for(String field: headerFields) {
+                    output.writeBytes(field + "\n");
+                }
+                // keep content type as text/html for now, not enough time to support CSS / JS.
+                output.writeBytes("Content-Length: " + content.length() + "\n");
+                output.writeBytes("\n");
+                output.writeBytes(content);
+                output.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            // keep content type as text/html for now, not enough time to support CSS / JS.
-            output.println("Content-Length: " + content.length());
-            output.println();
-            output.println(content);
-            output.flush();
         }
 
         private void sendByteRequest(byte[] byteArray, String extension) {
-            output.println("HTTP/1.1 200 OK");
-            output.println("Content-Type: " + contentType(extension)); // keep it as text/html for now, not enough time to support CSS / JS.
-            output.println("Content-Length: " + byteArray.length); // 1 byte = 1 character
-            output.println();
             try {
-                client.getOutputStream().write(byteArray); // we already defined the output stream so this is probably not going to throw an exception.
+                output.writeBytes("HTTP/1.1 200 OK" + "\n");
+                output.writeBytes("Content-Type: " + contentType(extension) + "\n"); // keep it as text/html for now, not enough time to support CSS / JS.
+                output.writeBytes("Content-Length: " + byteArray.length + "\n"); // 1 byte = 1 character
+                output.writeBytes("\n");
+                output.write(byteArray); // we already defined the output stream so this is probably not going to throw an exception.
+                output.flush();
             } catch (IOException e) {
                 System.out.println("Error created when getting socket output stream - sendByteRequest()");
                 e.printStackTrace();
             }
-            output.flush();
+            
         }
 
     }
