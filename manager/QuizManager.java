@@ -14,7 +14,7 @@ import utility.SQLStatementBuilder;
 /**
  * A class that manages {@code Quiz} objects
  *
- * @author Ricky Qin
+ * @author Ricky Qin and Sherwin Okhowat
  */
 public class QuizManager extends DatabaseManager {
 
@@ -86,8 +86,17 @@ public class QuizManager extends DatabaseManager {
      * @param user The user
      * @return an ArrayList containing all the quizzes returned by a user. 
      */
-    public ArrayList<? extends Object> getCreatedQuizzes (User user) {
-        return null;
+    public ArrayList<? extends Object> getUserCreatedQuizzes(User user) {
+        return executeReadOperation(new SQLStatementBuilder().select().from("QUIZZES").where("CREATOR_ID="+user.getID()).toString());
     }
+
+    /**
+     * Returns all the quizzes created.
+     * @return an ArrayList containing all the quizzes stored in the database.
+     */
+    public ArrayList<? extends Object> getAllCreatedQuizzes() {
+        return executeReadOperation(new SQLStatementBuilder().select().from("QUIZZES").toString());
+    }
+
 
 }
