@@ -352,7 +352,7 @@ public class Server {
                         webPage.appendBodyComponents("Invalid credentials!");
                     } else {
                         webPage.appendBodyComponents("Logged in!", WebPage.BR_TAG, user.toString(),
-                                WebPage.BR_TAG, new Hyperlink("../../home/", "Continue", true));
+                                WebPage.BR_TAG, new Hyperlink("../../home", "Continue", true));
                     }
                     content.append(webPage.toHTMLString());
                     sendResponse(content.toString(), "Content-Type: "+contentType("html"),
