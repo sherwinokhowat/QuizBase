@@ -267,7 +267,6 @@ public class Server {
                 } else if(path.equals("/signup/")) {// signup page
                     SignUpPage signUp = new SignUpPage();
                     content.append(signUp.toHTMLString());
-
                 } else if(path.equals("/home")) {
                     User user = userManager.authenticateUser("sok", "Sok123");
                     HomePage homePage = new HomePage(user);
@@ -327,7 +326,7 @@ public class Server {
                         webPage.appendBodyComponents("Unable to sign up! This may be because your username has already been taken, credentials are invalid or a network error occurred.");
                     } else {
                         webPage.appendBodyComponents("Sign up successful!", WebPage.BR_TAG,
-                                new Hyperlink("../../login", "Log in", true));
+                                new Hyperlink("../../login/", "Log in", true));
                 }
                     content.append(webPage.toHTMLString());
                     sendResponse(content.toString(), "Content-Type: "+contentType("html"));
