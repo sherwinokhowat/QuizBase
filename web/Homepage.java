@@ -16,7 +16,7 @@ public class Homepage extends WebPage {
         StringBuilder content = new StringBuilder();
         content.append("<div style='display: flex; justify-content: space-between; width: 100%; padding: 20px;'>");
         content.append("<img src='../images/logo.png' style='width: 100px; height: auto;'>");
-        content.append("<div style='text-align: right; font-size: 1.5em; padding-top: 35px;'>" + user.getUsername() + "</div>");
+        content.append("<div style='text-align: right; font-size: 1.5em; padding-top: 35px; padding-right: 35;'>" + user.getUsername() + "</div>");
         content.append("</div>");
 
         content.append("<hr style='border: 2px solid black; width: 150%;'>");
