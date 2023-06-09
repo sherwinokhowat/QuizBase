@@ -43,6 +43,17 @@ public class QuizManager extends DatabaseManager {
         executeWriteOperation(statement.toString());
     }
 
+    /**
+     * Creates a quiz with no elements in it. (alternately could add a bunch of quiz items to it)
+     * @param creator the user that created it.
+     * @param name 
+     * @param description 
+     * @return whether addition was successful or not.
+     */
+    public boolean addQuiz(User creator, String name, String description) {
+        return executeWriteOperation(new SQLStatementBuilder().insertInto("QUIZZES", "NAME", "DESCRIPTION", "CREATOR_ID").values("'" + name + "'", "'" + description + "'", Integer.toString(creator.getID())).toString());
+    }
+
     @Override
     public Object getById(int id) {
         Quiz cacheResult = cache.get(id);
