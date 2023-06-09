@@ -49,7 +49,7 @@ public class QuizManager extends DatabaseManager {
             return cacheResult;
         }
         ArrayList<? extends Object> dbResult = executeReadOperation(new SQLStatementBuilder()
-                .select().from("USERS").where("ID="+id).toString());
+                .select().from("QUIZZES").where("ID="+id).toString());
         if(dbResult.size() == 1) {
             Quiz user = (Quiz)(dbResult.get(1));
             cache.put(user.getID(), user);
