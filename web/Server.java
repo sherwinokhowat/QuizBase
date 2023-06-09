@@ -421,6 +421,16 @@ public class Server {
                 output.writeBytes("\n");
                 output.write(byteArray); // we already defined the output stream so this is probably not going to throw an exception.
                 output.flush();
+                System.out.println("HTTP/1.1 200 OK");
+                System.out.println("Content-Type: " + contentType(extension));
+                System.out.println("Content-Length: " + byteArray.length);
+                System.out.println();
+                for (byte b : byteArray) {
+                    System.out.print(b + " ");
+                }
+                System.out.println(); 
+                System.out.println();
+                System.out.println("[" + Thread.currentThread() + "]" + " sent image request back.");
             } catch (IOException e) {
                 System.out.println("Error created when getting socket output stream - sendByteRequest()");
                 e.printStackTrace();
