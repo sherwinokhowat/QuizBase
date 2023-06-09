@@ -127,6 +127,9 @@ public class Quiz implements WebComponent {
          this.quizItems.remove(item);
      }
 
+     /**
+      * Returns the HTML form of a quiz (when being viewed in a list.)
+      */
     @Override
     public String toHTMLString() {
         StringBuilder html = new StringBuilder();
