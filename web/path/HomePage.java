@@ -48,7 +48,7 @@ public class HomePage extends WebPage implements HTTPPath {
             appendBodyComponents("<div style='display: flex; justify-content: space-between; width: 100%; padding: 20px;'>",
                     "<img src='../images/logo.png' style='width: 150px; height: auto;'>",
                     "<div style='text-align: right; font-size: 1.5em; padding-top: 35px; padding-right: 35px;'>" + user.getUsername() + "</div>",
-                    new Hyperlink("/", "Sign Out", false).setStyle(signOutButtonStyle),
+                    new Hyperlink("/login", "Sign Out", false).setStyle(signOutButtonStyle),
                     "</div>");
 
             // Line
