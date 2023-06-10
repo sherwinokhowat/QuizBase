@@ -279,7 +279,7 @@ class ConnectionHandler implements Runnable {
                 case "/signout":
                     return new SignOut().processRequest(request, server);
                 case "/home":
-                    return new HomePage(false).processRequest(request, server);
+                    return new HomePage().processRequest(request, server);
                 default: {
                     if(path.startsWith("/images/")) {
                         return new ImagePath().processRequest(request, server);

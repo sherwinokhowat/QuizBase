@@ -18,15 +18,18 @@ import web.WebPage;
  */
 public class HomePage extends WebPage implements HTTPPath {
 
-    private boolean displayAll;
-
-    public HomePage(boolean displayAll) {
+    public HomePage() {
         setStyle("background-color: lightblue; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; box-sizing: border-box;");
-        this.displayAll = displayAll;
     }
 
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
+        boolean displayAll;
+        if("quizzes=my".equals(request.getQueryString())) {
+            displayAll = false;
+        } else {
+            displayAll = true;
+        }
         Pair<String, String> credentials = server.checkSessionID(request);
         if(credentials == null) {
             return new HTTPResponse().setStatus(303).setHeaderField("Location", "/login");
@@ -38,12 +41,14 @@ public class HomePage extends WebPage implements HTTPPath {
 
             String buttonStyle1 = "margin-right: 10px; background-color: " + (displayAll ? "#FFCCCB" : "#F2F2F2") + "; color: black; padding: 10px; text-decoration: none; border: 1px solid black;";
             String buttonStyle2 = "background-color:" + (!displayAll ? "#FFCCCB" : "#F2F2F2") + "; color: black; padding: 10px; text-decoration: none; border: 1px solid black;";
+            String signOutButtonStyle = "background-color: #F2F2F2; color: black; padding: 10px; text-decoration: none; border: 1px solid black;";
+
 
             // Header section
             appendBodyComponents("<div style='display: flex; justify-content: space-between; width: 100%; padding: 20px;'>",
                     "<img src='../images/logo.png' style='width: 150px; height: auto;'>",
                     "<div style='text-align: right; font-size: 1.5em; padding-top: 35px; padding-right: 35px;'>" + user.getUsername() + "</div>",
-                    new Hyperlink("/signout", "Sign Out", false).setStyle(buttonStyle1),
+                    new Hyperlink("/", "Sign Out", false).setStyle(signOutButtonStyle),
                     "</div>");
 
             // Line
