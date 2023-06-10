@@ -10,6 +10,10 @@ import web.HTTPRequest;
 import web.HTTPResponse;
 import web.Server;
 
+/**
+ * Takes files in the folder directory and uploads them. e.g. if the file is QuizBase/images/x.png and the program sends a request for /images/x.png, then this program handles the request.
+ */
+
 public class ImagePath implements HTTPPath {
 
     @Override

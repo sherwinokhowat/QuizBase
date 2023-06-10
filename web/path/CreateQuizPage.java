@@ -10,12 +10,17 @@ import web.WebPage;
 public class CreateQuizPage extends WebPage implements HTTPPath {
     public CreateQuizPage() {
         // you can change any part of this, i dont mind
+        appendHeadComponents("<script src='formHelper.js'></script>");
         appendBodyComponents(
-                "<form action='something' method='POST' style='display: flex; flex-direction: column; width: 300px; padding: 20px;'>",
-                "<input type='text' id='quizName' name='quizName' placeholder='Quiz Name'>",
-                "<textarea id='quizDescription' name='quizDescription' placeholder='Quiz Description' rows='4' cols='50'></textarea>",
-                "<input type='submit' value='Add Question'>",
-                "</form>"
+                "<form id='questionForm' action='something' method='POST' style='display: flex; flex-direction: column; width: 300px; padding: 20px;'>",
+                "<label for='quizName'>Quiz Name: </label><input type='text' id='quizName' name='quizName' placeholder='Quiz Name'>",
+                "<label for='quizDescription'>Description: </label><textarea id='quizDescription' name='quizDescription' placeholder='Quiz Description' rows='4' cols='50'></textarea>",
+                "<input type='submit' value='Finish Quiz'>",
+                "</form>",
+                "<div class='options' style='display: flex'>", // please change the CSS in here to something more palatable
+                "<button type='button' id='fcButton' onclick='addFlashcard()'>Add Flashcard Question</button>",
+                "<button type='button' id='mcButton' onclick='addMultipleChoice()'>Add Multiple Choice Question</button>",
+                "</div>" //                 "<input type='submit' value='Add Question'>",
         );
         setStyle("background-color: lightblue; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; box-sizing: border-box;");
     }
