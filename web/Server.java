@@ -8,6 +8,7 @@ import web.path.ImagePath;
 import web.path.LoginPage;
 import web.path.LoginSubmit;
 import web.path.RootPage;
+import web.path.SignOut;
 import web.path.SignUpPage;
 import web.path.SignUpSubmit;
 
@@ -110,6 +111,8 @@ public class Server {
      * Generates a unique 20 character session ID, containing AZaz09 characters.
      * Upon generation, it is stored as a cookie.
      *
+     * @param username The username
+     * @param password The password
      * @return The ID
      */
     public String createSessionID(String username, String password) {
@@ -136,25 +139,29 @@ public class Server {
      * Checks if the request contains a valid session ID
      *
      * @param request The request
-     * @return A Pair containing the user's username and password or {@code null} if the session ID
-     * doesn't exist or is invalid
+     * @return A Pair containing the user's username and password or {@code null} if the
+     * session ID doesn't exist or is invalid
      */
     public Pair<String, String> checkSessionID(HTTPRequest request) {
         String cookieFieldValue = request.getField("Cookie");
         if(cookieFieldValue == null) {
             return null;
         }
-        String sessionId = cookieFieldValue.substring(cookieFieldValue.indexOf("=")+1);
-        return cookies.get(sessionId);
+        String sessionID = cookieFieldValue.substring(cookieFieldValue.indexOf("=")+1);
+        return cookies.get(sessionID);
     }
 
     /**
-     * Removes the provided session ID from the list of valid, thus invalidating it.
+     * Removes the provided session ID from the list of valid ids, thus invalidating it.
      *
-     * @param id The session id to invalidate.
+     * @param request The request whose session id will be invalidated.
      */
-    public void deleteSessionId(String id) {
-        cookies.remove(id);
+    public void deleteSessionID(HTTPRequest request) {
+        String cookieFieldValue = request.getField("Cookie");
+        if(cookieFieldValue != null) {
+            String sessionID = cookieFieldValue.substring(cookieFieldValue.indexOf("=")+1);
+            cookies.remove(sessionID);
+        }
     }
 
 }
@@ -173,6 +180,7 @@ class ConnectionHandler implements Runnable {
      * Constructs a ConnectionHandler
      *
      * @param sock the socket belonging to this client connection
+     * @param server The running server
      */
     ConnectionHandler(Socket sock, Server server) {
         this.client = sock;
@@ -193,7 +201,6 @@ class ConnectionHandler implements Runnable {
      */
     @Override
     public void run() {
-        System.out.println("["+Thread.currentThread()+"] "+"this thread just started");
         // Get a message from the client
         ArrayList<String> request = new ArrayList<>();
 
@@ -219,11 +226,10 @@ class ConnectionHandler implements Runnable {
 
             if(request.size() != 0) {
                 // process request here
-                System.out.println("["+Thread.currentThread()+"] ");
+                System.out.println("["+Thread.currentThread()+"] received Request:");
                 System.out.println(request);
                 HTTPRequest requestObj = new HTTPRequest(request);
                 processRequest(requestObj).writeResponse(output);
-                System.out.println("["+Thread.currentThread()+"] "+"processed request");
             }
             input.close();
             output.close();
@@ -243,7 +249,7 @@ class ConnectionHandler implements Runnable {
      */
     public String getExtension (String filePath) {
         if (filePath.charAt(filePath.length()-1) == '/') {
-            filePath += "index.html";
+            return "html";
         }
         String[] pathArr = filePath.split("[.]");
         if (pathArr.length <= 1) {
@@ -261,27 +267,33 @@ class ConnectionHandler implements Runnable {
     private HTTPResponse processRequest(HTTPRequest request) {
         if(request.getType().equals("GET")) {
             String path = request.getPathWithoutQueryString();
-            if(path.equals("/")) {// homepage
-                return new RootPage().processRequest(request, server);
-            } else if(path.equals("/login")) {// login page
-                return new LoginPage().processRequest(request, server);
-            } else if(path.equals("/signup")) {// signup page
-                return new SignUpPage().processRequest(request, server);
-            } else if(path.equals("/home")) {// home page (after logging in)
-                return new HomePage(false).processRequest(request, server);
-            } else if(path.startsWith("/images/")) {// any path that requests an image
-                return new ImagePath().processRequest(request, server);
-            } else {
-                return new HTTPResponse().setStatus(404);
+            switch(path) {
+                case "/":
+                    return new RootPage().processRequest(request, server);
+                case "/login":
+                    return new LoginPage().processRequest(request, server);
+                case "/signup":
+                    return new SignUpPage().processRequest(request, server);
+                case "/signout":
+                    return new SignOut().processRequest(request, server);
+                case "/home":
+                    return new HomePage(false).processRequest(request, server);
+                default: {
+                    if(path.startsWith("/images/")) {
+                        return new ImagePath().processRequest(request, server);
+                    }
+                    return new HTTPResponse().setStatus(404);
+                }
             }
-
         } else if(request.getType().equals("POST")) {
-            if(request.getPath().equals("/login/submit")) {// submit login info
-                return new LoginSubmit().processRequest(request, server);
-            } else if(request.getPath().equals("/signup/submit")) {// submit signup info
-                return new SignUpSubmit().processRequest(request, server);
-            } else {
-                return new HTTPResponse().setStatus(400);
+            String path = request.getPathWithoutQueryString();
+            switch(path) {
+                case "/login/submit":
+                    return new LoginSubmit().processRequest(request, server);
+                case "/signup/submit":
+                    return new SignUpSubmit().processRequest(request, server);
+                default:
+                    return new HTTPResponse().setStatus(400);
             }
         } else {
             return new HTTPResponse().setStatus(400);

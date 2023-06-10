@@ -1,5 +1,6 @@
 package web.path;
 
+import utility.Pair;
 import web.HTTP;
 import web.HTTPRequest;
 import web.HTTPResponse;
@@ -23,6 +24,10 @@ public class LoginPage extends WebPage implements HTTPPath {
 
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
+        Pair<String, String> credentials = server.checkSessionID(request);
+        if(credentials != null) {
+            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/home");
+        }
         return new HTTPResponse().setStatus(200)
                 .setHeaderField("Content-Type", HTTP.contentType("html"))
                 .appendBody(toHTMLString());
