@@ -1,8 +1,10 @@
 // file basically adds a new input tag eveyr time addFlashcard and addMultipleChoice are in there
 // input tags have name and id question1, question2, question3, question4, question5... and there is a function to figure out the number of children in the <form> tag
 
+var newNumber = 1;
+
 function addFlashcard() {
-    var newNumber = document.getElementById("questionForm").childElementCount - 4; // if there are 2 elements (the 2 default), we place it as #1. if there are 3 elements, #2...
+    // var newNumber = document.getElementById("questionForm").childElementCount - 4; // if there are 2 elements (the 2 default), we place it as #1. if there are 3 elements, #2...
     var msg = "<div id='div" + newNumber + "'>";
     msg += "<p>Question #" + newNumber + " (Flashcard)</p>";
     msg += "<label for='question" + newNumber + "'>Front:</label><br>";
@@ -13,10 +15,11 @@ function addFlashcard() {
     msg += "</div>";
     // if we have 6 questions and we delete number 3, then the POST will send the maximum number of questions (6) and leave the program to get rid of the missing ones.
     document.getElementById("questionForm").insertAdjacentHTML("beforeend", msg);
+    newNumber++;
 }
 
 function addMultipleChoice() {
-    var newNumber = document.getElementById("questionForm").childElementCount - 4; // if there are 2 elements (the 2 default), we place it as #1. if there are 3 elements, #2...
+    // var newNumber = document.getElementById("questionForm").childElementCount - 4; // if there are 2 elements (the 2 default), we place it as #1. if there are 3 elements, #2...
     var msg = "<div id='div" + newNumber + "'>";
     msg += "<p>Question #" + newNumber + " (Multiple Choice)</p>";
     msg += "<label for='question" + newNumber + "'>Front:</label><br>";
@@ -40,6 +43,7 @@ function addMultipleChoice() {
     msg += "</div>";
     // if we have 6 questions and we delete number 3, then the POST will send the maximum number of questions (6) and leave the program to get rid of the missing ones.
     document.getElementById("questionForm").insertAdjacentHTML("beforeend", msg);
+    newNumber++;
 }
 
 function deleteQuestion (number) {
