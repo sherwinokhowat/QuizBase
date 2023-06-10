@@ -40,6 +40,7 @@ public class HomePage extends WebPage implements HTTPPath {
             content.append("<div style='display: flex; justify-content: space-between; width: 100%; padding: 20px;'>");
             content.append("<img src='../images/logo.png' style='width: 150px; height: auto;'>");
             content.append("<div style='text-align: right; font-size: 1.5em; padding-top: 35px; padding-right: 35px;'>" + user.getUsername() + "</div>");
+            content.append("<a href='/signout' style='text-align: right; font-size: 1.5em;'> Sign out </a>");
             content.append("</div>");
 
             // Line
