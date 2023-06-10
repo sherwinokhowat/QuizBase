@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import struct.User;
 
@@ -18,22 +17,12 @@ import utility.SQLStatementBuilder;
  */
 public class UserManager extends DatabaseManager {
 
-    /**
-     *
-     */
-    private HashMap<Integer, User> cache = new HashMap<Integer, User>();
-
     @Override
     public Object getById(int id) {
-        User cacheResult = cache.get(id);
-        if (cacheResult != null) {
-            return cacheResult;
-        }
         ArrayList<? extends Object> dbResult = executeReadOperation(new SQLStatementBuilder()
-                .select().from("USERS").where("ID='" + id + "'").toString());
+                .select().from("USERS").where("ID="+id).toString());
         if (dbResult.size() == 1) {
-            User user = (User) (dbResult.get(1));
-            cache.put(user.getID(), user);
+            User user = (User) (dbResult.get(0));
             return user;
         } else {
             return null;
@@ -55,8 +44,8 @@ public class UserManager extends DatabaseManager {
         StringBuilder statement = new StringBuilder();
         statement.append("CREATE TABLE IF NOT EXISTS USERS (");
         statement.append("ID INTEGER PRIMARY KEY AUTOINCREMENT,");
-        statement.append("USERNAME TEXT NOT NULL UNIQUE CHECK(LENGTH(USERNAME) > 0),");
-        statement.append("PASSWORD TEXT NOT NULL CHECK(LENGTH(PASSWORD) > 0)");
+        statement.append("USERNAME TEXT NOT NULL UNIQUE CHECK(LENGTH(USERNAME) > 2),");
+        statement.append("PASSWORD TEXT NOT NULL CHECK(LENGTH(PASSWORD) > 2)");
         statement.append(");");
         executeWriteOperation(statement.toString());
     }
@@ -78,7 +67,6 @@ public class UserManager extends DatabaseManager {
                 String username = rs.getString("USERNAME");
 
                 User user = new User(id, username, this);
-                cache.put(id, user);
                 list.add(user);
             }
             result.second().close();
@@ -109,23 +97,16 @@ public class UserManager extends DatabaseManager {
         }
     }
 
+    /**
+     * Deletes the user from the database
+     *
+     * @param user The user to delete
+     * @return Whether or not the deletion is successful
+     */
     public boolean deleteUser(User user) {
         return executeWriteOperation(
                 new SQLStatementBuilder().deleteFrom("USERS")
                 .where("USERNAME='" + user.getUsername() + "'").toString());
-    }
-
-    public User login(String username, String password) {
-        ArrayList<? extends Object> dbResult = executeReadOperation(new SQLStatementBuilder()
-                .select().from("USERS")
-                .where("USERNAME='" + username + "' AND PASSWORD='" + password + "'").toString());
-        if (dbResult.size() == 1) {
-            User user = (User) (dbResult.get(1));
-            cache.put(user.getID(), user);
-            return user;
-        } else {
-            return null;
-        }
     }
 
     /**

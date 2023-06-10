@@ -30,11 +30,10 @@ public abstract class DatabaseManager {
     }
 
     /**
-     * Retrieves the object with the specified id. If it exists in the cache, that reference is returned.
-     * If it does not exist in the cache, it fetches the database for the object and returns the result.
+     * Fetches the database for the object with the specified id.
      *
      * @param id The object id
-     * @return The found object or {@null} if it does not exist in the database
+     * @return The found object or {@null} if it does not exist.
      */
     public abstract Object getById(int id);
 
@@ -110,8 +109,6 @@ public abstract class DatabaseManager {
      *  <li>The method correctly parses the ResultSet into the appropriate class object</li>
      *  <li>At the end of the method, {@code Transaction.close()} is called on the
      * Transaction object</li>
-     * <li>A caching mechanism is used to ensure that there is one instance of each object.
-     * Objects retrieved from the database should be stored in the cache</li>
      * </ul>
      *
      * @param statement The SQL statement
