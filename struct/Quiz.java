@@ -133,7 +133,6 @@ public class Quiz implements WebComponent {
     @Override
     public String toHTMLString() {
         StringBuilder html = new StringBuilder();
-        html.append("<html>");
         html.append("<div style='border: 1px solid black; padding: 20px; margin: 20px; max-width: 300px;'>");
         html.append("<h1 style='margin: 0;'>").append(this.name).append("</h1>");
         html.append("<h3 style='margin: 0; color: gray;'>Created by User ID: ").append(this.creatorId).append("</h3>");
@@ -143,8 +142,13 @@ public class Quiz implements WebComponent {
         }
         html.append("<p style='margin: 0;'>").append(shortenedDescription).append("</p>");
         html.append("</div>");
-        html.append("</html>");
         return html.toString();
+    }
+
+    @Override
+    public WebComponent setStyle(String style) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setStyle'");
     }
 
 

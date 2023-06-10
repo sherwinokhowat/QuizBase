@@ -7,8 +7,8 @@ package web;
  */
 public class HTTP {
 
-    public static String getStatusMessage(int s) {
-        switch(s) {
+    public static String getStatusMessage(int code) {
+        switch(code) {
             case 200:
                 return "OK";
             case 303:
@@ -23,8 +23,10 @@ public class HTTP {
                 return "Not Found";
             case 500:
                 return "Internal Server Error";
+            case 501:
+                return "Not Implemented";
             default:
-                return "";
+                throw new IllegalArgumentException("Status code "+code+" not supported");
         }
     }
 
@@ -33,33 +35,24 @@ public class HTTP {
      * @param extension The extension (e.g. html, css). Doesn't contain the period before the extension.
      * @return a string representing the MIME type of the extension, or "invalid" if it can't find the type.
      * */
-    public static String contentType(String extension) {
-        String result;
-        switch (extension) {
+    public static String contentType(String type) {
+        switch (type) {
             case "html":
-                result = "text/html";
-                break;
+                return "text/html";
             case "css":
-                result = "text/css";// could look into CSS support for.
-                break;
+                return "text/css";// could look into CSS support for.
             case "js":
-                result = "application/javascript";
-                break;
+                return "application/javascript";
             case "png":
-                result = "image/png";
-                break;
+                return "image/png";
             case "jpg":
             case "jpeg":
-                result = "image/jpeg";
-                break;
+                return "image/jpeg";
             case "gif":
-                result = "image/gif";
-                break;
+                return "image/gif";
             default:
-                result = "invalid";
-                break;
+                throw new IllegalArgumentException("Content type \""+type+"\" not supported");
         }
-        return result;
     }
 
     /**

@@ -15,7 +15,7 @@ public class WebPage implements WebComponent {
 
     protected ArrayList<Object> headComponents = new ArrayList<Object>();
     protected ArrayList<Object> bodyComponents = new ArrayList<Object>();
-    protected String bodyAttributes;
+    protected String style;
 
     public WebPage() {
     }
@@ -57,14 +57,14 @@ public class WebPage implements WebComponent {
     }
 
     /**
-     * Sets the attributes of the <body> tag of this WebPage
+     * Sets the "style" attribute of the body of this WebPage
      *
-     * @param attributes attributes
+     * @param style The style
      * @return This WebPage
-     * @throws IllegalArgumentException if a component is neither a String or a {@code Webcomponent}
      */
-    public WebPage setBodyAttributes(String attributes) {
-        bodyAttributes = attributes;
+    @Override
+    public WebComponent setStyle(String style) {
+        this.style = style;
         return this;
     }
 
@@ -81,10 +81,10 @@ public class WebPage implements WebComponent {
             }
         }
         str.append("</head>");
-        if(bodyAttributes == null) {
+        if(style == null) {
             str.append("<body>");
         } else {
-            str.append("<body " + bodyAttributes + ">");
+            str.append("<body style='" + style + "'>");
         }
         for(Object component: bodyComponents) {
             if(component instanceof String) {

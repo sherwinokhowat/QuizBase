@@ -18,6 +18,9 @@ import utility.SQLStatementBuilder;
  */
 public class UserManager extends DatabaseManager {
 
+    /**
+     *
+     */
     private HashMap<Integer, User> cache = new HashMap<Integer, User>();
 
     @Override

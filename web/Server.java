@@ -298,7 +298,7 @@ class ConnectionHandler implements Runnable {
                     return new HTTPResponse().setStatus(400);
             }
         } else {
-            return new HTTPResponse().setStatus(400);
+            return new HTTPResponse().setStatus(501);
         }
     }
 }

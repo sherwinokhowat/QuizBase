@@ -7,6 +7,11 @@ import web.HTTPResponse;
 import web.Server;
 import web.WebPage;
 
+/**
+ * Class representing the signup page of the server
+ *
+ * @author Sherwin Okhowat, Ricky Qin
+ */
 public class LoginPage extends WebPage implements HTTPPath {
 
     /**
@@ -19,7 +24,7 @@ public class LoginPage extends WebPage implements HTTPPath {
         "<input style='margin-bottom: 5px;' type='password' id='password' name='password' placeholder='Password'>",
         "<input type='submit' value='Login'>",
         "</form>");
-        setBodyAttributes("style='background-color: lightblue; display: flex; flex-direction: column; justify-content: center; align-items: center;'");
+        setStyle("background-color: lightblue; display: flex; flex-direction: column; justify-content: center; align-items: center;");
     }
 
     @Override

@@ -13,6 +13,8 @@ public class Hyperlink implements WebComponent {
 
     private boolean isButton;
 
+    private String style;
+
     /**
      * Constructs a Hyperlink object
      *
@@ -27,9 +29,19 @@ public class Hyperlink implements WebComponent {
     }
 
     @Override
+    public WebComponent setStyle(String style) {
+        this.style = style;
+        return this;
+    }
+
+    @Override
     public String toHTMLString() {
         StringBuilder str = new StringBuilder();
-        str.append("<a href=\""+href+"\">");
+        str.append("<a href=\""+href+"\"");
+        if(style != null) {
+            str.append("style=\""+style+"\"");
+        }
+        str.append(">");
         if(isButton) {
             str.append("<button>");
         }

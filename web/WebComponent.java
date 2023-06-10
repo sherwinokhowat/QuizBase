@@ -8,6 +8,13 @@ package web;
  */
 public interface WebComponent {
 
+    /**
+     * Sets the style attribute of this component
+     *
+     * @param style The style
+     * @return This WebComponent
+     */
+    public WebComponent setStyle(String style);
 
     /**
      * Converts the component to an HTML string

@@ -106,16 +106,16 @@ public abstract class DatabaseManager {
     /**
      * Runs a SQL {@code SELECT} statement. Implementing classes must ensure that
      * <ul>
-     *  <li>{@code .getReadOperationResultSet(String statement)} is called</li>
-     *  <li>This method correct parses the ResultSet into the appropriate class object</li>
-     *  <li>At the end of this method, {@code Transaction.close()} is called on the
+     *  <li>{@code getReadOperationResultSet(String statement)} is called</li>
+     *  <li>The method correctly parses the ResultSet into the appropriate class object</li>
+     *  <li>At the end of the method, {@code Transaction.close()} is called on the
      * Transaction object</li>
      * <li>A caching mechanism is used to ensure that there is one instance of each object.
      * Objects retrieved from the database should be stored in the cache</li>
      * </ul>
      *
      * @param statement The SQL statement
-     * @return An array of objects or {@code null} if an exception occurred.
+     * @return An array of parsed objects or {@code null} if an exception occurred.
      */
     public abstract ArrayList<? extends Object> executeReadOperation(String statement);
 }

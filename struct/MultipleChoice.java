@@ -1,10 +1,12 @@
 package struct;
 
+import web.WebComponent;
+
 /**
  * This class represents a multiple choice quiz item, which holds four possible
  * answers and the index of the correct answer. Contains web component
  * methods since this is a quiz item. Answer options index begins at 0 index.
- * 
+ *
  * @author Sherwin Okhowat
  */
 public class MultipleChoice extends QuizItem {
@@ -14,7 +16,7 @@ public class MultipleChoice extends QuizItem {
 
     /**
      * Constructor for a multiple choice quiz item
-     * 
+     *
      * @param id           the multiple choice question's id
      * @param frequency    the frequency in which this multiple choice question
      *                     should appear
@@ -39,7 +41,7 @@ public class MultipleChoice extends QuizItem {
 
     /**
      * Sets the correct index of the answer
-     * 
+     *
      * @param index the correct index of the answer
      */
     public void setCorrectIndex(int index) {
@@ -48,11 +50,11 @@ public class MultipleChoice extends QuizItem {
         }
     }
 
-    
+
 
     /**
      * Returns the correct index of the answer
-     * 
+     *
      * @return the index of the correct answer
      */
     public int getCorrectIndex() {
@@ -61,7 +63,7 @@ public class MultipleChoice extends QuizItem {
 
     /**
      * Returns the array of answer options
-     * 
+     *
      * @return the array of answer options
      */
     public String[] getAnswerOptions() {
@@ -69,16 +71,16 @@ public class MultipleChoice extends QuizItem {
     }
 
     /**
-     * Gets the question 
+     * Gets the question
      * @return the question
      */
     public String getQuestion() {
-        return question; 
+        return question;
     }
 
     /**
      * Converts the component to an HTML string
-     * 
+     *
      * @return the HTML string representation of the component
      */
     @Override
@@ -89,16 +91,22 @@ public class MultipleChoice extends QuizItem {
 
         StringBuilder html = new StringBuilder("<div class='multipleChoice'>");
         html.append("<p>" + this.question + ("?".equals(this.question.substring(this.question.length()-1)) ? "": "?") + "</p>");
-        html.append("div class = 'answerOptions'>"); 
+        html.append("div class = 'answerOptions'>");
         for(int i = 0; i < this.answerOptions.length; i++) {
             html.append("<label> <input type='radio' name='question" + i + "' value='"+ (char)(i+65) + "'>");
             html.append(this.answerOptions[i]);
             html.append("</label>");
         }
-        html.append("</div>"); 
-        html.append("</div>"); 
+        html.append("</div>");
+        html.append("</div>");
 
         throw new UnsupportedOperationException("Unimplemented method 'toHTMLString'");
+    }
+
+    @Override
+    public WebComponent setStyle(String style) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setStyle'");
     }
 
 }

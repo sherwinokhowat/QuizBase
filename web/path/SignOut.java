@@ -9,7 +9,7 @@ import web.Server;
 /**
  * A sign out HTTP path (signs out the user)
  *
- * @author
+ * @author Ricky Qin
  */
 public class SignOut implements HTTPPath {
 

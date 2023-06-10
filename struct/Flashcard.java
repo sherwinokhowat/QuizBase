@@ -1,9 +1,11 @@
 package struct;
 
+import web.WebComponent;
+
 /**
  * This class represents a flashcard quiz item. Contains a question and respective answer. Contains web component
  * methods since this is a quiz item.
- * 
+ *
  * @author Sherwin Okhowat
  */
 public class Flashcard extends QuizItem {
@@ -12,7 +14,7 @@ public class Flashcard extends QuizItem {
 
     /**
      * Constructor for a flashcard
-     * 
+     *
      * @param id the flashcard's id
      * @param frequency the frequency in which this flashcard should appear
      * @param question the question this flashcard bears
@@ -26,7 +28,7 @@ public class Flashcard extends QuizItem {
 
     /**
      * Returns the question that this flashcard bears
-     * 
+     *
      * @return the question
      */
     public String getQuestion() {
@@ -35,8 +37,8 @@ public class Flashcard extends QuizItem {
 
     /**
      * Returns the answer that this flashcard bears
-     * 
-     * @return the answer 
+     *
+     * @return the answer
      */
     public String getAnswer() {
         return this.answer;
@@ -44,7 +46,7 @@ public class Flashcard extends QuizItem {
 
     /**
      * Sets the question this flashcard bears
-     * 
+     *
      * @param question the new question
      */
     public void setQuestion(String question) {
@@ -53,7 +55,7 @@ public class Flashcard extends QuizItem {
 
     /**
      * Sets the answer this flashcard bears
-     * 
+     *
      * @param answer the new answer
      */
     public void setAnswer(String answer) {
@@ -62,10 +64,16 @@ public class Flashcard extends QuizItem {
 
     /**
      * Converts the component to an HTML string
-     * 
+     *
      * @return the HTML string representation of the component
      */
     public String toHTMLString() {
         throw new UnsupportedOperationException("Unimplemented method 'toHTMLString'");
+    }
+
+    @Override
+    public WebComponent setStyle(String style) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setStyle'");
     }
 }

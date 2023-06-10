@@ -24,7 +24,7 @@ public class SignUpPage extends WebPage implements HTTPPath {
         "<input style='margin-bottom: 5px;' type='password' id='password' name='password' placeholder='Password'>",
         "<input type='submit' value='Sign Up'>",
         "</form>");
-        setBodyAttributes("style='background-color: lightblue; display: flex; flex-direction: column; justify-content: center; align-items: center;'");
+        setStyle("background-color: lightblue; display: flex; flex-direction: column; justify-content: center; align-items: center;");
     }
 
     @Override

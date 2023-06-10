@@ -7,6 +7,7 @@ import utility.Pair;
 import web.HTTP;
 import web.HTTPRequest;
 import web.HTTPResponse;
+import web.Hyperlink;
 import web.Server;
 import web.WebPage;
 
@@ -20,7 +21,7 @@ public class HomePage extends WebPage implements HTTPPath {
     private boolean displayAll;
 
     public HomePage(boolean displayAll) {
-        setBodyAttributes("style='background-color: lightblue; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; box-sizing: border-box;'");
+        setStyle("background-color: lightblue; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; box-sizing: border-box;");
         this.displayAll = displayAll;
     }
 
@@ -28,31 +29,30 @@ public class HomePage extends WebPage implements HTTPPath {
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         Pair<String, String> credentials = server.checkSessionID(request);
         if(credentials == null) {
-            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/");
+            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/login");
         } else {
             HTTPResponse response = new HTTPResponse().setStatus(200)
                     .setHeaderField("Content-Type", HTTP.contentType("html"));
             User user = server.getUserManager().authenticateUser(
                     credentials.first(), credentials.second());
 
-            StringBuilder content = new StringBuilder();
+            String buttonStyle1 = "margin-right: 10px; background-color: " + (displayAll ? "#FFCCCB" : "#F2F2F2") + "; color: black; padding: 10px; text-decoration: none; border: 1px solid black;";
+            String buttonStyle2 = "background-color:" + (!displayAll ? "#FFCCCB" : "#F2F2F2") + "; color: black; padding: 10px; text-decoration: none; border: 1px solid black;";
+
             // Header section
-            content.append("<div style='display: flex; justify-content: space-between; width: 100%; padding: 20px;'>");
-            content.append("<img src='../images/logo.png' style='width: 150px; height: auto;'>");
-            content.append("<div style='text-align: right; font-size: 1.5em; padding-top: 35px; padding-right: 35px;'>" + user.getUsername() + "</div>");
-            content.append("<a href='/signout' style='text-align: right; font-size: 1.5em;'> Sign out </a>");
-            content.append("</div>");
+            appendBodyComponents("<div style='display: flex; justify-content: space-between; width: 100%; padding: 20px;'>",
+                    "<img src='../images/logo.png' style='width: 150px; height: auto;'>",
+                    "<div style='text-align: right; font-size: 1.5em; padding-top: 35px; padding-right: 35px;'>" + user.getUsername() + "</div>",
+                    new Hyperlink("/signout", "Sign Out", false).setStyle(buttonStyle1),
+                    "</div>");
 
             // Line
-            content.append("<hr style='border: 2px solid black; width: 100%;'>");
+            appendBodyComponents("<hr style='border: 2px solid black; width: 100%;'>");
 
             // Content section
-            content.append("<div style='display: flex; justify-content: center; margin-bottom: 20px; width: 100%; display: flex; justify-content: center;'>");
-            content.append("<a href='/home?quizzes=all' style='margin-right: 10px; background-color: " + (displayAll ? "#FFCCCB" : "#F2F2F2") + "; color: black; padding: 10px; text-decoration: none; border: 1px solid black;'>All Quizzes</a>");
-            content.append("<a href='/home?quizzes=my' style='background-color:" + (!displayAll ? "#FFCCCB" : "#F2F2F2") + "; color: black; padding: 10px; text-decoration: none; border: 1px solid black;'>My Quizzes</a>");
-            content.append("</div>");
-
-            appendBodyComponents(content.toString());
+            appendBodyComponents("<div style='display: flex; justify-content: center; margin-bottom: 20px; width: 100%; display: flex; justify-content: center;'>",
+                    new Hyperlink("/home?quizzes=all", "All Quizzes", false).setStyle(buttonStyle1),
+                    new Hyperlink("/home?quizzes=my", "My Quizzes", false).setStyle(buttonStyle2));
 
             String query = request.getQueryString();
             if("quizzes=my".equals(query)) { // display user's quizzes
