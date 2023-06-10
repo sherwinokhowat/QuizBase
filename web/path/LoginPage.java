@@ -1,6 +1,12 @@
-package web;
+package web.path;
 
-public class LoginPage extends WebPage {
+import web.HTTP;
+import web.HTTPRequest;
+import web.HTTPResponse;
+import web.Server;
+import web.WebPage;
+
+public class LoginPage extends WebPage implements HTTPPath {
 
     /**
      * Constructs a LoginPage
@@ -13,5 +19,12 @@ public class LoginPage extends WebPage {
         "<input type='submit' value='Login'>",
         "</form>");
         setBodyAttributes("style='background-color: lightblue; display: flex; flex-direction: column; justify-content: center; align-items: center;'");
+    }
+
+    @Override
+    public HTTPResponse processRequest(HTTPRequest request, Server server) {
+        return new HTTPResponse().setStatus(200)
+                .setHeaderField("Content-Type", HTTP.contentType("html"))
+                .appendBody(toHTMLString());
     }
 }

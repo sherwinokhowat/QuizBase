@@ -1,11 +1,17 @@
-package web;
+package web.path;
+
+import web.HTTP;
+import web.HTTPRequest;
+import web.HTTPResponse;
+import web.Server;
+import web.WebPage;
 
 /**
  * Class representing the signup page of the server
  *
  * @author Sherwin Okhowat, Ricky Qin
  */
-public class SignUpPage extends WebPage {
+public class SignUpPage extends WebPage implements HTTPPath {
 
     /**
      * Constructs a SignUpPage
@@ -18,5 +24,12 @@ public class SignUpPage extends WebPage {
         "<input type='submit' value='Sign Up'>",
         "</form>");
         setBodyAttributes("style='background-color: lightblue; display: flex; flex-direction: column; justify-content: center; align-items: center;'");
+    }
+
+    @Override
+    public HTTPResponse processRequest(HTTPRequest request, Server server) {
+        return new HTTPResponse().setStatus(200)
+                .setHeaderField("Content-Type", HTTP.contentType("html"))
+                .appendBody(toHTMLString());
     }
 }

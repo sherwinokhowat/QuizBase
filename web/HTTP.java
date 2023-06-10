@@ -21,6 +21,8 @@ public class HTTP {
                 return "Forbidden";
             case 404:
                 return "Not Found";
+            case 500:
+                return "Internal Server Error";
             default:
                 return "";
         }
