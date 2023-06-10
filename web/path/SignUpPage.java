@@ -25,12 +25,12 @@ public class SignUpPage extends WebPage implements HTTPPath {
         "<input type='submit' value='Sign Up'>",
         "</form>",
                 "<form style='display: flex; flex-direction: column; justify-content: center; align-items: center; width: 200px; margin-top: 10px; padding: 20px;' action='/login' method='GET'>",
-                "<p style='font-size: 13px;'>Already have an account? Log in!</p>",
+                "<p style='font-size: 12px'>Already have an account? Log in!</p>",
                 "<input type='submit' value='Log in'>",
                 "</form>");
 
 
-        setStyle("background-color: lightblue; display: flex; flex-direction: column; justify-content: center; align-items: center;");
+        setStyle("background-color: lightblue; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: Arial");
     }
 
     @Override

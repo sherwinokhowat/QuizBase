@@ -27,11 +27,11 @@ public class LoginPage extends WebPage implements HTTPPath {
                 "</form>",
 
                 "<form style='display: flex; flex-direction: column; justify-content: center; align-items: center; width: 200px; margin-top: 10px; padding: 20px;' action='/signup' method='GET'>",
-                "<p style='font-size: 13px;'>Don't have an account? Make one!</p>",
+                "<p style='font-size: 12px'>Don't have an account? Make one!</p>",
                 "<input type='submit' value='Sign Up'>",
                 "</form>");
 
-        setStyle("background-color: lightblue; display: flex; flex-direction: column; justify-content: center; align-items: center;");
+        setStyle("background-color: lightblue; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: Arial");
     }
 
 
