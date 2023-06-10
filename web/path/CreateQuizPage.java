@@ -1,5 +1,6 @@
 package web.path;
 
+import utility.Pair;
 import web.HTTP;
 import web.HTTPRequest;
 import web.HTTPResponse;
@@ -21,6 +22,12 @@ public class CreateQuizPage extends WebPage implements HTTPPath {
 
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
-        throw new UnsupportedOperationException("Unimplemented method, 'processRequest");
+        Pair<String, String> credentials = server.checkSessionID(request);
+        if(credentials == null) {
+            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/login");
+        }
+        return new HTTPResponse().setStatus(200)
+                .setHeaderField("Content-Type", HTTP.contentType("html"))
+                .appendBody(toHTMLString());
     }
 }

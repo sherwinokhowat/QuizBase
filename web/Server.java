@@ -3,6 +3,7 @@ package web;
 import manager.QuizManager;
 import manager.UserManager;
 import utility.Pair;
+import web.path.CreateQuizPage;
 import web.path.HomePage;
 import web.path.ImagePath;
 import web.path.LoginPage;
@@ -280,6 +281,8 @@ class ConnectionHandler implements Runnable {
                     return new SignOut().processRequest(request, server);
                 case "/home":
                     return new HomePage().processRequest(request, server);
+                case "/create-quiz":
+                    return new CreateQuizPage().processRequest(request, server);
                 default: {
                     if(path.startsWith("/images/")) {
                         return new ImagePath().processRequest(request, server);
