@@ -48,6 +48,8 @@ public class MultipleChoice extends QuizItem {
         }
     }
 
+    
+
     /**
      * Returns the correct index of the answer
      * 
@@ -64,6 +66,14 @@ public class MultipleChoice extends QuizItem {
      */
     public String[] getAnswerOptions() {
         return this.answerOptions;
+    }
+
+    /**
+     * Gets the question 
+     * @return the question
+     */
+    public String getQuestion() {
+        return question; 
     }
 
     /**

@@ -8,6 +8,8 @@ import java.util.HashMap;
 
 import struct.Quiz;
 import struct.QuizItem; 
+import struct.Flashcard;
+import struct.MultipleChoice;
 import struct.User; 
 import utility.Pair;
 import utility.SQLStatementBuilder;
@@ -20,6 +22,9 @@ import utility.SQLStatementBuilder;
 public class QuizManager extends DatabaseManager {
 
     private HashMap<Integer, Quiz> cache = new HashMap<Integer, Quiz>();
+
+    private static int FLASHCARD = 1;
+    private static int MULTIPLE_CHOICE = 2; 
 
     /**
      * Constructs a QuizManager class for the specified database
@@ -42,6 +47,20 @@ public class QuizManager extends DatabaseManager {
         statement.append("FOREIGN KEY (CREATOR_ID) REFERENCES USERS (ID)");
         statement.append(");");
         executeWriteOperation(statement.toString());
+        StringBuilder statement2 = new StringBuilder();
+        statement2.append("CREATE TABLE IF NOT EXISTS QUIZ_ITEMS (");
+        statement2.append("ID INTEGER PRIMARY KEY AUTOINCREMENT,");
+        statement2.append("QUIZ_ID INTEGER NOT NULL,");
+        statement2.append("TYPE INTEGER NOT NULL,");
+        statement2.append("QUESTION TEXT NOT NULL,");
+        statement2.append("OPTION_1 TEXT NOT NULL,");
+        statement2.append("OPTION_2 TEXT,");
+        statement2.append("OPTION_3 TEXT,");
+        statement2.append("OPTION_4 TEXT,");
+        statement2.append("CORRECT_ANSWER INTEGER,");
+        statement2.append("FOREIGN KEY (QUIZ_ID) REFERENCES QUIZZES (ID)");
+        statement2.append(");");
+        executeWriteOperation(statement2.toString());
     }
 
     /**
@@ -82,8 +101,21 @@ public class QuizManager extends DatabaseManager {
         }
     }
 
+    /**
+     * Adds a list of quiz items 
+     * @param quiz The quiz associated with the items 
+     * @param items The quiz items 
+     */
     public void addQuizItems (Quiz quiz, QuizItem... items) {
-        
+        for (QuizItem item : items) {
+            if (item instanceof Flashcard) { // it's abstract
+                Flashcard flashcardItem = (Flashcard) item; 
+                executeWriteOperation(new SQLStatementBuilder().insertInto("QUIZ_ITEMS", "QUIZ_ID", "TYPE", "QUESTION", "OPTION_1").values(Integer.toString(quiz.getID()), Integer.toString(FLASHCARD), flashcardItem.getQuestion(), flashcardItem.getAnswer()).toString());
+            } else if (item instanceof MultipleChoice) {
+                MultipleChoice mcItem = (MultipleChoice) item; 
+                executeWriteOperation(new SQLStatementBuilder().insertInto("QUIZ_ITEMS", "QUIZ_ID", "TYPE", "QUESTION", "OPTION_1", "OPTION_2", "OPTION_3", "OPTION_4", "CORRECT_ANSWER").values(Integer.toString(quiz.getID()), Integer.toString(MULTIPLE_CHOICE), mcItem.getQuestion(), mcItem.getAnswerOptions()[0], mcItem.getAnswerOptions()[1], mcItem.getAnswerOptions()[2], mcItem.getAnswerOptions()[3], Integer.toString(mcItem.getCorrectIndex()+1)).toString());
+            }
+        }
     }
 
 
