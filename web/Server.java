@@ -106,16 +106,6 @@ public class Server {
     }
 
     /**
-     * Validates the provided id
-     *
-     * @param id The session id
-     * @return The user's username and password
-     */
-    public Pair<String, String> checkSessionID(String id) {
-        return cookies.get(id);
-    }
-
-    /**
      * Generates a unique 20 character session ID, containing AZaz09 characters.
      * Upon generation, it is stored as a cookie.
      *
@@ -141,7 +131,25 @@ public class Server {
         return id;
     }
 
-    //***** Inner class - thread for client connection
+    /**
+     * Checks if the request contains a valid session ID
+     *
+     * @param request The request
+     * @return A Pair containing the user's username and password or {@code null} if the session ID
+     * doesn't exist or is invalid
+     */
+    public Pair<String, String> checkSessionID(Request request) {
+        String cookieFieldValue = request.getField("Cookie");
+        if(cookieFieldValue == null) {
+            return null;
+        }
+        String sessionId = cookieFieldValue.substring(cookieFieldValue.indexOf("=")+1);
+        return cookies.get(sessionId);
+    }
+
+    /**
+     * Inner class - thread for client connection
+     */
     class ConnectionHandler implements Runnable {
 
         private DataOutputStream output;// assign printwriter to network stream
@@ -197,7 +205,7 @@ public class Server {
                     // process request here
                     System.out.println("["+Thread.currentThread()+"] "+request.get(0));
                     Request requestObj = new Request(request);
-                    processRequest(requestObj);
+                    processRequest(requestObj).writeResponse(output);
                     System.out.println("["+Thread.currentThread()+"] "+"processed request");
                 }
 
@@ -228,50 +236,17 @@ public class Server {
         }
 
         /**
-         * Returns the MIME type of a given file extension.
-         * @param extension The extension (e.g. html, css). Doesn't contain the period before the extension.
-         * @return a string representing the MIME type of the extension, or "invalid" if it can't find the type.
-         * */
-        public String contentType(String extension) {
-            String result;
-            switch (extension) {
-                case "html":
-                    result = "text/html";
-                    break;
-                case "css":
-                    result = "text/css";// could look into CSS support for.
-                    break;
-                case "js":
-                    result = "application/javascript";
-                    break;
-                case "png":
-                    result = "image/png";
-                    break;
-                case "jpg":
-                case "jpeg":
-                    result = "image/jpeg";
-                    break;
-                case "gif":
-                    result = "image/gif";
-                    break;
-                default:
-                    result = "invalid";
-                    break;
-            }
-            return result;
-        }
-
-        /**
          * Processes a request and sends a response to the client
          *
          * @param request The request, split by the line separator
+         * @return The response
          */
-        private void processRequest(Request request) {
+        private Response processRequest(Request request) {
 
             System.out.println(request);
             Response response = new Response().setStatus(200)
                     // default content type is text/html
-                    .setHeaderField("Content-Type", contentType("html"));
+                    .setHeaderField("Content-Type", HTTP.contentType("html"));
 
             if(request.getType().equals("GET")) {
                 System.out.println("["+Thread.currentThread()+"] "+request);
@@ -293,25 +268,27 @@ public class Server {
                     response.appendBody(new SignUpPage().toHTMLString());
 
                 } else if(path.equals("/home")) {
-                    String cookieFieldValue = request.getField("Cookie");
-                    String cookie = cookieFieldValue.substring(cookieFieldValue.indexOf("=")+1);
-                    Pair<String, String> credentials = checkSessionID(cookie);
-                    User user = userManager.authenticateUser(credentials.first(), credentials.second());
+                    Pair<String, String> credentials = checkSessionID(request);
+                    if(credentials == null) {
+                        response.setStatus(303).setHeaderField("Location", "/");
+                    } else {
+                        User user = userManager.authenticateUser(credentials.first(), credentials.second());
 
-                    String query = request.getQueryString();
-                    HomePage homepage = new HomePage(user, false);
-                    if("quizzes=my".equals(query)) { // display user's quizzes
-                        ArrayList<? extends Object> quizzes = quizManager.getUserCreatedQuizzes(user);
-                        for(Object quiz : quizzes) {
-                            homepage.appendBodyComponents(((Quiz) quiz).toHTMLString());
+                        String query = request.getQueryString();
+                        HomePage homepage = new HomePage(user, false);
+                        if("quizzes=my".equals(query)) { // display user's quizzes
+                            ArrayList<? extends Object> quizzes = quizManager.getUserCreatedQuizzes(user);
+                            for(Object quiz : quizzes) {
+                                homepage.appendBodyComponents(((Quiz) quiz).toHTMLString());
+                            }
+                        } else { // display all quizzes
+                            ArrayList<? extends Object> quizzes = quizManager.getAllCreatedQuizzes();
+                            for(Object quiz : quizzes) {
+                                homepage.appendBodyComponents(((Quiz) quiz).toHTMLString());
+                            }
                         }
-                    } else { // display all quizzes
-                        ArrayList<? extends Object> quizzes = quizManager.getAllCreatedQuizzes();
-                        for(Object quiz : quizzes) {
-                            homepage.appendBodyComponents(((Quiz) quiz).toHTMLString());
-                        }
+                        response.appendBody(homepage.toHTMLString());
                     }
-                    response.appendBody(homepage.toHTMLString());
 
                 } else if(path.startsWith("/images/")) {// any path that references stuff inside the images directory
                     byte[] d = null; // byte array for images
@@ -341,15 +318,13 @@ public class Server {
                     String password = request.getPostBody("password");
                     User user = userManager.authenticateUser(username, password);
 
-                    WebPage webPage = new WebPage();
                     if(user == null) {
-                        webPage.appendBodyComponents("Invalid credentials!");
+                        return response.appendBody("Invalid credentials!");
                     } else {
-                        webPage.appendBodyComponents("Logged in!", WebPage.BR_TAG, user.toString(),
-                                WebPage.BR_TAG, new Hyperlink("../../home", "Continue", true));
+                        response.setStatus(303).setHeaderField("Location", "/home");
+                        return response.setHeaderField("Set-Cookie",
+                                "sessionId="+createSessionID(username, password)+"; Path=/");
                     }
-                    response.appendBody(webPage.toHTMLString());
-                    response.setHeaderField("Set-Cookie", "sessionId="+createSessionID(username, password)+"; Path=/");
 
                 } else if(request.getPath().equals("/signup/submit")) {
                     String username = request.getPostBody("username");
@@ -369,7 +344,7 @@ public class Server {
             } else {
                 response.setStatus(400);
             }
-            response.writeResponse(output);
+            return response;
         }
     }
 }

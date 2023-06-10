@@ -3,7 +3,6 @@ package web;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,23 +12,6 @@ import java.util.Map;
  * @author Ricky Qin
  */
 public class Response {
-
-    public static String getStatusMessage(int s) {
-        switch(s) {
-            case 200:
-                return "OK";
-            case 400:
-                return "Bad Request";
-            case 401:
-                return "Unauthorized";
-            case 403:
-                return "Forbidden";
-            case 404:
-                return "Not Found";
-            default:
-                return "";
-        }
-    }
 
     private int status;
     private HashMap<String, String> headerFields = new HashMap<String, String>();
@@ -81,7 +63,7 @@ public class Response {
      */
     public void writeResponse(DataOutputStream output) {
         try {
-            output.writeBytes("HTTP/1.1 " + status + " " + getStatusMessage(status) + "\n");
+            output.writeBytes("HTTP/1.1 " + status + " " + HTTP.getStatusMessage(status) + "\n");
             headerFields.put("Content-Length", String.valueOf(body.length));
             for(Map.Entry<String, String> entry: headerFields.entrySet()) {
                 output.writeBytes(entry.getKey() + ": " + entry.getValue() + "\n");
