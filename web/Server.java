@@ -2,8 +2,6 @@ package web;
 
 import manager.QuizManager;
 import manager.UserManager;
-import struct.Quiz;
-import struct.User;
 import utility.Pair;
 import web.path.HomePage;
 import web.path.ImagePath;
@@ -16,12 +14,9 @@ import web.path.SignUpSubmit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -37,8 +32,6 @@ public class Server {
     private QuizManager quizManager;
 
     private ServerSocket serverSock;
-
-    private static boolean accepting = true;
 
     /**
      * Each cookie is mapped to the user's username and password.
@@ -72,7 +65,7 @@ public class Server {
             serverSock.setSoTimeout(0);// will never timeout while waiting for connections
             System.out.println("Accepting Connections");
 
-            while(accepting) {
+            while(true) {// always accept connections
                 client = serverSock.accept();// wait for connection
 
                 // Note: you might want to keep references to all clients if you plan to broadcast messages
@@ -155,6 +148,14 @@ public class Server {
         return cookies.get(sessionId);
     }
 
+    /**
+     * Removes the provided session ID from the list of valid, thus invalidating it.
+     *
+     * @param id The session id to invalidate.
+     */
+    public void deleteSessionId(String id) {
+        cookies.remove(id);
+    }
 
 }
 
@@ -218,12 +219,12 @@ class ConnectionHandler implements Runnable {
 
             if(request.size() != 0) {
                 // process request here
-                System.out.println("["+Thread.currentThread()+"] "+request.get(0));
+                System.out.println("["+Thread.currentThread()+"] ");
+                System.out.println(request);
                 HTTPRequest requestObj = new HTTPRequest(request);
                 processRequest(requestObj).writeResponse(output);
                 System.out.println("["+Thread.currentThread()+"] "+"processed request");
             }
-
             input.close();
             output.close();
             client.close();
@@ -236,6 +237,7 @@ class ConnectionHandler implements Runnable {
 
     /**
      * Gets the extension of a file path (e.g. "/", "/style.css")
+     *
      * @param filePath the file path
      * @return the extension (e.g. "html", "css")
      */
@@ -257,48 +259,32 @@ class ConnectionHandler implements Runnable {
      * @return The response
      */
     private HTTPResponse processRequest(HTTPRequest request) {
-
-        System.out.println(request);
-        HTTPResponse response = new HTTPResponse().setStatus(200)
-                // default content type is text/html
-                .setHeaderField("Content-Type", HTTP.contentType("html"));
-
         if(request.getType().equals("GET")) {
-            System.out.println("["+Thread.currentThread()+"] "+request);
-
             String path = request.getPathWithoutQueryString();
-
             if(path.equals("/")) {// homepage
                 return new RootPage().processRequest(request, server);
-
             } else if(path.equals("/login")) {// login page
                 return new LoginPage().processRequest(request, server);
-
             } else if(path.equals("/signup")) {// signup page
                 return new SignUpPage().processRequest(request, server);
-
-            } else if(path.equals("/home")) {
+            } else if(path.equals("/home")) {// home page (after logging in)
                 return new HomePage(false).processRequest(request, server);
-
             } else if(path.startsWith("/images/")) {// any path that requests an image
                 return new ImagePath().processRequest(request, server);
             } else {
-                response.setStatus(404);
+                return new HTTPResponse().setStatus(404);
             }
 
         } else if(request.getType().equals("POST")) {
-            System.out.println("["+Thread.currentThread()+"] "+request);
-
-            if(request.getPath().equals("/login/submit")) {
+            if(request.getPath().equals("/login/submit")) {// submit login info
                 return new LoginSubmit().processRequest(request, server);
-            } else if(request.getPath().equals("/signup/submit")) {
+            } else if(request.getPath().equals("/signup/submit")) {// submit signup info
                 return new SignUpSubmit().processRequest(request, server);
             } else {
-                response.setStatus(400);
+                return new HTTPResponse().setStatus(400);
             }
         } else {
-            response.setStatus(400);
+            return new HTTPResponse().setStatus(400);
         }
-        return response;
     }
 }
