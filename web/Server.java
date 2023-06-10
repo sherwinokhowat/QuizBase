@@ -138,7 +138,7 @@ public class Server {
      * @return A Pair containing the user's username and password or {@code null} if the session ID
      * doesn't exist or is invalid
      */
-    public Pair<String, String> checkSessionID(Request request) {
+    public Pair<String, String> checkSessionID(HTTPRequest request) {
         String cookieFieldValue = request.getField("Cookie");
         if(cookieFieldValue == null) {
             return null;
@@ -204,7 +204,7 @@ public class Server {
                 if(request.size() != 0) {
                     // process request here
                     System.out.println("["+Thread.currentThread()+"] "+request.get(0));
-                    Request requestObj = new Request(request);
+                    HTTPRequest requestObj = new HTTPRequest(request);
                     processRequest(requestObj).writeResponse(output);
                     System.out.println("["+Thread.currentThread()+"] "+"processed request");
                 }
@@ -241,10 +241,10 @@ public class Server {
          * @param request The request, split by the line separator
          * @return The response
          */
-        private Response processRequest(Request request) {
+        private HTTPResponse processRequest(HTTPRequest request) {
 
             System.out.println(request);
-            Response response = new Response().setStatus(200)
+            HTTPResponse response = new HTTPResponse().setStatus(200)
                     // default content type is text/html
                     .setHeaderField("Content-Type", HTTP.contentType("html"));
 

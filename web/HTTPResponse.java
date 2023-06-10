@@ -11,16 +11,16 @@ import java.util.Map;
  *
  * @author Ricky Qin
  */
-public class Response {
+public class HTTPResponse {
 
     private int status;
     private HashMap<String, String> headerFields = new HashMap<String, String>();
     private byte[] body = new byte[0];
 
-    public Response() {
+    public HTTPResponse() {
     }
 
-    public Response setStatus(int status) {
+    public HTTPResponse setStatus(int status) {
         this.status = status;
         return this;
     }
@@ -31,12 +31,12 @@ public class Response {
      * @param value The field
      * @return
      */
-    public Response setHeaderField(String name, String value) {
+    public HTTPResponse setHeaderField(String name, String value) {
         headerFields.put(name, value);
         return this;
     }
 
-    public Response appendBody(String str) {
+    public HTTPResponse appendBody(String str) {
         try {
             return appendBody(str.getBytes("utf-8"));
         } catch (UnsupportedEncodingException e) {
@@ -45,7 +45,7 @@ public class Response {
         }
     }
 
-    public Response appendBody(byte[] bytes) {
+    public HTTPResponse appendBody(byte[] bytes) {
         byte[] newBody = new byte[body.length + bytes.length];
         for(int i = 0; i < body.length; i++) {
             newBody[i] = body[i];

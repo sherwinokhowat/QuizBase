@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
  *
  * @author Avery Chan, Ricky Qin
  */
-public class Request {
+public class HTTPRequest {
 
     private String type; // e.g. POST, GET
     private String path; // e.g. /index2.html
@@ -24,7 +24,7 @@ public class Request {
      *
      * @param rawRequest An ArrayList containing all the lines in the request, line by line.
      * */
-    public Request (ArrayList<String> rawRequest) {
+    public HTTPRequest (ArrayList<String> rawRequest) {
         this.rawRequest = rawRequest;
         // System.out.println("DEBUG: request has " + rawRequest.size() + " lines in it.");
 
