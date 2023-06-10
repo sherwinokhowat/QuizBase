@@ -10,7 +10,7 @@ import web.WebPage;
 public class CreateQuizPage extends WebPage implements HTTPPath {
     public CreateQuizPage() {
         // you can change any part of this, i dont mind
-        appendHeadComponents("<script src='formHelper.js'></script>");
+        appendHeadComponents("<script src='/js/formHelper.js'></script>");
         appendBodyComponents(
                 "<form id='questionForm' action='something' method='POST' style='display: flex; flex-direction: column; width: 300px; padding: 20px;'>",
                 "<label for='quizName'>Quiz Name: </label><input type='text' id='quizName' name='quizName' placeholder='Quiz Name'>",

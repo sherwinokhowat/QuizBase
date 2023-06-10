@@ -5,7 +5,7 @@ import manager.UserManager;
 import utility.Pair;
 import web.path.CreateQuizPage;
 import web.path.HomePage;
-import web.path.ImagePath;
+import web.path.FilePath;
 import web.path.LoginPage;
 import web.path.LoginSubmit;
 import web.path.RootPage;
@@ -285,7 +285,9 @@ class ConnectionHandler implements Runnable {
                     return new CreateQuizPage().processRequest(request, server);
                 default: {
                     if(path.startsWith("/images/")) {
-                        return new ImagePath().processRequest(request, server);
+                        return new FilePath("html").processRequest(request, server);
+                    } else if (path.startsWith("/js/")) {
+                        return new FilePath("js").processRequest(request, server);
                     }
                     return new HTTPResponse().setStatus(404);
                 }

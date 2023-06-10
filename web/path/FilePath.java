@@ -14,12 +14,18 @@ import web.Server;
  * Takes files in the folder directory and uploads them. e.g. if the file is QuizBase/images/x.png and the program sends a request for /images/x.png, then this program handles the request.
  */
 
-public class ImagePath implements HTTPPath {
+public class FilePath implements HTTPPath {
+
+    private String fileType;
+
+    public FilePath (String fileType) {
+        this.fileType = fileType;
+    }
 
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         HTTPResponse response = new HTTPResponse().setStatus(200)
-                .setHeaderField("Content-Type", HTTP.contentType("html"));
+                .setHeaderField("Content-Type", HTTP.contentType(fileType));
 
         byte[] data = null; // byte array to store image
         File imgFile = new File(System.getProperty("user.dir"), request.getPathWithoutQueryString());
