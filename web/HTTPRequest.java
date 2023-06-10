@@ -16,8 +16,8 @@ public class HTTPRequest {
     private String body;
 
     private ArrayList<String> rawRequest;// stores everything, line by line.
-    private HashMap<String, String> fields;
-    private HashMap<String, String> postBody;// The contents of the body (only for POST)
+    private HashMap<String, String> fields = new HashMap<String, String>();
+    private HashMap<String, String> postBody = new HashMap<>();// The contents of the body (only for POST)
 
     /**
      * Store useful information about the request
@@ -32,7 +32,6 @@ public class HTTPRequest {
         this.type = firstLine[0];
         this.path = firstLine[1];
 
-        fields = new HashMap<String, String>();
         for(int i = 1; i < rawRequest.size(); i++) {
             String line = rawRequest.get(i);
             if(line.equals("")) {
@@ -46,7 +45,6 @@ public class HTTPRequest {
 
         this.body = rawRequest.get(rawRequest.size()-1);
         if(this.type.equals("POST")) {
-            postBody = new HashMap<String, String>();
             StringTokenizer st = new StringTokenizer(body, "&");
             while(st.hasMoreTokens()) {
                 String entry = st.nextToken();
@@ -69,8 +67,18 @@ public class HTTPRequest {
         return fields.get(fieldName);
     }
 
+    /**
+     * Gets the decoded value of a key value pair in the request body.
+     *
+     * @param key The key
+     * @return The value (already decoded)
+     */
     public String getPostBody(String key) {
-        return postBody.get(key);
+        String value = postBody.get(key);
+        if(value != null) {
+            return HTTP.decodeURL(value);
+        }
+        return null;
     }
 
     /**

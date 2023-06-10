@@ -12,7 +12,7 @@ public class CreateQuizPage extends WebPage implements HTTPPath {
         // you can change any part of this, i dont mind
         appendHeadComponents("<script src='/js/formHelper.js'></script>");
         appendBodyComponents(
-                "<form id='questionForm' action='something' method='POST' style='display: flex; flex-direction: column; width: 300px; padding: 20px;'>",
+                "<form id='questionForm' action='/create-quiz/submit' method='POST' style='display: flex; flex-direction: column; width: 300px; padding: 20px;'>",
                 "<label for='quizName'>Quiz Name: </label><input type='text' id='quizName' name='quizName' placeholder='Quiz Name'>",
                 "<label for='quizDescription'>Description: </label><textarea id='quizDescription' name='quizDescription' placeholder='Quiz Description' rows='4' cols='50'></textarea>",
                 "<input type='submit' value='Finish Quiz'>",

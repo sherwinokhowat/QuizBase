@@ -30,12 +30,15 @@ public abstract class DatabaseManager {
     }
 
     /**
-     * Fetches the database for the object with the specified id.
+     * Fetches the database for the object with the specified value in the specified column.
+     * Recommended that this is used on columns with unique values.
      *
-     * @param id The object id
-     * @return The found object or {@null} if it does not exist.
+     * @param columnName The column name
+     * @param columnValue The column value
+     * @return The found object or {@null} if it does not exist. If multiple objects have
+     * the same value, any one of them is returned.
      */
-    public abstract Object getById(int id);
+    public abstract Object getBy(String columnName, String columnValue);
 
     /**
      * Attempts to connect to the database with the name {@code name}.

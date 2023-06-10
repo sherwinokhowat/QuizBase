@@ -1,5 +1,9 @@
 package web;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
 /**
  * Contains useful constants and methods relating to HTTP
  *
@@ -52,6 +56,21 @@ public class HTTP {
                 return "image/gif";
             default:
                 throw new IllegalArgumentException("Content type \""+type+"\" not supported");
+        }
+    }
+
+    /**
+     * Decodes the provided URL-encoded string
+     *
+     * @param str The string
+     * @return The decoded string
+     */
+    public static String decodeURL(String str) {
+        try {
+            return URLDecoder.decode(str, StandardCharsets.UTF_8.name());
+        } catch(UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

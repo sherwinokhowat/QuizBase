@@ -18,9 +18,9 @@ import utility.SQLStatementBuilder;
 public class UserManager extends DatabaseManager {
 
     @Override
-    public Object getById(int id) {
+    public Object getBy(String columnName, String columnValue) {
         ArrayList<? extends Object> dbResult = executeReadOperation(new SQLStatementBuilder()
-                .select().from("USERS").where("ID="+id).toString());
+                .select().from("USERS").where(columnName+"="+columnValue).toString());
         if (dbResult.size() == 1) {
             User user = (User) (dbResult.get(0));
             return user;

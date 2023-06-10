@@ -4,6 +4,7 @@ import manager.QuizManager;
 import manager.UserManager;
 import utility.Pair;
 import web.path.CreateQuizPage;
+import web.path.CreateQuizSubmit;
 import web.path.HomePage;
 import web.path.FilePath;
 import web.path.LoginPage;
@@ -299,6 +300,8 @@ class ConnectionHandler implements Runnable {
                     return new LoginSubmit().processRequest(request, server);
                 case "/signup/submit":
                     return new SignUpSubmit().processRequest(request, server);
+                case "/create-quiz/submit":
+                    return new CreateQuizSubmit().processRequest(request, server);
                 default:
                     return new HTTPResponse().setStatus(400);
             }
