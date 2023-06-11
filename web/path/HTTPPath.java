@@ -10,5 +10,11 @@ import web.Server;
  * @author Ricky Qin
  */
 public interface HTTPPath {
+    /**
+     * Whenever a request is generated for this page, this method figures out what to do with it.
+     * @param request
+     * @param server
+     * @return
+     */
     public HTTPResponse processRequest(HTTPRequest request, Server server);
 }

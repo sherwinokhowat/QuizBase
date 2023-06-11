@@ -29,3 +29,4 @@ public class SignOut implements HTTPPath {
     }
 
 }
+// todo: get this to redirect automatically. 
