@@ -3,6 +3,7 @@ package web.path;
 import struct.Quiz;
 import struct.User;
 import utility.Pair;
+import web.HTTP;
 import web.HTTPRequest;
 import web.HTTPResponse;
 import web.Server;
@@ -22,7 +23,7 @@ public class CreateQuizSubmit implements HTTPPath {
         String name = request.getPostBody("quizName");
         String description = request.getPostBody("quizDescription");
         User user = (User)(server.getUserManager().getBy("USERNAME", "'"+credentials.first()+"'"));
-        Quiz quiz = (Quiz)(server.getQuizManager().addQuiz(user.getID(), name, description));
+        Quiz quiz = null;
 
         int questionNum = 1;
         while(true) {
@@ -43,15 +44,23 @@ public class CreateQuizSubmit implements HTTPPath {
                 if(options[0] == null || options[1] == null || options[2] == null || options[3] == null || correctAnswer == -1) {
                     return new HTTPResponse().setStatus(400);
                 } else {
+                    if(quiz == null) {// must have at least one quiz item to make a quiz
+                        quiz = (Quiz)(server.getQuizManager().addQuiz(user.getID(), name, description));
+                    }
                     server.getQuizManager().addMultipleChoice(quiz.getID(), question, options[0], options[1], options[2], options[3], correctAnswer);
                 }
             } else {
+                if(quiz == null) {// must have at least one quiz item to make a quiz
+                    quiz = (Quiz)(server.getQuizManager().addQuiz(user.getID(), name, description));
+                }
                 server.getQuizManager().addFlashCard(quiz.getID(), question, answer);
             }
             questionNum++;
         }
         if(questionNum == 1) {
-            return new HTTPResponse().setStatus(400);
+            return new HTTPResponse().setStatus(400)
+                    .setHeaderField("Content-Type", HTTP.contentType("html"))
+                    .appendBody("Quiz must contain at least one question");
         }
         return new HTTPResponse().setStatus(303).setHeaderField("Location", "../../home");
     }

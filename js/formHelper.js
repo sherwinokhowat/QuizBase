@@ -8,9 +8,9 @@ function addFlashcard() {
     var msg = "<div id='div" + newNumber + "'>";
     msg += "<p>Question #" + newNumber + " (Flashcard)</p>";
     msg += "<label for='question" + newNumber + "'>Front:</label><br>";
-    msg += "<input type='text' placeholder='Question' id='question" + newNumber + "' name='question" + newNumber + "'><br>";
+    msg += "<input type='text' placeholder='Question' id='question" + newNumber + "' name='question" + newNumber + "' required><br>";
     msg += "<label for='answer" + newNumber + "'>Back:</label><br>";
-    msg += "<input type='text' placeholder='Answer' id='answer" + newNumber + "' name='answer" + newNumber + "'><br>";
+    msg += "<input type='text' placeholder='Answer' id='answer" + newNumber + "' name='answer" + newNumber + "' required><br>";
     msg += "<button type='button' onclick='deleteQuestion(" + newNumber + ")>Delete Question</button><br>";
     msg += "</div>";
     // if we have 6 questions and we delete number 3, then the POST will send the maximum number of questions (6) and leave the program to get rid of the missing ones.
@@ -23,17 +23,17 @@ function addMultipleChoice() {
     var msg = "<div id='div" + newNumber + "'>";
     msg += "<p>Question #" + newNumber + " (Multiple Choice)</p>";
     msg += "<label for='question" + newNumber + "'>Front:</label><br>";
-    msg += "<input type='text' placeholder='Question' id='question" + newNumber + "' name='question" + newNumber + "'><br>";
+    msg += "<input type='text' placeholder='Question' id='question" + newNumber + "' name='question" + newNumber + "' required><br>";
     msg += "<label for='optionA" + newNumber + "'>Option 1:</label><br>";
-    msg += "<input type='text' placeholder='Option 1' id='optionA" + newNumber + "' name='optionA" + newNumber + "'><br>";
+    msg += "<input type='text' placeholder='Option 1' id='optionA" + newNumber + "' name='optionA" + newNumber + "' required><br>";
     msg += "<label for='optionB" + newNumber + "'>Option 2:</label><br>";
-    msg += "<input type='text' placeholder='Option 2' id='optionB" + newNumber + "' name='optionB" + newNumber + "'><br>";
+    msg += "<input type='text' placeholder='Option 2' id='optionB" + newNumber + "' name='optionB" + newNumber + "' required><br>";
     msg += "<label for='optionC" + newNumber + "'>Option 3:</label><br>";
-    msg += "<input type='text' placeholder='Option 3' id='optionC" + newNumber + "' name='optionC" + newNumber + "'><br>";
+    msg += "<input type='text' placeholder='Option 3' id='optionC" + newNumber + "' name='optionC" + newNumber + "' required><br>";
     msg += "<label for='optionD" + newNumber + "'>Option 4:</label><br>";
-    msg += "<input type='text' placeholder='Option 4' id='optionD" + newNumber + "' name='optionD" + newNumber + "'><br>";
+    msg += "<input type='text' placeholder='Option 4' id='optionD" + newNumber + "' name='optionD" + newNumber + "' required><br>";
     msg += "<label for='correctAnswer" + newNumber + "'>Correct Answer (1-4):</label><br>";
-    msg += "<select id='correctAnswer" + newNumber + "' name='correctAnswer" + newNumber + "'>";
+    msg += "<select id='correctAnswer" + newNumber + "' name='correctAnswer" + newNumber + "' required>";
     msg += "<option value='1'>1</option>";
     msg += "<option value='2'>2</option>";
     msg += "<option value='3'>3</option>";

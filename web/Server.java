@@ -13,9 +13,6 @@ import web.path.RootPage;
 import web.path.SignOut;
 import web.path.SignUpPage;
 import web.path.SignUpSubmit;
-import web.HTTP;
-import web.HTTPRequest;
-import web.HTTPResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.BufferedReader;
@@ -232,6 +229,7 @@ class ConnectionHandler implements Runnable {
                 // process request here
                 System.out.println("["+Thread.currentThread()+"] received Request:");
                 System.out.println(request);
+                System.out.println();
                 HTTPRequest requestObj = new HTTPRequest(request);
                 processRequest(requestObj).writeResponse(output);
             }
