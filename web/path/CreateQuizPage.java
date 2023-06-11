@@ -10,7 +10,17 @@ import web.WebPage;
 public class CreateQuizPage extends WebPage implements HTTPPath {
     public CreateQuizPage() {
         // you can change any part of this, i dont mind
+        setStyle("background-color: lightblue; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; box-sizing: border-box;");
+    }
+
+    @Override
+    public HTTPResponse processRequest(HTTPRequest request, Server server) {
+        Pair<String, String> credentials = server.checkSessionID(request);
+        if(credentials == null) {
+            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/login");
+        }
         appendHeadComponents("<script src='/js/formHelper.js'></script>");
+        addHeader(request, server);
         appendBodyComponents(
                 "<form id='questionForm' action='/create-quiz/submit' method='POST' style='display: flex; flex-direction: column; width: 300px; padding: 20px;'>",
                 "<label for='quizName'>Quiz Name: </label><input type='text' id='quizName' name='quizName' placeholder='Quiz Name' required>",
@@ -22,15 +32,6 @@ public class CreateQuizPage extends WebPage implements HTTPPath {
                 "<button type='button' id='mcButton' onclick='addMultipleChoice()'>Add Multiple Choice Question</button>",
                 "</div>" //                 "<input type='submit' value='Add Question'>",
         );
-        setStyle("background-color: lightblue; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; box-sizing: border-box;");
-    }
-
-    @Override
-    public HTTPResponse processRequest(HTTPRequest request, Server server) {
-        Pair<String, String> credentials = server.checkSessionID(request);
-        if(credentials == null) {
-            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/login");
-        }
         return new HTTPResponse().setStatus(200)
                 .setHeaderField("Content-Type", HTTP.contentType("html"))
                 .appendBody(toHTMLString());
