@@ -32,6 +32,7 @@ public class QuizPage extends WebPage implements HTTPPath {
             appendBodyComponents("<p>No more questions!!</p>");
         } else {
             appendBodyComponents(item.toHTMLString());
+            quiz.addItem(item);
         }
 
         return new HTTPResponse().setStatus(200)
