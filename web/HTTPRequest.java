@@ -55,14 +55,30 @@ public class HTTPRequest {
         }
     }
 
+    /**
+     * Gets the type of request (eg POST, GET)
+     *
+     * @return The type
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Gets the full path of this request
+     *
+     * @return The path
+     */
     public String getPath() {
         return path;
     }
 
+    /**
+     * Gets the value of a header field
+     *
+     * @param fieldName The field name
+     * @return The field value
+     */
     public String getField(String fieldName) {
         return fields.get(fieldName);
     }
@@ -96,6 +112,11 @@ public class HTTPRequest {
         return str.toString();
     }
 
+    /**
+     * Gets the HTTP path, excluding the query string
+     *
+     * @return The HTTP path
+     */
     public String getPathWithoutQueryString() {
         int index = path.indexOf('?');
         if(index == -1) {
@@ -105,31 +126,19 @@ public class HTTPRequest {
         }
     }
 
+    /**
+     * Gets the query string in the HTTP path
+     *
+     * @return The query string (excluding {@code ?}) or {@code ""} if it doesn't exist.
+     */
     public String getQueryString() {
         int index = this.path.indexOf('?');
         if (index == -1) {
             // No query string in this request
-            return null;
+            return "";
         } else {
             return this.path.substring(index + 1);
         }
     }
 
 }
-
-/*
-GET /style123.css HTTP/1.1
-Host: 127.0.0.1:5000
-Connection: keep-alive
-sec-ch-ua: "Google Chrome";v="113", "Chromium";v="113", "Not-A.Brand";v="24"
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36
-sec-ch-ua-platform: "Windows"
-Accept: text/css,q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://127.0.0.1:5000/
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-*/

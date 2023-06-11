@@ -20,13 +20,16 @@ public class QuizManager extends DatabaseManager {
     private static int FLASHCARD = 1;
     private static int MULTIPLE_CHOICE = 2;
 
+    private UserManager userManager;
+
     /**
      * Constructs a QuizManager class for the specified database
      *
      * @param dbName The name of database to manage (must include {@code .db} file extension)
      */
-    public QuizManager(String dbName) {
+    public QuizManager(String dbName, UserManager userManager) {
         super(dbName);
+        this.userManager = userManager;
     }
 
     @Override
@@ -158,7 +161,7 @@ public class QuizManager extends DatabaseManager {
                 String name = rs.getString("NAME");
                 String description = rs.getString("DESCRIPTION");
                 int creatorId = rs.getInt("CREATOR_ID");
-                list.add(new Quiz(id, name, description, creatorId, this));
+                list.add(new Quiz(id, name, description, creatorId, this, userManager));
             }
             result.second().close();
             return list;

@@ -9,6 +9,7 @@ import web.path.HomePage;
 import web.path.FilePath;
 import web.path.LoginPage;
 import web.path.LoginSubmit;
+import web.path.QuizPage;
 import web.path.RootPage;
 import web.path.SignOut;
 import web.path.SignUpPage;
@@ -52,7 +53,7 @@ public class Server {
      */
     public void start(int port, String dbName) {
         userManager = new UserManager(dbName);
-        quizManager = new QuizManager(dbName);
+        quizManager = new QuizManager(dbName, userManager);
         userManager.connectToDatabase();
         quizManager.connectToDatabase();
         userManager.initialize();// must be initialized before quizManager
@@ -285,8 +286,10 @@ class ConnectionHandler implements Runnable {
                 default: {
                     if(path.startsWith("/images/")) {
                         return new FilePath("html").processRequest(request, server);
-                    } else if (path.startsWith("/js/")) {
+                    } else if(path.startsWith("/js/")) {
                         return new FilePath("js").processRequest(request, server);
+                    } else if(path.startsWith("/quiz/")) {
+                        return new QuizPage().processRequest(request, server);
                     }
                     return new HTTPResponse().setStatus(404);
                 }

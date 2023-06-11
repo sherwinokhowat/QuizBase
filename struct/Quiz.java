@@ -2,6 +2,8 @@ package struct;
 
 import java.util.PriorityQueue;
 import manager.QuizManager;
+import manager.UserManager;
+import web.Hyperlink;
 import web.WebComponent;
 
 public class Quiz implements WebComponent {
@@ -11,19 +13,21 @@ public class Quiz implements WebComponent {
     private String name;
     private String description;
     private int creatorId;
-    private QuizManager manager;
+    private QuizManager quizManager;
+    private UserManager userManager;
 
     /**
      * Constructor for a quiz
      *
      * @param manager the quiz manager for this quiz
      */
-    public Quiz(int id, String name, String description, int creatorId, QuizManager manager) {
+    public Quiz(int id, String name, String description, int creatorId, QuizManager quizManager, UserManager userManager) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.creatorId = creatorId;
-        this.manager = manager;
+        this.quizManager = quizManager;
+        this.userManager = userManager;
     }
 
     /**
@@ -134,8 +138,12 @@ public class Quiz implements WebComponent {
     public String toHTMLString() {
         StringBuilder html = new StringBuilder();
         html.append("<div style='border: 1px solid black; padding: 20px; margin: 20px; max-width: 300px;'>");
-        html.append("<h1 style='margin: 0;'>").append(this.name).append("</h1>");
-        html.append("<h3 style='margin: 0; color: gray;'>Created by User ID: ").append(this.creatorId).append("</h3>");
+        html.append("<h1 style='margin: 0;'>");
+        html.append(new Hyperlink("/quiz/"+this.name, this.name, false).toHTMLString());
+        html.append("</h1>");
+        html.append("<h3 style='margin: 0; color: gray;'>Created by: ");
+        html.append(((User)userManager.getBy("ID", String.valueOf(this.creatorId))).getUsername());
+        html.append("</h3>");
         String shortenedDescription = this.description;
         if(this.description.length() > 50) { // adjust the number here as per your requirement
             shortenedDescription = this.description.substring(0, 50) + "...";

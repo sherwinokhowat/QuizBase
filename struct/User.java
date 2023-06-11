@@ -1,8 +1,5 @@
 package struct;
 
-import java.util.Set;
-import java.util.ArrayList;
-import java.util.HashSet;
 import manager.UserManager;
 
 /**
@@ -13,7 +10,7 @@ import manager.UserManager;
 public class User {
     private String username;
     private int id;
-    private UserManager manager;
+    private UserManager userManager;
 
     /**
      * Default constructor for a user
@@ -22,10 +19,10 @@ public class User {
      * @param manager the user manager
      * @param id the unique id
      */
-    public User(int id, String username, UserManager manager) {
+    public User(int id, String username, UserManager userManager) {
         this.id = id;
         this.username = username;
-        this.manager = manager;
+        this.userManager = userManager;
     }
 
      // ------------------------ Functionality Methods ----------------------------
@@ -91,9 +88,9 @@ public class User {
 
     // ------------------------ Database Methods ----------------------------
 
-    /* 
+    /*
 
-    we removed likes and we moved this to QuizManager 
+    we removed likes and we moved this to QuizManager
     public HashSet<Quiz> getLikedQuizzesFromDB() {
         throw new UnsupportedOperationException("Unimplemented method 'getLikedQuizzesFromDB'");
     }
