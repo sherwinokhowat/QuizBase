@@ -10,6 +10,7 @@ import web.WebComponent;
  * @author Sherwin Okhowat
  */
 public class MultipleChoice extends QuizItem {
+
     private String[] answerOptions;
     private String question;
     private int correctIndex;
@@ -26,10 +27,9 @@ public class MultipleChoice extends QuizItem {
      * @param answerFour   the fourth answer option
      * @param correctIndex the correct index of the answer in the array
      */
-    public MultipleChoice(int id, String question, String answerOne, String answerTwo,
-            String answerThree,
-            String answerFour, int correctIndex) {
-        super(id);
+    public MultipleChoice(int id, int quizID, String question, String answerOne, String answerTwo,
+            String answerThree, String answerFour, int correctIndex) {
+        super(id, quizID);
         this.question = question;
         this.answerOptions = new String[4];
         this.answerOptions[0] = answerOne;

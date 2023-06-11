@@ -10,9 +10,11 @@ import web.WebComponent;
  */
 public abstract class QuizItem implements WebComponent {
     private int id;
+    private int quizID;
 
-    public QuizItem(int id) {
+    public QuizItem(int id, int quizID) {
         this.id = id;
+        this.quizID = quizID;
     }
 
     /**
@@ -22,6 +24,15 @@ public abstract class QuizItem implements WebComponent {
      */
     public int getId() {
         return this.id;
+    }
+
+    /**
+     * Returns the id of the quiz this quiz item is in
+     *
+     * @return the id
+     */
+    public int getQuizId() {
+        return this.quizID;
     }
 
     @Override

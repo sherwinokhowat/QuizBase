@@ -9,6 +9,7 @@ import web.WebComponent;
  * @author Sherwin Okhowat
  */
 public class Flashcard extends QuizItem {
+
     private String question;
     private String answer;
 
@@ -20,8 +21,8 @@ public class Flashcard extends QuizItem {
      * @param question the question this flashcard bears
      * @param answer the answer this flashcard bears
      */
-    public Flashcard(int id, double frequency, String question, String answer) {
-        super(id, frequency);
+    public Flashcard(int id, int quizID, String question, String answer) {
+        super(id, quizID);
         this.question = question;
         this.answer = answer;
     }
@@ -42,24 +43,6 @@ public class Flashcard extends QuizItem {
      */
     public String getAnswer() {
         return this.answer;
-    }
-
-    /**
-     * Sets the question this flashcard bears
-     *
-     * @param question the new question
-     */
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-
-    /**
-     * Sets the answer this flashcard bears
-     *
-     * @param answer the new answer
-     */
-    public void setAnswer(String answer) {
-        this.answer = answer;
     }
 
     /**
