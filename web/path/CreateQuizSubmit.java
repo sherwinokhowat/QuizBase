@@ -22,8 +22,7 @@ public class CreateQuizSubmit implements HTTPPath {
 
         String name = request.getPostBody("quizName");
         String description = request.getPostBody("quizDescription");
-        User user = (User)(server.getUserManager().getBy("USERNAME", "'"+credentials.first()+"'"));
-        Quiz quiz = null;
+
         int highestNumber = Integer.parseInt(request.getPostBody("highestNumber"));
         int numOfQuestions = Integer.parseInt(request.getPostBody("numOfQuestions"));
 
@@ -33,12 +32,15 @@ public class CreateQuizSubmit implements HTTPPath {
                     .appendBody("Quiz must contain at least one question");
         }
 
+        User user = (User)(server.getUserManager().getBy("USERNAME", credentials.first()));
+        Quiz quiz = (Quiz)(server.getQuizManager().addQuiz(user.getID(), name, description));
+
         int questionNum = 1;
         while(questionNum <= highestNumber) {
             String question = request.getPostBody("question"+questionNum);
             if(question == null) {
                 questionNum++;
-                continue; 
+                continue;
             }
             String answer = request.getPostBody("answer"+questionNum);
 
@@ -53,21 +55,15 @@ public class CreateQuizSubmit implements HTTPPath {
                 if(options[0] == null || options[1] == null || options[2] == null || options[3] == null || correctAnswer == -1) {
                     return new HTTPResponse().setStatus(400);
                 } else {
-                    if(quiz == null) {// must have at least one quiz item to make a quiz
-                        quiz = (Quiz)(server.getQuizManager().addQuiz(user.getID(), name, description));
-                    }
                     server.getQuizManager().addMultipleChoice(quiz.getID(), question, options[0], options[1], options[2], options[3], correctAnswer);
                 }
             } else {
-                if(quiz == null) {// must have at least one quiz item to make a quiz
-                    quiz = (Quiz)(server.getQuizManager().addQuiz(user.getID(), name, description));
-                }
                 server.getQuizManager().addFlashCard(quiz.getID(), question, answer);
             }
             //System.out.println("Processed question " + questionNum);
             questionNum++;
         }
-        
+
         return new HTTPResponse().setStatus(303).setHeaderField("Location", "../../home");
     }
 }

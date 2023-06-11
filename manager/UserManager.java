@@ -18,7 +18,12 @@ import utility.SQLStatementBuilder;
 public class UserManager extends DatabaseManager {
 
     @Override
-    public Object getBy(String columnName, String columnValue) {
+    public Object getBy(String columnName, Object columnValue) {
+        if(columnValue instanceof Integer) {
+            columnValue = ((Integer)columnValue).toString();
+        } else {
+            columnValue = SQLStatementBuilder.toStringLiteral(columnValue.toString());
+        }
         ArrayList<? extends Object> dbResult = executeReadOperation(new SQLStatementBuilder()
                 .select().from("USERS").where(columnName+"="+columnValue).toString());
         if (dbResult.size() == 1) {
@@ -87,10 +92,10 @@ public class UserManager extends DatabaseManager {
     public User registerUser(String username, String password) {
         boolean successful = executeWriteOperation(
                 new SQLStatementBuilder().insertInto("USERS", "USERNAME", "PASSWORD")
-                .values("'"+username+"'", "'"+password+"'").toString());
+                .values(username, password).toString());
         if(successful) {
             ArrayList<? extends Object> list = executeReadOperation(new SQLStatementBuilder().select()
-                    .from("USERS").where("USERNAME='"+username+"'").toString());
+                    .from("USERS").where("USERNAME="+SQLStatementBuilder.toStringLiteral(username)).toString());
             return (User)list.get(0);
         } else {
             return null;
@@ -106,7 +111,7 @@ public class UserManager extends DatabaseManager {
     public boolean deleteUser(User user) {
         return executeWriteOperation(
                 new SQLStatementBuilder().deleteFrom("USERS")
-                .where("USERNAME='" + user.getUsername() + "'").toString());
+                .where("USERNAME=" + SQLStatementBuilder.toStringLiteral(user.getUsername())).toString());
     }
 
     /**
@@ -122,8 +127,8 @@ public class UserManager extends DatabaseManager {
         User user = authenticateUser(username, password);
         if (user != null) {
             boolean isSuccessful = executeWriteOperation(new SQLStatementBuilder().update("USERS")
-                    .set(new Pair<String, String>("USERNAME", newUsername))
-                    .where("USERNAME='" + username + "'").toString());
+                    .set(new Pair<>("USERNAME", newUsername))
+                    .where("USERNAME=" + SQLStatementBuilder.toStringLiteral(username)).toString());
             if (isSuccessful) {
                 user.setUsername(newUsername);
             }
@@ -145,8 +150,8 @@ public class UserManager extends DatabaseManager {
         if (this.authenticateUser(username, password) != null) {
             // change password in the database
             boolean isSuccessful = executeWriteOperation(new SQLStatementBuilder().update("USERS")
-                    .set(new Pair<String, String>("PASSWORD", newPassword))
-                    .where("USERNAME='" + username + "'").toString());
+                    .set(new Pair<>("PASSWORD", newPassword))
+                    .where("USERNAME=" + SQLStatementBuilder.toStringLiteral(username)).toString());
             return isSuccessful;
         }
         return false;
@@ -162,7 +167,7 @@ public class UserManager extends DatabaseManager {
      */
     public User authenticateUser(String username, String password) {
         ArrayList<? extends Object> list = executeReadOperation(new SQLStatementBuilder().select()
-                .from("USERS").where("USERNAME='" + username + "' AND PASSWORD='" + password + "'")
+                .from("USERS").where("USERNAME=" + SQLStatementBuilder.toStringLiteral(username) + " AND PASSWORD=" + SQLStatementBuilder.toStringLiteral(password))
                 .toString());
         if (list.size() == 1) {
             return (User) (list.get(0));

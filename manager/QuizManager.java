@@ -69,18 +69,16 @@ public class QuizManager extends DatabaseManager {
      * @return The created Quiz or {@code null} if an error occurred
      */
     public Quiz addQuiz(int creator, String name, String description) {
-        boolean successful = executeWriteOperation(new SQLStatementBuilder().insertInto("QUIZZES", "NAME", "DESCRIPTION", "CREATOR_ID").values("'" + sanitize(name) + "'", "'" + sanitize(description) + "'", String.valueOf(creator)).toString());
+        boolean successful = executeWriteOperation(new SQLStatementBuilder()
+                .insertInto("QUIZZES", "NAME", "DESCRIPTION", "CREATOR_ID")
+                .values(name, description, creator).toString());
         if(successful) {
             ArrayList<? extends Object> list = executeReadOperation(new SQLStatementBuilder().select()
-                    .from("QUIZZES").where("NAME='"+name+"'").toString());
+                    .from("QUIZZES").where("NAME="+SQLStatementBuilder.toStringLiteral(name)).toString());
             return (Quiz)list.get(0);
         } else {
             return null;
         }
-    }
-
-    private String sanitize(String input) {
-        return input.replace("'", "''");
     }
 
     /**
@@ -90,7 +88,8 @@ public class QuizManager extends DatabaseManager {
      * @return whether deletion was successful or not.
      */
     public boolean deleteQuiz (User requestor, Quiz quiz) {
-        return executeWriteOperation(new SQLStatementBuilder().deleteFrom("QUIZZES").where("ID='"+quiz.getID() + "' AND CREATOR_ID='" + requestor.getID() + "'").toString());
+        return executeWriteOperation(new SQLStatementBuilder().deleteFrom("QUIZZES")
+                .where("ID="+quiz.getID() + " AND CREATOR_ID=" + requestor.getID()).toString());
     }
 
     /**
@@ -101,8 +100,8 @@ public class QuizManager extends DatabaseManager {
      */
     public Quiz getQuiz (int id, String name) {
         ArrayList<? extends Object> dbResult = executeReadOperation(new SQLStatementBuilder()
-        .select().from("QUIZZES")
-        .where("ID='" + id + "' AND NAME='" + name + "'").toString());
+                .select().from("QUIZZES")
+                .where("ID=" + id + " AND NAME=" + SQLStatementBuilder.toStringLiteral(name)).toString());
         if (dbResult.size() == 1) {
             return (Quiz) dbResult.get(0);
         } else {
@@ -121,7 +120,7 @@ public class QuizManager extends DatabaseManager {
     public boolean addFlashCard(int quizID, String question, String answer) {
         return executeWriteOperation(new SQLStatementBuilder()
                 .insertInto("QUIZ_ITEMS", "QUIZ_ID", "TYPE", "QUESTION", "OPTION_1")
-                .values(Integer.toString(quizID), Integer.toString(FLASHCARD), "'"+question+"'", "'"+answer+"'").toString());
+                .values(quizID, FLASHCARD, question, answer).toString());
     }
 
     /**
@@ -139,13 +138,19 @@ public class QuizManager extends DatabaseManager {
     public boolean addMultipleChoice(int quizID, String question, String option1, String option2, String option3, String option4, int answer) {
         return executeWriteOperation(new SQLStatementBuilder()
                 .insertInto("QUIZ_ITEMS", "QUIZ_ID", "TYPE", "QUESTION", "OPTION_1", "OPTION_2", "OPTION_3", "OPTION_4", "CORRECT_ANSWER")
-                .values(Integer.toString(quizID), Integer.toString(MULTIPLE_CHOICE), "'"+question+"'", "'"+option1+"'", "'"+option2+"'", "'"+option3+"'", "'"+option4+"'", Integer.toString(answer)).toString());
+                .values(quizID, MULTIPLE_CHOICE, question, option1, option2, option3, option4, answer).toString());
     }
 
     @Override
-    public Object getBy(String columnName, String columnValue) {
+    public Object getBy(String columnName, Object columnValue) {
+        if(columnValue instanceof Integer) {
+            columnValue = ((Integer)columnValue).toString();
+        } else {
+            columnValue = SQLStatementBuilder.toStringLiteral(columnValue.toString());
+        }
         ArrayList<? extends Object> dbResult = executeReadOperation(new SQLStatementBuilder()
-                .select().from("QUIZZES").where(columnName+"="+columnValue).toString());
+                .select().from("QUIZZES")
+                .where(columnName+"="+columnValue).toString());
         if(dbResult.size() == 1) {
             Quiz quiz = (Quiz)(dbResult.get(0));
             return quiz;
@@ -181,7 +186,8 @@ public class QuizManager extends DatabaseManager {
      * @return an ArrayList containing all the quizzes returned by a user.
      */
     public ArrayList<? extends Object> getUserCreatedQuizzes(User user) {
-        return executeReadOperation(new SQLStatementBuilder().select().from("QUIZZES").where("CREATOR_ID="+user.getID()).toString());
+        return executeReadOperation(new SQLStatementBuilder().select().from("QUIZZES")
+                .where("CREATOR_ID="+user.getID()).toString());
     }
 
     /**

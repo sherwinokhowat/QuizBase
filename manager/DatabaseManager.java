@@ -34,11 +34,12 @@ public abstract class DatabaseManager {
      * Recommended that this is used on columns with unique values.
      *
      * @param columnName The column name
-     * @param columnValue The column value
+     * @param columnValue The column value. Non-integer objects will be converted to a string
+     * by calling the object's {@code toString()} method.
      * @return The found object or {@null} if it does not exist. If multiple objects have
      * the same value, any one of them is returned.
      */
-    public abstract Object getBy(String columnName, String columnValue);
+    public abstract Object getBy(String columnName, Object columnValue);
 
     /**
      * Attempts to connect to the database with the name {@code name}.
