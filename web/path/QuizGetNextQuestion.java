@@ -57,6 +57,7 @@ public class QuizGetNextQuestion extends WebPage implements HTTPPath {
             response.appendBody("No more questions left!");
             server.endQuiz(credentials.first(), quizID);
         }
+        response.appendBody(toHTMLString());
         return response;
     }
 
