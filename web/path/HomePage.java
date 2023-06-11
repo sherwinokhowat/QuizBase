@@ -52,6 +52,8 @@ public class HomePage extends WebPage implements HTTPPath {
                     new Hyperlink("/home?quizzes=my", "My Quizzes", false).setStyle(buttonStyle2), "</div>");
 
             String query = request.getQueryString();
+
+            appendBodyComponents("<div id='quizzes' style='display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; align-items: flex-start; width: 100%;'>");
             if("quizzes=my".equals(query)) { // display user's quizzes
                 ArrayList<? extends Object> quizzes = server.getQuizManager().getUserCreatedQuizzes(user);
                 for(Object quiz : quizzes) {
@@ -63,6 +65,8 @@ public class HomePage extends WebPage implements HTTPPath {
                     appendBodyComponents(((Quiz) quiz).toHTMLString());
                 }
             }
+            appendBodyComponents("</div>");
+
             response.appendBody(toHTMLString());
             return response;
         }

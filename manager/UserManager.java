@@ -139,7 +139,7 @@ public class UserManager extends DatabaseManager {
      * @param username    the user's current username
      * @param password    the user's current password
      * @param newPassword the user's requested password change
-     * @return whether or not the password change was successful
+     * @return whether the password change was successful
      */
     public boolean changePassword(String username, String password, String newPassword) {
         if (this.authenticateUser(username, password) != null) {

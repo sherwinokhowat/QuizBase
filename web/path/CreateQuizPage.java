@@ -7,6 +7,11 @@ import web.HTTPResponse;
 import web.Server;
 import web.WebPage;
 
+/**
+ * A class representing a page which is used to create quizzes.
+ *
+ * @author Sherwin Okhowat, Avery Chan
+ */
 public class CreateQuizPage extends WebPage implements HTTPPath {
     public CreateQuizPage() {
         // you can change any part of this, i dont mind
@@ -23,8 +28,8 @@ public class CreateQuizPage extends WebPage implements HTTPPath {
         addHeader(request, server);
         appendBodyComponents(
                 "<form id='questionForm' action='/create-quiz/submit' method='POST' style='display: flex; flex-direction: column; width: 300px; padding: 20px;'>",
-                "<label for='quizName'>Quiz Name: </label><input type='text' id='quizName' name='quizName' placeholder='Quiz Name' required>",
-                "<label for='quizDescription'>Description: </label><textarea id='quizDescription' name='quizDescription' placeholder='Quiz Description' rows='4' cols='50'></textarea>",
+                "<label for='quizName'>Quiz Name: </label><input type='text' maxlength='19'; id='quizName' name='quizName' placeholder='Quiz Name' required>",
+                "<label for='quizDescription'>Description: </label><textarea id='quizDescription' maxlength='200'; name='quizDescription' placeholder='Quiz Description' rows='4' cols='50'></textarea>",
                 "<input type='hidden' name='highestNumber' id='highestNumber' value='0'>",
                 "<input type='hidden' name='numOfQuestions' id='numOfQuestions' value='0'>",
                 "<input type='submit' value='Finish Quiz'>",

@@ -69,7 +69,7 @@ public class QuizManager extends DatabaseManager {
      * @return The created Quiz or {@code null} if an error occurred
      */
     public Quiz addQuiz(int creator, String name, String description) {
-        boolean successful = executeWriteOperation(new SQLStatementBuilder().insertInto("QUIZZES", "NAME", "DESCRIPTION", "CREATOR_ID").values("'" + name + "'", "'" + description + "'", String.valueOf(creator)).toString());
+        boolean successful = executeWriteOperation(new SQLStatementBuilder().insertInto("QUIZZES", "NAME", "DESCRIPTION", "CREATOR_ID").values("'" + sanitize(name) + "'", "'" + sanitize(description) + "'", String.valueOf(creator)).toString());
         if(successful) {
             ArrayList<? extends Object> list = executeReadOperation(new SQLStatementBuilder().select()
                     .from("QUIZZES").where("NAME='"+name+"'").toString());
@@ -77,6 +77,10 @@ public class QuizManager extends DatabaseManager {
         } else {
             return null;
         }
+    }
+
+    private String sanitize(String input) {
+        return input.replace("'", "''");
     }
 
     /**

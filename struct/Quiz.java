@@ -134,24 +134,33 @@ public class Quiz implements WebComponent {
      /**
       * Returns the HTML form of a quiz (when being viewed in a list.)
       */
-    @Override
-    public String toHTMLString() {
-        StringBuilder html = new StringBuilder();
-        html.append("<div style='border: 1px solid black; padding: 20px; margin: 20px; max-width: 300px;'>");
-        html.append("<h1 style='margin: 0;'>");
-        html.append(new Hyperlink("/quiz/"+this.name, this.name, false).toHTMLString());
-        html.append("</h1>");
-        html.append("<h3 style='margin: 0; color: gray;'>Created by: ");
-        html.append(((User)userManager.getBy("ID", String.valueOf(this.creatorId))).getUsername());
-        html.append("</h3>");
-        String shortenedDescription = this.description;
-        if(this.description.length() > 50) { // adjust the number here as per your requirement
-            shortenedDescription = this.description.substring(0, 50) + "...";
-        }
-        html.append("<p style='margin: 0;'>").append(shortenedDescription).append("</p>");
-        html.append("</div>");
-        return html.toString();
-    }
+     @Override
+     public String toHTMLString() {
+         final int MAX_DESC_LENGTH = 110;
+         StringBuilder html = new StringBuilder();
+
+         html.append("<div style='border: 1px solid black; padding: 10px; margin: 13px; width: 140px; height: 90px; background-color: white; font-size: 0.8em; display: flex; flex-direction: column; justify-content: space-between;'>");
+         html.append("<h1 style='margin: 0; font-size: 1.2em; flex-grow: 0;'>");
+         html.append(new Hyperlink("/quiz/"+this.name, this.name, false).toHTMLString());
+         html.append("</h1>");
+         html.append("<h2 style='margin: 0; color: gray; font-size: 1em; flex-grow: 0;'>Created by: ");
+         html.append(((User)userManager.getBy("ID", String.valueOf(this.creatorId))).getUsername());
+         html.append("</h2>");
+
+         String shortenedDescription = this.description.length() > MAX_DESC_LENGTH ?
+                 this.description.substring(0, MAX_DESC_LENGTH) + "..." :
+                 this.description;
+
+         html.append("<p style='margin: 0; font-size: 0.8em; flex-grow: 1;'>");
+         html.append(shortenedDescription);
+         html.append("</p>");
+         html.append("</div>");
+
+         return html.toString();
+     }
+
+
+
 
     @Override
     public WebComponent setStyle(String style) {
