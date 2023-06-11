@@ -80,6 +80,7 @@ public class MultipleChoice extends QuizItem {
 
     /**
      * Converts the component to an HTML string
+     * IMPORTANT: the caller must wrap the resulting string in a <form> tag!
      *
      * @return the HTML string representation of the component
      */
@@ -89,16 +90,16 @@ public class MultipleChoice extends QuizItem {
         // add <form> tag and <submit button> tags!
         // add <form> tag and <submit button> tags!
 
-        // Form and submit button tags will be added in their own classes, for flexibility. Spaced repetition treats it as one of its own, 
+        // Form and submit button tags will be added in their own classes, for flexibility. Spaced repetition treats it as one of its own,
 
         StringBuilder html = new StringBuilder("<div class='multipleChoice' id='question" + getId() + "'>");
         html.append("<h4>" + this.question  + "</h4>"); // + ("?".equals(this.question.substring(this.question.length()-1)) ? "": "?") we might not need this, if there wasn't a "?" there probably wasn't one for a reason.
         for(int i = 0; i < this.answerOptions.length; i++) {
-            html.append("<input type='radio' name='answer'" + getId() + "' value='"+i+"'>");
+            html.append("<input type='radio' name='answer'" + getId() + "' value='"+(i+1)+"'>");
             html.append(this.answerOptions[i]);
             html.append("<br>");
         }
-        html.append("</div>");
+        html.append("<input type='submit' value = 'Submit'>");
         return html.toString();
     }
 
