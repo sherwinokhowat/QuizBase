@@ -39,9 +39,9 @@ public class Server {
     private ServerSocket serverSock;
 
     /**
-     * Maps each Pair(String username, String quizname) to a QuizProgress
+     * Maps each Pair(String username, Integer id) to a QuizProgress
      */
-    private HashMap<Pair<String, String>, QuizProgress> quizzes;
+    private HashMap<Pair<String, Integer>, QuizProgress> quizzes;
 
     /**
      * Each cookie is mapped to the user's username and password.
@@ -183,8 +183,8 @@ public class Server {
      * @param username the username
      * @param quizName The name of the quiz
      */
-    public void startQuiz(String username, String quizName) {
-        this.quizzes.put(new Pair<>(username, quizName), new QuizProgress(quizName, this));
+    public void startQuiz(String username, int id) {
+        this.quizzes.put(new Pair<>(username, id), new QuizProgress(id, this));
     }
 
     /**
@@ -194,8 +194,8 @@ public class Server {
      * @param quizName The name of the quiz
      * @return the QuizProgress {@code null} if there is no active quiz
      */
-    public QuizProgress getQuizProgress(String username, String quizName) {
-        return this.quizzes.getOrDefault(new Pair<>(username, quizName), null);
+    public QuizProgress getQuizProgress(String username, int id) {
+        return this.quizzes.getOrDefault(new Pair<>(username, id), null);
     }
 
     /**

@@ -14,14 +14,15 @@ public class ViewQuizPage extends WebPage implements HTTPPath {
 
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
-        String quizName = HTTPRequest.decodeURL(request.getPathWithoutQueryString().substring("/quiz/".length()));
+        String idRaw = HTTPRequest.decodeURL(request.getPathWithoutQueryString().substring("/quiz/".length()));
+        // returns the id: 3, 5, 7...
         String id = request.getQueryString();
         String username = server.checkSessionID(request).first();
 
-        QuizProgress oldProgress = server.getQuizProgress(username, quizName);
+        QuizProgress oldProgress = server.getQuizProgress(username, Integer.parseInt(idRaw));
         // comfirm if user wants to restart quiz since old progress will be overriden
 
-        server.startQuiz(username, quizName);
+        server.startQuiz(username, Integer.parseInt(idRaw));
 
         // QuizItem item = quiz.getNextItem();
         // if(item == null) {
