@@ -30,7 +30,7 @@ public class ViewQuizPage extends WebPage implements HTTPPath {
         server.startQuiz(username, Integer.parseInt(idRaw));
 
         
-        QuizItem item = oldProgress.getNextQuizItem();
+        /* QuizItem item = oldProgress.getNextQuizItem();
         if(item == null) {
             appendBodyComponents("<p>This quiz has no questions!</p>");
         } else {
@@ -38,7 +38,7 @@ public class ViewQuizPage extends WebPage implements HTTPPath {
             // here we should be increasing/decreasing the frequency based on
             // whether the user got the question right or wrong
            //  quiz.addItem(item);
-        }
+        } */
         
         // Optional: comfirm if user wants to restart quiz since old progress will be overriden
 
