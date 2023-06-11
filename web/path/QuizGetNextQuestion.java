@@ -43,7 +43,7 @@ public class QuizGetNextQuestion extends WebPage implements HTTPPath {
         String path = request.getPathWithoutQueryString();
         int quizID = Integer.parseInt(path.substring("/quiz/".length(), path.length()-"next-question".length()-1));
         QuizProgress progress = server.getQuizProgress(credentials.first(), quizID);
-        String itemHTML = progress.getNextQuizItem().toHTMLString();
+
         System.out.println("QuizGetNextQuestion.java: quiz item fetched.");
 
 
@@ -52,7 +52,7 @@ public class QuizGetNextQuestion extends WebPage implements HTTPPath {
         appendHeadComponents("<script src='/js/flashcard.js'></script>");
         QuizItem quizItem = progress.getNextQuizItem();
         if(quizItem != null) {
-            appendBodyComponents("<form action='/quiz/"+quizID+"/check-answer' method='POST'", itemHTML, "</form>");
+            appendBodyComponents("<form action='/quiz/"+quizID+"/check-answer' method='POST'", quizItem.toHTMLString(), "</form>");
         } else {
             response.appendBody("No more questions left!");
             server.endQuiz(credentials.first(), quizID);
