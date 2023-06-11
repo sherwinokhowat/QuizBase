@@ -1,19 +1,21 @@
 package struct;
 
 import java.util.ArrayList;
-import java.util.PriorityQueue;
+
 import manager.QuizManager;
 import manager.UserManager;
+import utility.SQLStatementBuilder;
 import web.Hyperlink;
 import web.WebComponent;
 
 public class Quiz implements WebComponent {
-    private PriorityQueue<QuizItem> quizItems;
-    private int likes = -1;
+
+
     private int id;
     private String name;
     private String description;
     private int creatorId;
+    // private int likes = -1;
     private QuizManager quizManager;
     private UserManager userManager;
 
@@ -23,14 +25,13 @@ public class Quiz implements WebComponent {
      * @param manager the quiz manager for this quiz
      * @param items
      */
-    public Quiz(int id, String name, String description, int creatorId, PriorityQueue<QuizItem> items, QuizManager quizManager, UserManager userManager) {
+    public Quiz(int id, String name, String description, int creatorId, QuizManager quizManager, UserManager userManager) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.creatorId = creatorId;
         this.quizManager = quizManager;
         this.userManager = userManager;
-        this.quizItems = items;
     }
 
     /**
@@ -38,18 +39,27 @@ public class Quiz implements WebComponent {
      *
      * @return the number of likes
      */
-    public int getLikes() {
-        return this.likes;
-    }
+    // public int getLikes() {
+    //     return this.likes;
+    // }
 
     /**
      * Method for adding a like to a quiz
      *
      * @param user the user liking the quiz
      */
-    public void addLike(User user) {
-        this.likes++;
-        throw new UnsupportedOperationException("Unimplemented method 'addLike'");
+    // public void addLike(User user) {
+    //     this.likes++;
+    //     throw new UnsupportedOperationException("Unimplemented method 'addLike'");
+    // }
+
+    /**
+     * Returns the id of the quiz
+     *
+     * @return the unique id of the quiz
+     */
+    public int getID() {
+        return this.id;
     }
 
     /**
@@ -66,9 +76,9 @@ public class Quiz implements WebComponent {
      *
      * @param name the new name of the quiz
      */
-    public void setName(String name) {
-        this.name = name;
-    }
+    // public void setName(String name) {
+    //     this.name = name;
+    // }
 
     /**
      * Returns the description of the quiz
@@ -84,27 +94,9 @@ public class Quiz implements WebComponent {
      *
      * @param description the new description of the quiz
      */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    /**
-     * Returns the id of the quiz
-     *
-     * @return the unique id of the quiz
-     */
-    public int getID() {
-        return this.id;
-    }
-
-    /**
-     * Sets the id of the quiz
-     *
-     * @param id the id of the quiz
-     */
-    public void setID(int id) {
-        this.id = id;
-    }
+    // public void setDescription(String description) {
+    //     this.description = description;
+    // }
 
     /**
      * Returns the user id of the creator of the quiz
@@ -116,31 +108,18 @@ public class Quiz implements WebComponent {
     }
 
     /**
-     * Adds a quiz item to the quiz
+     * Gets the quiz items in this quiz
      *
-     * @param item the item to be added to the quiz
+     * @return An arraylist of QuizItems
      */
-     public void addItem(QuizItem item) {
-         this.quizItems.add(item);
-        // unimplemented
-     }
+    public ArrayList<QuizItem> getQuizItems() {
+        return quizManager.executeReadQuizItemOperation(new SQLStatementBuilder().select()
+                .from("QUIZ_ITEMS").where("QUIZ_ID="+id).toString());
+    }
 
-     /**
-      * Removes a quiz item from the quiz
-      *
-      * @param item the item to remove from the quiz
-      */
-     public void removeItem(QuizItem item) {
-         this.quizItems.remove(item);
-     }
-
-     public QuizItem getNextItem() {
-         return this.quizItems.poll();
-     }
-
-     /**
-      * Returns the HTML form of a quiz (when being viewed in a list.)
-      */
+    /**
+     * Returns the HTML form of a quiz (when being viewed in a list.)
+     */
      @Override
      public String toHTMLString() {
          final int MAX_DESC_LENGTH = 110;
@@ -167,14 +146,14 @@ public class Quiz implements WebComponent {
          return html.toString();
      }
 
-
-
-
+    /**
+     * Cannot set style of quiz as it is already determined. This method does not do anything.
+     *
+     * @param style A string
+     * @return This Quiz
+     */
     @Override
     public WebComponent setStyle(String style) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setStyle'");
+        return this;
     }
-
-
 }
