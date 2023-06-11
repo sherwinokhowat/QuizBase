@@ -68,7 +68,8 @@ public class Flashcard extends QuizItem {
      * @return the HTML string representation of the component
      */
     public String toHTMLString() {
-        return "<p>" + question + "</p>";
+        return "<h4>" + question + "</h4>";
+        // so the user will have to press "Show Answer", which will show the answer, as well as a 'Incorrect'/'Correct' slider
     }
 
     @Override
