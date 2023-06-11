@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import web.HTTP;
 import web.HTTPRequest;
 import web.HTTPResponse;
 import web.Server;
@@ -20,16 +19,12 @@ import web.Server;
 
 public class FilePath implements HTTPPath {
 
-    private String fileType;
-
-    public FilePath (String fileType) {
-        this.fileType = fileType;
+    public FilePath () {
     }
 
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
-        HTTPResponse response = new HTTPResponse().setStatus(200)
-                .setHeaderField("Content-Type", HTTP.contentType(fileType));
+        HTTPResponse response = new HTTPResponse().setStatus(200);
 
         byte[] data = null; // byte array to store image
         File file = new File(System.getProperty("user.dir"), request.getPathWithoutQueryString());

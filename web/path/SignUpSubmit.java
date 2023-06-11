@@ -1,7 +1,6 @@
 package web.path;
 
 import struct.User;
-import web.HTTP;
 import web.HTTPRequest;
 import web.HTTPResponse;
 import web.Hyperlink;
@@ -27,7 +26,7 @@ public class SignUpSubmit implements HTTPPath {
         User user = server.getUserManager().registerUser(username, password);
 
         HTTPResponse response = new HTTPResponse().setStatus(200)
-                .setHeaderField("Content-Type", HTTP.contentType("html"));
+                .setHeaderField("Content-Type", HTTPResponse.contentType("html"));
         if(user == null) {
             response.appendBody("Unable to sign up! This may be because your username has already been taken, credentials are invalid or a network error occurred.");
         } else {

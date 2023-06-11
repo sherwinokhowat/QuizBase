@@ -1,7 +1,6 @@
 package web.path;
 
 import struct.User;
-import web.HTTP;
 import web.HTTPRequest;
 import web.HTTPResponse;
 import web.Server;
@@ -24,7 +23,7 @@ public class LoginSubmit implements HTTPPath {
         }
 
         HTTPResponse response = new HTTPResponse().setStatus(200)
-                .setHeaderField("Content-Type", HTTP.contentType("html"));
+                .setHeaderField("Content-Type", HTTPResponse.contentType("html"));
         if(user == null) {
             response.appendBody("Invalid credentials!");
         } else {

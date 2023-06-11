@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import struct.Quiz;
 import struct.User;
 import utility.Pair;
-import web.HTTP;
 import web.HTTPRequest;
 import web.HTTPResponse;
 import web.Hyperlink;
@@ -35,7 +34,7 @@ public class HomePage extends WebPage implements HTTPPath {
             return new HTTPResponse().setStatus(303).setHeaderField("Location", "/login");
         } else {
             HTTPResponse response = new HTTPResponse().setStatus(200)
-                    .setHeaderField("Content-Type", HTTP.contentType("html"));
+                    .setHeaderField("Content-Type", HTTPResponse.contentType("html"));
             User user = server.getUserManager().authenticateUser(
                     credentials.first(), credentials.second());
 

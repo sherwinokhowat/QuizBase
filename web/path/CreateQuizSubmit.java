@@ -3,7 +3,6 @@ package web.path;
 import struct.Quiz;
 import struct.User;
 import utility.Pair;
-import web.HTTP;
 import web.HTTPRequest;
 import web.HTTPResponse;
 import web.Server;
@@ -28,7 +27,7 @@ public class CreateQuizSubmit implements HTTPPath {
 
         if(numOfQuestions == 0) {
             return new HTTPResponse().setStatus(400)
-                    .setHeaderField("Content-Type", HTTP.contentType("html"))
+                    .setHeaderField("Content-Type", HTTPResponse.contentType("html"))
                     .appendBody("Quiz must contain at least one question");
         }
 

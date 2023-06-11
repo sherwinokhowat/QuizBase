@@ -23,7 +23,6 @@ import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import struct.Quiz;
-import struct.QuizItem;
 
 /**
  * The Server class, responsible for managing client and database connections.
@@ -282,23 +281,6 @@ class ConnectionHandler implements Runnable {
     }
 
     /**
-     * Gets the extension of a file path (e.g. "/", "/style.css")
-     *
-     * @param filePath the file path
-     * @return the extension (e.g. "html", "css")
-     */
-    public String getExtension (String filePath) {
-        if (filePath.charAt(filePath.length()-1) == '/') {
-            return "html";
-        }
-        String[] pathArr = filePath.split("[.]");
-        if (pathArr.length <= 1) {
-            return "";
-        }
-        return pathArr[pathArr.length-1];
-    }
-
-    /**
      * Processes a request and sends a response to the client
      *
      * @param request The request, split by the line separator
@@ -322,9 +304,9 @@ class ConnectionHandler implements Runnable {
                     return new CreateQuizPage().processRequest(request, server);
                 default: {
                     if(path.startsWith("/images/")) {
-                        return new FilePath("html").processRequest(request, server);
+                        return new FilePath().processRequest(request, server);
                     } else if(path.startsWith("/js/")) {
-                        return new FilePath("js").processRequest(request, server);
+                        return new FilePath().processRequest(request, server);
                     } else if(path.startsWith("/quiz/")) {
                         return new QuizPage().processRequest(request, server);
                     }

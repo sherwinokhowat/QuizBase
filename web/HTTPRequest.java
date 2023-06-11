@@ -1,5 +1,8 @@
 package web;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.StringTokenizer;
@@ -92,7 +95,12 @@ public class HTTPRequest {
     public String getPostBody(String key) {
         String value = postBody.get(key);
         if(value != null) {
-            return HTTP.decodeURL(value);
+            try {
+                return URLDecoder.decode(value, "utf-8");
+            } catch(UnsupportedEncodingException e) {
+                e.printStackTrace();
+                return null;
+            }
         }
         return null;
     }

@@ -47,7 +47,7 @@ public class QuizPage extends WebPage implements HTTPPath {
         }
 
         return new HTTPResponse().setStatus(200)
-                .setHeaderField("Content-Type", HTTP.contentType("html"))
+                .setHeaderField("Content-Type", HTTPResponse.contentType("html"))
                 .appendBody(toHTMLString());
     }
 

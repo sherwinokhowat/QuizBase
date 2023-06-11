@@ -1,7 +1,6 @@
 package web.path;
 
 import utility.Pair;
-import web.HTTP;
 import web.HTTPRequest;
 import web.HTTPResponse;
 import web.Server;
@@ -40,7 +39,7 @@ public class SignUpPage extends WebPage implements HTTPPath {
             return new HTTPResponse().setStatus(303).setHeaderField("Location", "/home");
         }
         return new HTTPResponse().setStatus(200)
-                .setHeaderField("Content-Type", HTTP.contentType("html"))
+                .setHeaderField("Content-Type", HTTPResponse.contentType("html"))
                 .appendBody(toHTMLString());
     }
 }
