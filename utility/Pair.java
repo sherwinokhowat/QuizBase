@@ -48,6 +48,16 @@ public class Pair<A, B> implements Serializable {
   }
 
   /**
+   * Returns the hash code for this pair
+   *
+   * @return The hashcode
+   */
+  @Override
+  public int hashCode() {
+    return 97 * (a == null ? 1 : a.hashCode()) + 97*97 * (b == null ? 1 : b.hashCode());
+  }
+
+  /**
    * Outputs a string representation of this Pair
    *
    * @return <code>{first, second}</code>
