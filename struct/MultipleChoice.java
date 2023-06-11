@@ -90,17 +90,13 @@ public class MultipleChoice extends QuizItem {
         // add <form> tag and <submit button> tags!
 
         StringBuilder html = new StringBuilder("<div class='multipleChoice'>");
-        html.append("<p>" + this.question + ("?".equals(this.question.substring(this.question.length()-1)) ? "": "?") + "</p>");
-        html.append("div class = 'answerOptions'>");
+        html.append("<h1>" + this.question + ("?".equals(this.question.substring(this.question.length()-1)) ? "": "?") + "</h1>");
         for(int i = 0; i < this.answerOptions.length; i++) {
-            html.append("<label> <input type='radio' name='question" + i + "' value='"+ (char)(i+65) + "'>");
+            html.append("<input type='radio' name='question' value='"+i+"'>");
             html.append(this.answerOptions[i]);
-            html.append("</label>");
+            html.append("<br>");
         }
-        html.append("</div>");
-        html.append("</div>");
-
-        throw new UnsupportedOperationException("Unimplemented method 'toHTMLString'");
+        return html.toString();
     }
 
     @Override
