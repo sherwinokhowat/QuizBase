@@ -94,7 +94,7 @@ public class MultipleChoice extends QuizItem {
         StringBuilder html = new StringBuilder("<div class='multipleChoice'>");
         html.append("<h4>" + this.question  + "</h4>"); // + ("?".equals(this.question.substring(this.question.length()-1)) ? "": "?") we might not need this, if there wasn't a "?" there probably wasn't one for a reason.
         for(int i = 0; i < this.answerOptions.length; i++) {
-            html.append("<input type='radio' name='question" + id + "' value='"+i+"'>");
+            html.append("<input type='radio' name='question'" + getId() + "' value='"+i+"'>");
             html.append(this.answerOptions[i]);
             html.append("<br>");
         }
