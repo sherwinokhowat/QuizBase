@@ -44,6 +44,8 @@ public class QuizGetNextQuestion extends WebPage implements HTTPPath {
         int quizID = Integer.parseInt(path.substring("/quiz/".length(), path.length()-"next-question".length()-1));
         QuizProgress progress = server.getQuizProgress(credentials.first(), quizID);
         String itemHTML = progress.getNextQuizItem().toHTMLString();
+        System.out.println("QuizGetNextQuestion.java: quiz item fetched.");
+
 
         // adding an if statement which only does that in response to a post request. 
 

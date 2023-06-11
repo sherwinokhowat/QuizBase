@@ -47,6 +47,7 @@ public class QuizProgress {
      */
     public QuizItem getNextQuizItem() {
         if(currQuizItem != -1) {
+            System.out.println("QuizProgress.java: getNextQuizItem was not called after checkUserAnswer with value: " + currQuizItem);
             throw new IllegalStateException();
         }
 
