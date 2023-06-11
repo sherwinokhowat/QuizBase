@@ -68,7 +68,7 @@ public class Flashcard extends QuizItem {
      * @return the HTML string representation of the component
      */
     public String toHTMLString() {
-        throw new UnsupportedOperationException("Unimplemented method 'toHTMLString'");
+        return "<p>" + question + "</p>";
     }
 
     @Override

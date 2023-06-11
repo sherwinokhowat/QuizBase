@@ -4,9 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
-import struct.Quiz;
-import struct.User;
+import struct.*;
 import utility.Pair;
 import utility.SQLStatementBuilder;
 
@@ -123,6 +123,14 @@ public class QuizManager extends DatabaseManager {
                 .values(quizID, FLASHCARD, question, answer).toString());
     }
 
+    public ArrayList<? extends Object> getQuizItems(int quizID) {
+        ArrayList<? extends Object> dbResult = executeReadOperation(new SQLStatementBuilder()
+                .select().from("QUIZ_ITEMS").where("QUIZ_ID="+quizID).toString());
+
+        return (dbResult == null) ? null : dbResult;
+    }
+
+
     /**
      * Adds a Multiple Choice to the database
      *
@@ -161,18 +169,41 @@ public class QuizManager extends DatabaseManager {
 
     @Override
     public ArrayList<? extends Object> executeReadOperation(String statement) {
-        Pair<ResultSet, Statement> result = getReadOperationResultSet(statement);
+        Pair<ResultSet, Statement> resultQuiz = getReadOperationResultSet(statement);
         try {
-            ResultSet rs = result.first();
+            ResultSet rsQuiz = resultQuiz.first();
             ArrayList<Quiz> list = new ArrayList<Quiz>();
-            while(rs.next()) {
-                int id = rs.getInt("ID");
-                String name = rs.getString("NAME");
-                String description = rs.getString("DESCRIPTION");
-                int creatorId = rs.getInt("CREATOR_ID");
-                list.add(new Quiz(id, name, description, creatorId, this, userManager));
+            while(rsQuiz.next()) {
+                int id = rsQuiz.getInt("ID");
+                String name = rsQuiz.getString("NAME");
+                String description = rsQuiz.getString("DESCRIPTION");
+                int creatorID = rsQuiz.getInt("CREATOR_ID");
+                PriorityQueue<QuizItem> items = new PriorityQueue<>();
+
+                Pair<ResultSet, Statement> resultQuizItems = getReadOperationResultSet(new SQLStatementBuilder().select().from("QUIZ_ITEMS").where("QUIZ_ID=" + id).toString());
+                ResultSet rsQuizItems = resultQuizItems.first();
+                while(rsQuizItems.next()) {
+                    int itemId = rsQuizItems.getInt("ID");
+                    int quizID = rsQuizItems.getInt("QUIZ_ID");
+                    int type = rsQuizItems.getInt("TYPE");
+                    String question = rsQuizItems.getString("QUESTION");
+                    if(type == FLASHCARD) {
+                        String answer = rsQuizItems.getString("OPTION_1");
+                        items.add(new Flashcard(itemId, quizID, question, answer));
+                    } else if (type == MULTIPLE_CHOICE) {
+                        String option1 = rsQuizItems.getString("OPTION_1");
+                        String option2 = rsQuizItems.getString("OPTION_2");
+                        String option3 = rsQuizItems.getString("OPTION_3");
+                        String option4 = rsQuizItems.getString("OPTION_4");
+                        int answer = rsQuizItems.getInt("CORRECT_ANSWER");
+                        items.add(new MultipleChoice(itemId, quizID, question, option1, option2, option3, option4, answer));
+                    }
+                }
+                resultQuizItems.second().close();
+
+                list.add(new Quiz(id, name, description, creatorID, items, this, userManager));
             }
-            result.second().close();
+            resultQuiz.second().close();
             return list;
         } catch(SQLException e) {
             e.printStackTrace();

@@ -1,5 +1,6 @@
 package struct;
 
+import java.util.ArrayList;
 import java.util.PriorityQueue;
 import manager.QuizManager;
 import manager.UserManager;
@@ -20,15 +21,16 @@ public class Quiz implements WebComponent {
      * Constructor for a quiz
      *
      * @param manager the quiz manager for this quiz
+     * @param items
      */
-    public Quiz(int id, String name, String description, int creatorId, QuizManager quizManager, UserManager userManager) {
+    public Quiz(int id, String name, String description, int creatorId, PriorityQueue<QuizItem> items, QuizManager quizManager, UserManager userManager) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.creatorId = creatorId;
         this.quizManager = quizManager;
         this.userManager = userManager;
-        this.quizItems = new PriorityQueue<>();
+        this.quizItems = items;
     }
 
     /**
