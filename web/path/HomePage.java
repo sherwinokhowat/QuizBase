@@ -58,7 +58,7 @@ public class HomePage extends WebPage implements HTTPPath {
             // Content section
             appendBodyComponents("<div style='display: flex; justify-content: center; margin-bottom: 20px; width: 100%; display: flex; justify-content: center;'>",
                     new Hyperlink("/home?quizzes=all", "All Quizzes", false).setStyle(buttonStyle1),
-                    new Hyperlink("/home?quizzes=my", "My Quizzes", false).setStyle(buttonStyle2));
+                    new Hyperlink("/home?quizzes=my", "My Quizzes", false).setStyle(buttonStyle2), "</div>");
 
             String query = request.getQueryString();
             if("quizzes=my".equals(query)) { // display user's quizzes
