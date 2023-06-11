@@ -9,7 +9,7 @@ import web.path.HomePage;
 import web.path.FilePath;
 import web.path.LoginPage;
 import web.path.LoginSubmit;
-import web.path.QuizPage;
+import web.path.ViewQuizPage;
 import web.path.RootPage;
 import web.path.SignOut;
 import web.path.SignUpPage;
@@ -308,7 +308,7 @@ class ConnectionHandler implements Runnable {
                     } else if(path.startsWith("/js/")) {
                         return new FilePath().processRequest(request, server);
                     } else if(path.startsWith("/quiz/")) {
-                        return new QuizPage().processRequest(request, server);
+                        return new ViewQuizPage().processRequest(request, server);
                     }
                     return new HTTPResponse().setStatus(404);
                 }

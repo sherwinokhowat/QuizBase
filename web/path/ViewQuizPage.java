@@ -5,9 +5,9 @@ import struct.Quiz;
 import utility.Pair;
 import struct.QuizItem;
 
-public class QuizPage extends WebPage implements HTTPPath {
+public class ViewQuizPage extends WebPage implements HTTPPath {
 
-    public QuizPage() {
+    public ViewQuizPage() {
         setStyle("background-color: lightblue; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; box-sizing: border-box;");
     }
 
