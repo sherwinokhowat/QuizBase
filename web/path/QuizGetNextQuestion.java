@@ -47,12 +47,13 @@ public class QuizGetNextQuestion extends WebPage implements HTTPPath {
         System.out.println("QuizGetNextQuestion.java: quiz item fetched.");
 
 
-        // adding an if statement which only does that in response to a post request. 
+        // adding an if statement which only does that in response to a post request.
 
         appendHeadComponents("<script src='/js/flashcard.js'></script>");
         QuizItem quizItem = progress.getNextQuizItem();
         if(quizItem != null) {
             appendBodyComponents("<form action='/quiz/"+quizID+"/check-answer' method='POST'", quizItem.toHTMLString(), "</form>");
+            response.appendBody(toHTMLString());
         } else {
             response.appendBody("No more questions left!");
             server.endQuiz(credentials.first(), quizID);
