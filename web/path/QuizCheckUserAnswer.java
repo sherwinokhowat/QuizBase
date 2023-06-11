@@ -10,7 +10,7 @@ import web.WebPage;
 /**
  * @author Ricky Qin
  */
-public class QuizGetNextQuestion extends WebPage implements HTTPPath {
+public class QuizCheckUserAnswer extends WebPage implements HTTPPath {
 
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
@@ -20,12 +20,18 @@ public class QuizGetNextQuestion extends WebPage implements HTTPPath {
         }
 
         String path = request.getPathWithoutQueryString();
-        String quizName = path.substring("/quiz/".length(), path.length()-"next-question".length()-1);
+        String quizName = path.substring("/quiz/".length(), path.length()-"check-answer".length()-1);
         QuizProgress progress = server.getQuizProgress(credentials.first(), quizName);
+        boolean result = progress.checkUserAnswer(request.getPostBody("answer"));
 
-        return new HTTPResponse().setStatus(200)
-                .setHeaderField("Content-Type", HTTPResponse.contentType("html"))
-                .appendBody(progress.getNextQuizItem().toHTMLString());
+        HTTPResponse response = new HTTPResponse().setStatus(200)
+                .setHeaderField("Content-Type", HTTPResponse.contentType("html"));
+        if(result) {
+            response.appendBody("Correct!");
+        } else {
+            response.appendBody("Wrong Answer");
+        }
+        return response;
     }
 
 }

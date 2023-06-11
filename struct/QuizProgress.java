@@ -12,10 +12,13 @@ import web.Server;
  */
 public class QuizProgress {
 
-    private String quizName;
-    private int id;
     private Server server;
     private ArrayList<Integer> quizItemIDS;
+
+    /**
+     * The index of the current quiz item (the one that was most recently sent)
+     */
+    private int currQuizItem = -1;
 
     /**
      * The probability of choosing the ith item is {@code prob[i] / (sum of prob)}
@@ -27,8 +30,8 @@ public class QuizProgress {
      *
      * @param quizName The name of the quiz
      */
-    public QuizProgress(int id, Server server) {
-        this.id = id;
+    public QuizProgress(String quizName, Server server) {
+        this.quizName = quizName;
         this.server = server;
         Quiz quiz = (Quiz)server.getQuizManager().getBy("ID", id);
         this.quizName = quiz.getName();
@@ -42,8 +45,13 @@ public class QuizProgress {
      * Gets the next QuizItem to send to the client
      *
      * @return The next quiz item
+     * @throws IllegalStateException if this method is not called after {@code checkUserAnswer()}
      */
     public QuizItem getNextQuizItem() {
+        if(currQuizItem != -1) {
+            throw new IllegalStateException();
+        }
+
         int sumProb = 0;
         for(int i = 0; i < prob.length; i++) {
             sumProb += prob[i];
@@ -54,10 +62,41 @@ public class QuizProgress {
         while(!((currSum <= randInt) && (randInt < currSum+prob[idx]))) {
             idx++;
         }
+
+        currQuizItem = idx;
         return server.getQuizManager().getQuizItemBy("ID", quizItemIDS.get(idx));
     }
 
-    public void checkUserAnswer() {
+    /**
+     * Checks the users answer and updates the probabilities as neccessary
+     *
+     * @param response The user's response
+     * @return {@code true} If the response matches the correct answer (not case sensitive).
+     * @throws IllegalStateException if this method is not called after {@code getNextQuizItem()}
+     */
+    public boolean checkUserAnswer(String response) {
+        if(currQuizItem == -1) {
+            throw new IllegalStateException();
+        }
 
+        QuizItem item = server.getQuizManager().getQuizItemBy("ID", quizItemIDS.get(currQuizItem));
+        boolean correct = false;
+        if(item instanceof Flashcard) {
+            if(((Flashcard)item).getAnswer().toLowerCase().equals(response.toLowerCase())) {
+                correct = true;
+            }
+        } else if(item instanceof MultipleChoice) {
+            if(((MultipleChoice)item).getCorrectIndex() == Integer.parseInt(response)) {
+                correct = true;
+            }
+        }
+
+        if(correct) {
+            prob[currQuizItem] = Math.max(prob[currQuizItem] - 2, 0);
+        } else {
+            prob[currQuizItem] = prob[currQuizItem] + 1;
+        }
+        currQuizItem = -1;
+        return correct;
     }
 }
