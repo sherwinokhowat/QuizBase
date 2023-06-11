@@ -11,7 +11,7 @@ function addFlashcard() {
     msg += "<input type='text' placeholder='Question' id='question" + newNumber + "' name='question" + newNumber + "' required><br>";
     msg += "<label for='answer" + newNumber + "'>Back:</label><br>";
     msg += "<input type='text' placeholder='Answer' id='answer" + newNumber + "' name='answer" + newNumber + "' required><br>";
-    msg += "<button type='button' onclick='deleteQuestion(" + newNumber + ")>Delete Question</button><br>";
+    msg += "<button type='button' onclick='deleteQuestion(" + newNumber + ")'>Delete Question</button><br>";
     msg += "</div>";
     // if we have 6 questions and we delete number 3, then the POST will send the maximum number of questions (6) and leave the program to get rid of the missing ones.
     document.getElementById("questionForm").insertAdjacentHTML("beforeend", msg);
@@ -39,7 +39,7 @@ function addMultipleChoice() {
     msg += "<option value='3'>3</option>";
     msg += "<option value='4'>4</option>";
     msg += "</select><br>";
-    msg += "<button type='button' onclick='deleteQuestion(" + newNumber + ")>Delete Question</button>";
+    msg += "<button type='button' onclick='deleteQuestion(" + newNumber + ")'>Delete Question</button>";
     msg += "</div>";
     // if we have 6 questions and we delete number 3, then the POST will send the maximum number of questions (6) and leave the program to get rid of the missing ones.
     document.getElementById("questionForm").insertAdjacentHTML("beforeend", msg);
