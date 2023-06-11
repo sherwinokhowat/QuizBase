@@ -34,7 +34,7 @@ public class QuizProgress {
     public QuizProgress(int quizID, Server server) {
         this.server = server;
         this.quizItemIDS = server.getQuizManager().getQuizItemIDS(quizID);
-
+        System.out.println("QuizProgress.java: " + quizItemIDS.size());
         prob = new int[quizItemIDS.size()];
         Arrays.fill(prob, 1);
     }
