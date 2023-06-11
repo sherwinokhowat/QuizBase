@@ -55,6 +55,9 @@ public class QuizProgress {
         for(int i = 0; i < prob.length; i++) {
             sumProb += prob[i];
         }
+        if(sumProb == 0) {// no more questions left
+            return null;
+        }
         int randInt = (int)(Math.random()*sumProb)+1;
         int idx = 0;
         int currSum = 1;

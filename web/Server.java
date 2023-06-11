@@ -207,8 +207,8 @@ public class Server {
      * @param username the username
      * @param quizName The name of the quiz
      */
-    public void endQuiz(String username, String quizName) {
-        this.quizzes.remove(new Pair<>(username, quizName));
+    public void endQuiz(String username, int quizID) {
+        this.quizzes.remove(new Pair<>(username, quizID));
     }
 }
 
