@@ -15,6 +15,8 @@ import web.path.RootPage;
 import web.path.SignOut;
 import web.path.SignUpPage;
 import web.path.SignUpSubmit;
+import web.path.StartQuiz;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.BufferedReader;
@@ -313,7 +315,13 @@ class ConnectionHandler implements Runnable {
                     } else if(path.startsWith("/js/")) {
                         return new FilePath().processRequest(request, server);
                     } else if(path.startsWith("/quiz/")) {
-                        return new ViewQuizPage().processRequest(request, server);
+                        if(path.endsWith("/next-question")) {
+                            return new QuizGetNextQuestion().processRequest(request, server);
+                        } else if(path.endsWith("/start")) {
+                            return new StartQuiz().processRequest(request, server);
+                        } else {
+                            return new ViewQuizPage().processRequest(request, server);
+                        }
                     }
                     return new HTTPResponse().setStatus(404);
                 }
@@ -327,8 +335,6 @@ class ConnectionHandler implements Runnable {
                     return new SignUpSubmit().processRequest(request, server);
                 case "/create-quiz/submit":
                     return new CreateQuizSubmit().processRequest(request, server);
-                case "/quiz/quizName/next-question":
-                    return new QuizGetNextQuestion().processRequest(request, server);
                 case "/quiz/quizName/check-answer":
                 default:
                     return new HTTPResponse().setStatus(400);

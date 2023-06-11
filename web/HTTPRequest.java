@@ -47,7 +47,7 @@ public class HTTPRequest {
 
         String[] firstLine = rawRequest.get(0).split(" ");
         this.type = firstLine[0];
-        this.path = firstLine[1];
+        this.path = decodeURL(firstLine[1]);
 
         for(int i = 1; i < rawRequest.size(); i++) {
             String line = rawRequest.get(i);
