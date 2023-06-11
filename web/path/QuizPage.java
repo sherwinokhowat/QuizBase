@@ -4,6 +4,7 @@ import web.*;
 import struct.Quiz;
 import utility.Pair;
 import struct.QuizItem;
+import struct.QuizProgress;
 
 public class QuizPage extends WebPage implements HTTPPath {
 
@@ -16,22 +17,21 @@ public class QuizPage extends WebPage implements HTTPPath {
         String quizName = HTTPRequest.decodeURL(request.getPathWithoutQueryString().substring("/quiz/".length()));
         String id = request.getQueryString();
         String username = server.checkSessionID(request).first();
-        Quiz quiz = server.getActiveQuiz(username);
 
-        if(quiz == null) {
-            server.startActiveQuiz(new Pair<>(username, server.getQuizManager().getQuiz(Integer.parseInt(id), quizName)));
-            quiz = server.getActiveQuiz(username);
-        }
+        QuizProgress oldProgress = server.getQuizProgress(username, quizName);
+        // comfirm if user wants to restart quiz since old progress will be overriden
 
-        QuizItem item = quiz.getNextItem();
-        if(item == null) {
-            appendBodyComponents("<p>This quiz has no questions!</p>");
-        } else {
-            appendBodyComponents(item.toHTMLString());
-            // here we should be increasing/decreasing the frequency based on
-            // whether the user got the question right or wrong
-            quiz.addItem(item);
-        }
+        server.startQuiz(username, quizName);
+
+        // QuizItem item = quiz.getNextItem();
+        // if(item == null) {
+        //     appendBodyComponents("<p>This quiz has no questions!</p>");
+        // } else {
+        //     appendBodyComponents(item.toHTMLString());
+        //     // here we should be increasing/decreasing the frequency based on
+        //     // whether the user got the question right or wrong
+        //     quiz.addItem(item);
+        // }
 
 
         return new HTTPResponse().setStatus(200)

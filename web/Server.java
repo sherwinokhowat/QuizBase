@@ -9,6 +9,7 @@ import web.path.HomePage;
 import web.path.FilePath;
 import web.path.LoginPage;
 import web.path.LoginSubmit;
+import web.path.QuizGetNextQuestion;
 import web.path.QuizPage;
 import web.path.RootPage;
 import web.path.SignOut;
@@ -23,6 +24,7 @@ import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import struct.Quiz;
+import struct.QuizProgress;
 
 /**
  * The Server class, responsible for managing client and database connections.
@@ -37,8 +39,10 @@ public class Server {
 
     private ServerSocket serverSock;
 
-    // maps each user to a certain quiz
-    private HashMap<String, Quiz> quizzes;
+    /**
+     * Maps each Pair(String username, String quizname) to a QuizProgress
+     */
+    private HashMap<Pair<String, String>, QuizProgress> quizzes;
 
     /**
      * Each cookie is mapped to the user's username and password.
@@ -177,30 +181,32 @@ public class Server {
     /**
      * Starts a session for an active quiz for a specific user
      *
-     * @param session A pair of the user's username and the quiz they are starting
+     * @param username the username
+     * @param quizName The name of the quiz
      */
-    public void startActiveQuiz(Pair<String, Quiz> session) {
-        this.quizzes.put(session.first(), session.second());
+    public void startQuiz(String username, String quizName) {
+        this.quizzes.put(new Pair<>(username, quizName), new QuizProgress(quizName, this));
+    }
+
+    /**
+     * Retrieves a User's progress on a Quiz
+     *
+     * @param username the username
+     * @param quizName The name of the quiz
+     * @return the QuizProgress {@code null} if there is no active quiz
+     */
+    public QuizProgress getQuizProgress(String username, String quizName) {
+        return this.quizzes.getOrDefault(new Pair<>(username, quizName), null);
     }
 
     /**
      * Ends the ongoing session for an active quiz for a specific user
      *
-     * @param username the user's username
+     * @param username the username
+     * @param quizName The name of the quiz
      */
-    // username, quiz
-    public void endActiveQuiz(String username) {
-        this.quizzes.remove(username);
-    }
-
-    /**
-     * Retrieves the active quiz for a user
-     *
-     * @param username the user's username
-     * @return the ongoing quiz or {@code null} if there is no active quiz
-     */
-    public Quiz getActiveQuiz(String username) {
-        return this.quizzes.getOrDefault(username, null);
+    public void endQuiz(String username, String quizName) {
+        this.quizzes.remove(new Pair<>(username, quizName));
     }
 }
 
@@ -322,6 +328,9 @@ class ConnectionHandler implements Runnable {
                     return new SignUpSubmit().processRequest(request, server);
                 case "/create-quiz/submit":
                     return new CreateQuizSubmit().processRequest(request, server);
+                case "/quiz/quizName/next-question":
+                    return new QuizGetNextQuestion().processRequest(request, server);
+                case "/quiz/quizName/check-answer":
                 default:
                     return new HTTPResponse().setStatus(400);
             }

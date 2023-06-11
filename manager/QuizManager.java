@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
 
 import struct.*;
 import utility.Pair;
@@ -73,9 +72,9 @@ public class QuizManager extends DatabaseManager {
                 .insertInto("QUIZZES", "NAME", "DESCRIPTION", "CREATOR_ID")
                 .values(name, description, creator).toString());
         if(successful) {
-            ArrayList<? extends Object> list = executeReadOperation(new SQLStatementBuilder().select()
+            ArrayList<Quiz> list = executeReadOperation(new SQLStatementBuilder().select()
                     .from("QUIZZES").where("NAME="+SQLStatementBuilder.toStringLiteral(name)).toString());
-            return (Quiz)list.get(0);
+            return list.get(0);
         } else {
             return null;
         }
@@ -99,11 +98,11 @@ public class QuizManager extends DatabaseManager {
      * @return
      */
     public Quiz getQuiz (int id, String name) {
-        ArrayList<? extends Object> dbResult = executeReadOperation(new SQLStatementBuilder()
+        ArrayList<Quiz> dbResult = executeReadOperation(new SQLStatementBuilder()
                 .select().from("QUIZZES")
                 .where("ID=" + id + " AND NAME=" + SQLStatementBuilder.toStringLiteral(name)).toString());
         if (dbResult.size() == 1) {
-            return (Quiz) dbResult.get(0);
+            return dbResult.get(0);
         } else {
             return null;
         }
@@ -122,14 +121,6 @@ public class QuizManager extends DatabaseManager {
                 .insertInto("QUIZ_ITEMS", "QUIZ_ID", "TYPE", "QUESTION", "OPTION_1")
                 .values(quizID, FLASHCARD, question, answer).toString());
     }
-
-    public ArrayList<? extends Object> getQuizItems(int quizID) {
-        ArrayList<? extends Object> dbResult = executeReadOperation(new SQLStatementBuilder()
-                .select().from("QUIZ_ITEMS").where("QUIZ_ID="+quizID).toString());
-
-        return (dbResult == null) ? null : dbResult;
-    }
-
 
     /**
      * Adds a Multiple Choice to the database
@@ -156,19 +147,18 @@ public class QuizManager extends DatabaseManager {
         } else {
             columnValue = SQLStatementBuilder.toStringLiteral(columnValue.toString());
         }
-        ArrayList<? extends Object> dbResult = executeReadOperation(new SQLStatementBuilder()
+        ArrayList<Quiz> dbResult = executeReadOperation(new SQLStatementBuilder()
                 .select().from("QUIZZES")
                 .where(columnName+"="+columnValue).toString());
-        if(dbResult.size() == 1) {
-            Quiz quiz = (Quiz)(dbResult.get(0));
-            return quiz;
+        if(dbResult.size() > 0) {
+            return dbResult.get(0);
         } else {
             return null;
         }
     }
 
     @Override
-    public ArrayList<? extends Object> executeReadOperation(String statement) {
+    public ArrayList<Quiz> executeReadOperation(String statement) {
         Pair<ResultSet, Statement> resultQuiz = getReadOperationResultSet(statement);
         try {
             ResultSet rsQuiz = resultQuiz.first();
@@ -178,33 +168,76 @@ public class QuizManager extends DatabaseManager {
                 String name = rsQuiz.getString("NAME");
                 String description = rsQuiz.getString("DESCRIPTION");
                 int creatorID = rsQuiz.getInt("CREATOR_ID");
-                PriorityQueue<QuizItem> items = new PriorityQueue<>();
-
-                Pair<ResultSet, Statement> resultQuizItems = getReadOperationResultSet(new SQLStatementBuilder().select().from("QUIZ_ITEMS").where("QUIZ_ID=" + id).toString());
-                ResultSet rsQuizItems = resultQuizItems.first();
-                while(rsQuizItems.next()) {
-                    int itemId = rsQuizItems.getInt("ID");
-                    int quizID = rsQuizItems.getInt("QUIZ_ID");
-                    int type = rsQuizItems.getInt("TYPE");
-                    String question = rsQuizItems.getString("QUESTION");
-                    if(type == FLASHCARD) {
-                        String answer = rsQuizItems.getString("OPTION_1");
-                        items.add(new Flashcard(itemId, quizID, question, answer));
-                    } else if (type == MULTIPLE_CHOICE) {
-                        String option1 = rsQuizItems.getString("OPTION_1");
-                        String option2 = rsQuizItems.getString("OPTION_2");
-                        String option3 = rsQuizItems.getString("OPTION_3");
-                        String option4 = rsQuizItems.getString("OPTION_4");
-                        int answer = rsQuizItems.getInt("CORRECT_ANSWER");
-                        items.add(new MultipleChoice(itemId, quizID, question, option1, option2, option3, option4, answer));
-                    }
-                }
-                resultQuizItems.second().close();
-
-                list.add(new Quiz(id, name, description, creatorID, items, this, userManager));
+                list.add(new Quiz(id, name, description, creatorID, this, userManager));
             }
             resultQuiz.second().close();
             return list;
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Runs a SQL {@code SELECT} statement to select QuizItems. Implementing classes must ensure that
+     * <ul>
+     *  <li>{@code getReadOperationResultSet(String statement)} is called</li>
+     *  <li>The method correctly parses the ResultSet into the appropriate class object</li>
+     *  <li>At the end of the method, {@code Transaction.close()} is called on the
+     * Transaction object</li>
+     * </ul>
+     *
+     * @param statement The SQL statement
+     * @return An array of QuizItems or {@code null} if an exception occurred.
+     */
+    public ArrayList<QuizItem> executeReadQuizItemOperation(String statement) {
+        Pair<ResultSet, Statement> resultQuiz = getReadOperationResultSet(statement);
+        try {
+            ResultSet rs = resultQuiz.first();
+            ArrayList<QuizItem> items = new ArrayList<>();
+            while(rs.next()) {
+                int id = rs.getInt("ID");
+                int quizID = rs.getInt("QUIZ_ID");
+                int type = rs.getInt("TYPE");
+                String question = rs.getString("QUESTION");
+                if(type == FLASHCARD) {
+                    String answer = rs.getString("OPTION_1");
+                    items.add(new Flashcard(id, quizID, question, answer));
+                } else if (type == MULTIPLE_CHOICE) {
+                    String option1 = rs.getString("OPTION_1");
+                    String option2 = rs.getString("OPTION_2");
+                    String option3 = rs.getString("OPTION_3");
+                    String option4 = rs.getString("OPTION_4");
+                    int answer = rs.getInt("CORRECT_ANSWER");
+                    items.add(new MultipleChoice(id, quizID, question, option1, option2, option3, option4, answer));
+                }
+            }
+            resultQuiz.second().close();
+            return items;
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Gets the list of IDs of the quiz items in a quiz
+     *
+     * @param quizID The id of the quiz
+     * @return An arraylist of IDs
+     */
+    public ArrayList<Integer> getQuizItemIDS(int quizID) {
+        Pair<ResultSet, Statement> resultQuiz = getReadOperationResultSet(new SQLStatementBuilder()
+                .select("ID").from("QUIZ_ITEMS").where("QUIZ_ID="+quizID).toString());
+        try {
+            ResultSet rs = resultQuiz.first();
+            ArrayList<Integer> items = new ArrayList<>();
+            while(rs.next()) {
+                items.add(rs.getInt("ID"));
+
+            }
+            resultQuiz.second().close();
+            return items;
         } catch(SQLException e) {
             e.printStackTrace();
             return null;
@@ -216,7 +249,7 @@ public class QuizManager extends DatabaseManager {
      * @param user The user
      * @return an ArrayList containing all the quizzes returned by a user.
      */
-    public ArrayList<? extends Object> getUserCreatedQuizzes(User user) {
+    public ArrayList<Quiz> getUserCreatedQuizzes(User user) {
         return executeReadOperation(new SQLStatementBuilder().select().from("QUIZZES")
                 .where("CREATOR_ID="+user.getID()).toString());
     }
@@ -225,7 +258,7 @@ public class QuizManager extends DatabaseManager {
      * Returns all the quizzes created.
      * @return an ArrayList containing all the quizzes stored in the database.
      */
-    public ArrayList<? extends Object> getAllCreatedQuizzes() {
+    public ArrayList<Quiz> getAllCreatedQuizzes() {
         return executeReadOperation(new SQLStatementBuilder().select().from("QUIZZES").toString());
     }
 

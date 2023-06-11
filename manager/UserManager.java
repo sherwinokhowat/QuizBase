@@ -24,7 +24,7 @@ public class UserManager extends DatabaseManager {
         } else {
             columnValue = SQLStatementBuilder.toStringLiteral(columnValue.toString());
         }
-        ArrayList<? extends Object> dbResult = executeReadOperation(new SQLStatementBuilder()
+        ArrayList<User> dbResult = executeReadOperation(new SQLStatementBuilder()
                 .select().from("USERS").where(columnName+"="+columnValue).toString());
         if (dbResult.size() == 1) {
             User user = (User) (dbResult.get(0));
@@ -62,7 +62,7 @@ public class UserManager extends DatabaseManager {
      * @return An ArrayList containing all the data.
      */
     @Override
-    public ArrayList<? extends Object> executeReadOperation(String statement) {
+    public ArrayList<User> executeReadOperation(String statement) {
         Pair<ResultSet, Statement> result = getReadOperationResultSet(statement);
         try {
             ResultSet rs = result.first();
@@ -94,7 +94,7 @@ public class UserManager extends DatabaseManager {
                 new SQLStatementBuilder().insertInto("USERS", "USERNAME", "PASSWORD")
                 .values(username, password).toString());
         if(successful) {
-            ArrayList<? extends Object> list = executeReadOperation(new SQLStatementBuilder().select()
+            ArrayList<User> list = executeReadOperation(new SQLStatementBuilder().select()
                     .from("USERS").where("USERNAME="+SQLStatementBuilder.toStringLiteral(username)).toString());
             return (User)list.get(0);
         } else {
@@ -166,7 +166,7 @@ public class UserManager extends DatabaseManager {
      * @return The User object or {@code null} if the credentials do not match
      */
     public User authenticateUser(String username, String password) {
-        ArrayList<? extends Object> list = executeReadOperation(new SQLStatementBuilder().select()
+        ArrayList<User> list = executeReadOperation(new SQLStatementBuilder().select()
                 .from("USERS").where("USERNAME=" + SQLStatementBuilder.toStringLiteral(username) + " AND PASSWORD=" + SQLStatementBuilder.toStringLiteral(password))
                 .toString());
         if (list.size() == 1) {
