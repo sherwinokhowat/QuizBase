@@ -24,7 +24,7 @@ public class SignOut implements HTTPPath {
                     .setHeaderField("Content-Type", HTTP.contentType("html"))
                     // even if the client doesn't delete the cookie, it won't work anymore
                     .setHeaderField("Set-Cookie", "sessionId=none; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT")
-                    .appendBody("Signed out!");
+                    .appendBody("<html><head><meta http-equiv='refresh' content='2'></head><body><p>Signed out! Redirecting you back... </p></body></html>");
         }
     }
 

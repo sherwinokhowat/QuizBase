@@ -1,5 +1,6 @@
 // file basically adds a new input tag eveyr time addFlashcard and addMultipleChoice are in there
 // input tags have name and id question1, question2, question3, question4, question5... and there is a function to figure out the number of children in the <form> tag
+// @author Avery Chan
 
 var newNumber = 1;
 
