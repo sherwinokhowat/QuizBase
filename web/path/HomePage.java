@@ -39,14 +39,16 @@ public class HomePage extends WebPage implements HTTPPath {
                 credentials.first(), credentials.second());
 
         String buttonStyle1 = "margin-right: 10px; background-color: " + (displayAll ? "#FFCCCB" : "#F2F2F2") + "; color: black; padding: 10px; text-decoration: none; border: 1px solid black;";
-        String buttonStyle2 = "background-color:" + (!displayAll ? "#FFCCCB" : "#F2F2F2") + "; color: black; padding: 10px; text-decoration: none; border: 1px solid black;";
+        String buttonStyle2 = "margin-right: 10px; background-color:" + (!displayAll ? "#FFCCCB" : "#F2F2F2") + "; color: black; padding: 10px; text-decoration: none; border: 1px solid black;";
 
         addHeader(request, server);
 
         // Content section
         appendBodyComponents("<div style='display: flex; justify-content: center; margin-bottom: 20px; width: 100%; display: flex; justify-content: center;'>",
                 new Hyperlink("/home?quizzes=all", "All Quizzes", false).setStyle(buttonStyle1),
-                new Hyperlink("/home?quizzes=my", "My Quizzes", false).setStyle(buttonStyle2), "</div>");
+                new Hyperlink("/home?quizzes=my", "My Quizzes", false).setStyle(buttonStyle2),
+                new Hyperlink("/create-quiz", "Create Quiz", false).setStyle(buttonStyle2), // ideally I would put this in a div so that an image could be next to the hyperlink, or just have this as an image
+                "</div>");
 
         String query = request.getQueryString();
 
