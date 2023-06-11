@@ -40,8 +40,6 @@ public class HomePage extends WebPage implements HTTPPath {
 
             String buttonStyle1 = "margin-right: 10px; background-color: " + (displayAll ? "#FFCCCB" : "#F2F2F2") + "; color: black; padding: 10px; text-decoration: none; border: 1px solid black;";
             String buttonStyle2 = "background-color:" + (!displayAll ? "#FFCCCB" : "#F2F2F2") + "; color: black; padding: 10px; text-decoration: none; border: 1px solid black;";
-            String signOutButtonStyle = "background-color: #F2F2F2; color: black; padding: 10px; text-decoration: none; border: 1px solid black;";
-
 
             addHeader(request, server);
 
