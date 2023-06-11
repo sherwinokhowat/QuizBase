@@ -1,5 +1,6 @@
 package web.path;
 
+import struct.QuizItem;
 import struct.QuizProgress;
 import struct.User;
 import utility.Pair;
@@ -39,18 +40,21 @@ public class QuizGetNextQuestion extends WebPage implements HTTPPath {
 
         addHeader(request, server);
 
+        HTTPResponse response = new HTTPResponse().setStatus(200)
+                .setHeaderField("Content-Type", HTTPResponse.contentType("html"));
+
         String path = request.getPathWithoutQueryString();
         int quizID = Integer.parseInt(path.substring("/quiz/".length(), path.length()-"next-question".length()-1));
         QuizProgress progress = server.getQuizProgress(credentials.first(), quizID);
+        String itemHTML = progress.getNextQuizItem().toHTMLString();
 
         // adding an if statement which only does that in response to a post request. 
 
         appendHeadComponents("<script src='/js/flashcard.js'></script>");
         
+        appendBodyComponents("<form action='/quiz/"+quizID+"/check-answer' method='POST'", itemHTML, "</form>");
 
-        return new HTTPResponse().setStatus(200)
-                .setHeaderField("Content-Type", HTTPResponse.contentType("html"))
-                .appendBody(progress.getNextQuizItem().toHTMLString());
+        return response;
     }
 
 }

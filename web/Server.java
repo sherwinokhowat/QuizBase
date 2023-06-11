@@ -9,6 +9,7 @@ import web.path.HomePage;
 import web.path.FilePath;
 import web.path.LoginPage;
 import web.path.LoginSubmit;
+import web.path.QuizCheckUserAnswer;
 import web.path.QuizGetNextQuestion;
 import web.path.ViewQuizPage;
 import web.path.RootPage;
@@ -335,9 +336,13 @@ class ConnectionHandler implements Runnable {
                     return new SignUpSubmit().processRequest(request, server);
                 case "/create-quiz/submit":
                     return new CreateQuizSubmit().processRequest(request, server);
-                case "/quiz/quizName/check-answer":
-                default:
-                    return new HTTPResponse().setStatus(400);
+                default: {
+                    if(path.startsWith("/quiz/") && path.endsWith("/check-answer")) {
+                        return new QuizCheckUserAnswer().processRequest(request, server);
+                    } else {
+                        return new HTTPResponse().setStatus(400);
+                    }
+                }
             }
         } else {
             return new HTTPResponse().setStatus(501);

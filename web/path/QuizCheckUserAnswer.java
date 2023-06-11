@@ -4,6 +4,7 @@ import struct.QuizProgress;
 import utility.Pair;
 import web.HTTPRequest;
 import web.HTTPResponse;
+import web.Hyperlink;
 import web.Server;
 import web.WebPage;
 
@@ -20,7 +21,7 @@ public class QuizCheckUserAnswer extends WebPage implements HTTPPath {
         }
 
         String path = request.getPathWithoutQueryString();
-        int quizID = Integer.parseInt(path.substring("/quiz/".length(), path.length()-"next-question".length()-1));
+        int quizID = Integer.parseInt(path.substring("/quiz/".length(), path.length()-"check-answer".length()-1));
         QuizProgress progress = server.getQuizProgress(credentials.first(), quizID);
         boolean result = progress.checkUserAnswer(request.getPostBody("answer"));
 
@@ -31,6 +32,8 @@ public class QuizCheckUserAnswer extends WebPage implements HTTPPath {
         } else {
             response.appendBody("Wrong Answer");
         }
+        response.appendBody("<br>");
+        response.appendBody(new Hyperlink("/quiz/"+quizID+"/next-question", "Next Question", true).toHTMLString());
         return response;
     }
 
