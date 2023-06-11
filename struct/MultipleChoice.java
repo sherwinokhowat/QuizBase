@@ -91,13 +91,14 @@ public class MultipleChoice extends QuizItem {
 
         // Form and submit button tags will be added in their own classes, for flexibility. Spaced repetition treats it as one of its own, 
 
-        StringBuilder html = new StringBuilder("<div class='multipleChoice'>");
+        StringBuilder html = new StringBuilder("<div class='multipleChoice' id='question" + getId() + "'>");
         html.append("<h4>" + this.question  + "</h4>"); // + ("?".equals(this.question.substring(this.question.length()-1)) ? "": "?") we might not need this, if there wasn't a "?" there probably wasn't one for a reason.
         for(int i = 0; i < this.answerOptions.length; i++) {
-            html.append("<input type='radio' name='question'" + getId() + "' value='"+i+"'>");
+            html.append("<input type='radio' name='answer'" + getId() + "' value='"+i+"'>");
             html.append(this.answerOptions[i]);
             html.append("<br>");
         }
+        html.append("</div>");
         return html.toString();
     }
 
