@@ -13,7 +13,6 @@ import web.Server;
 public class QuizProgress {
 
     private String quizName;
-    private int id; // stores id of quiz
     private Server server;
     private ArrayList<Integer> quizItemIDS;
 
@@ -30,14 +29,11 @@ public class QuizProgress {
     /**
      * Constructs a QuizProgress object for the provided quiz
      *
-     * @param quizName The name of the quiz
+     * @param quizID The id of the quiz
      */
-    public QuizProgress(int id, Server server) {
-        this.id = id;
+    public QuizProgress(int quizID, Server server) {
         this.server = server;
-        Quiz quiz = (Quiz)server.getQuizManager().getBy("ID", id);
-        this.quizName = quiz.getName();
-        this.quizItemIDS = server.getQuizManager().getQuizItemIDS(quiz.getID());
+        this.quizItemIDS = server.getQuizManager().getQuizItemIDS(quizID);
 
         prob = new int[quizItemIDS.size()];
         Arrays.fill(prob, 1);

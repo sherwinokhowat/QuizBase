@@ -20,8 +20,8 @@ public class QuizCheckUserAnswer extends WebPage implements HTTPPath {
         }
 
         String path = request.getPathWithoutQueryString();
-        String quizName = path.substring("/quiz/".length(), path.length()-"check-answer".length()-1);
-        QuizProgress progress = server.getQuizProgress(credentials.first(), quizName);
+        int quizID = Integer.parseInt(path.substring("/quiz/".length(), path.length()-"next-question".length()-1));
+        QuizProgress progress = server.getQuizProgress(credentials.first(), quizID);
         boolean result = progress.checkUserAnswer(request.getPostBody("answer"));
 
         HTTPResponse response = new HTTPResponse().setStatus(200)
