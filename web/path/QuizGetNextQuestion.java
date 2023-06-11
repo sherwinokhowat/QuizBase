@@ -40,9 +40,6 @@ public class QuizGetNextQuestion extends WebPage implements HTTPPath {
 
         addHeader(request, server);
 
-        HTTPResponse response = new HTTPResponse().setStatus(200)
-                .setHeaderField("Content-Type", HTTPResponse.contentType("html"));
-
         String path = request.getPathWithoutQueryString();
         int quizID = Integer.parseInt(path.substring("/quiz/".length(), path.length()-"next-question".length()-1));
         QuizProgress progress = server.getQuizProgress(credentials.first(), quizID);
