@@ -92,23 +92,6 @@ public class QuizManager extends DatabaseManager {
     }
 
     /**
-     * Returns the quiz with a certain ID and Name
-     * @param id the quiz's ID
-     * @param name the name of the quiz (case sensitive)
-     * @return
-     */
-    public Quiz getQuiz (int id, String name) {
-        ArrayList<Quiz> dbResult = executeReadOperation(new SQLStatementBuilder()
-                .select().from("QUIZZES")
-                .where("ID=" + id + " AND NAME=" + SQLStatementBuilder.toStringLiteral(name)).toString());
-        if (dbResult.size() == 1) {
-            return dbResult.get(0);
-        } else {
-            return null;
-        }
-    }
-
-    /**
      * Adds a Flashcard to the database
      *
      * @param quizID The id of the quiz associated with the Flashcard
@@ -140,6 +123,7 @@ public class QuizManager extends DatabaseManager {
                 .values(quizID, MULTIPLE_CHOICE, question, option1, option2, option3, option4, answer).toString());
     }
 
+
     @Override
     public Object getBy(String columnName, Object columnValue) {
         if(columnValue instanceof Integer) {
@@ -149,6 +133,32 @@ public class QuizManager extends DatabaseManager {
         }
         ArrayList<Quiz> dbResult = executeReadOperation(new SQLStatementBuilder()
                 .select().from("QUIZZES")
+                .where(columnName+"="+columnValue).toString());
+        if(dbResult.size() > 0) {
+            return dbResult.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Fetches the database for the QuizItem with the specified value in the specified column.
+     * Recommended that this is used on columns with unique values.
+     *
+     * @param columnName The column name
+     * @param columnValue The column value. Non-integer objects will be converted to a string
+     * by calling the object's {@code toString()} method.
+     * @return The found QuizItem or {@null} if it does not exist. If multiple objects have
+     * the same value, any one of them is returned.
+     */
+    public QuizItem getQuizItemBy(String columnName, Object columnValue) {
+        if(columnValue instanceof Integer) {
+            columnValue = ((Integer)columnValue).toString();
+        } else {
+            columnValue = SQLStatementBuilder.toStringLiteral(columnValue.toString());
+        }
+        ArrayList<QuizItem> dbResult = executeReadQuizItemOperation(new SQLStatementBuilder()
+                .select().from("QUIZ_ITEMS")
                 .where(columnName+"="+columnValue).toString());
         if(dbResult.size() > 0) {
             return dbResult.get(0);

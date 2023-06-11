@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import struct.Quiz;
 import struct.QuizProgress;
 
 /**
