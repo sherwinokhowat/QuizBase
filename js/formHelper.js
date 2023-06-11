@@ -1,8 +1,12 @@
 // file basically adds a new input tag eveyr time addFlashcard and addMultipleChoice are in there
 // input tags have name and id question1, question2, question3, question4, question5... and there is a function to figure out the number of children in the <form> tag
 // @author Avery Chan
+// also keeps track of the highest "newNumber" (since newNumber doesn't adjust when a question gets removed) and the running number of questions. by storing it as a hidden input. 
+// someone can change the hidden input but nothing we can do about it for now. 
 
-var newNumber = 1;
+var newNumber = 1; // controls the id of the next question that gets added (if newNumber = 4, the next input tag will be named "question4"). 
+
+var numOfQuestions = 0;
 
 function addFlashcard() {
     // var newNumber = document.getElementById("questionForm").childElementCount - 4; // if there are 2 elements (the 2 default), we place it as #1. if there are 3 elements, #2...
@@ -17,6 +21,19 @@ function addFlashcard() {
     // if we have 6 questions and we delete number 3, then the POST will send the maximum number of questions (6) and leave the program to get rid of the missing ones.
     document.getElementById("questionForm").insertAdjacentHTML("beforeend", msg);
     newNumber++;
+    numOfQuestions++;
+    var hiddenInput1 = document.getElementById("highestNumber");
+    var hiddenInput2 = document.getElementById("numOfQuestions");
+    hiddenInput1.value = newNumber-1;
+    hiddenInput2.value = numOfQuestions;
+    /*
+    hiddenInput1.parentElement.removeChild(hiddenInput1);
+    hiddenInput2.parentElement.removeChild(hiddenInput2);
+    var newHiddenInput = "<input type='hidden' name='highestNumber' id='highestNumber' value='" + newNumber-1 + "'>"; // "<input type='hidden' name='highestNumber' id='highestNumber' value='0'>",
+    newHiddenInput += "<input type='hidden' name='numOfQuestions' id='numOfQuestions' value='" + numOfQuestions + "'>";
+    document.getElementById("questionForm").insertAdjacentHTML("beforeend", newHiddenInput);
+    */
+    // "<input type='hidden' name='numOfQuestions' id='numOfQuestions' value='0'>",
 }
 
 function addMultipleChoice() {
@@ -45,11 +62,35 @@ function addMultipleChoice() {
     // if we have 6 questions and we delete number 3, then the POST will send the maximum number of questions (6) and leave the program to get rid of the missing ones.
     document.getElementById("questionForm").insertAdjacentHTML("beforeend", msg);
     newNumber++;
+    numOfQuestions++;
+    var hiddenInput1 = document.getElementById("highestNumber");
+    var hiddenInput2 = document.getElementById("numOfQuestions");
+    hiddenInput1.value = newNumber-1;
+    hiddenInput2.value = numOfQuestions;
+    /*
+    hiddenInput1.parentElement.removeChild(hiddenInput1);
+    hiddenInput2.parentElement.removeChild(hiddenInput2);
+    var newHiddenInput = "<input type='hidden' name='highestNumber' id='highestNumber' value='" + newNumber-1 + "'>"; // "<input type='hidden' name='highestNumber' id='highestNumber' value='0'>",
+    newHiddenInput += "<input type='hidden' name='numOfQuestions' id='numOfQuestions' value='" + numOfQuestions + "'>";
+    document.getElementById("questionForm").insertAdjacentHTML("beforeend", newHiddenInput);
+    */
 }
 
 function deleteQuestion (number) {
     if (confirm("Are you sure you want to delete question #" + number + "?")) {
         var question = document.getElementById("div" + number);
         question.parentElement.removeChild(question);
+        numOfQuestions--; 
+        var hiddenInput1 = document.getElementById("highestNumber");
+        var hiddenInput2 = document.getElementById("numOfQuestions");
+        hiddenInput1.value = newNumber;
+        hiddenInput2.value = numOfQuestions;
+        /*
+        hiddenInput1.parentElement.removeChild(hiddenInput1);
+        hiddenInput2.parentElement.removeChild(hiddenInput2);
+        var newHiddenInput = "<input type='hidden' name='highestNumber' id='highestNumber' value='" + newNumber-1 + "'>"; // "<input type='hidden' name='highestNumber' id='highestNumber' value='0'>",
+        newHiddenInput += "<input type='hidden' name='numOfQuestions' id='numOfQuestions' value='" + numOfQuestions + "'>";
+        document.getElementById("questionForm").insertAdjacentHTML("beforeend", newHiddenInput);
+        */
     }
 }

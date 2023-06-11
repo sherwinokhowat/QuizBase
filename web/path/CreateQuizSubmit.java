@@ -24,12 +24,20 @@ public class CreateQuizSubmit implements HTTPPath {
         String description = request.getPostBody("quizDescription");
         User user = (User)(server.getUserManager().getBy("USERNAME", "'"+credentials.first()+"'"));
         Quiz quiz = null;
+        int highestNumber = Integer.parseInt(request.getPostBody("highestNumber"));
+        int numOfQuestions = Integer.parseInt(request.getPostBody("numOfQuestions"));
+
+        if(numOfQuestions == 0) {
+            return new HTTPResponse().setStatus(400)
+                    .setHeaderField("Content-Type", HTTP.contentType("html"))
+                    .appendBody("Quiz must contain at least one question");
+        }
 
         int questionNum = 1;
-        while(true) {
+        while(questionNum <= highestNumber) {
             String question = request.getPostBody("question"+questionNum);
             if(question == null) {
-                break;
+                continue; 
             }
             String answer = request.getPostBody("answer"+questionNum);
 
@@ -55,13 +63,10 @@ public class CreateQuizSubmit implements HTTPPath {
                 }
                 server.getQuizManager().addFlashCard(quiz.getID(), question, answer);
             }
+            System.out.println("Processed question " + questionNum);
             questionNum++;
         }
-        if(questionNum == 1) {
-            return new HTTPResponse().setStatus(400)
-                    .setHeaderField("Content-Type", HTTP.contentType("html"))
-                    .appendBody("Quiz must contain at least one question");
-        }
+        
         return new HTTPResponse().setStatus(303).setHeaderField("Location", "../../home");
     }
 }

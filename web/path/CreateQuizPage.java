@@ -25,6 +25,8 @@ public class CreateQuizPage extends WebPage implements HTTPPath {
                 "<form id='questionForm' action='/create-quiz/submit' method='POST' style='display: flex; flex-direction: column; width: 300px; padding: 20px;'>",
                 "<label for='quizName'>Quiz Name: </label><input type='text' id='quizName' name='quizName' placeholder='Quiz Name' required>",
                 "<label for='quizDescription'>Description: </label><textarea id='quizDescription' name='quizDescription' placeholder='Quiz Description' rows='4' cols='50'></textarea>",
+                "<input type='hidden' name='highestNumber' id='highestNumber' value='0'>",
+                "<input type='hidden' name='numOfQuestions' id='numOfQuestions' value='0'>",
                 "<input type='submit' value='Finish Quiz'>",
                 "</form>",
                 "<div class='options' style='display: flex'>", // please change the CSS in here to something more palatable
