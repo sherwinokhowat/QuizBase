@@ -22,6 +22,8 @@ import java.io.InputStreamReader;
 import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import struct.Quiz;
+import struct.QuizItem;
 
 /**
  * The Server class, responsible for managing client and database connections.
@@ -35,6 +37,9 @@ public class Server {
     private QuizManager quizManager;
 
     private ServerSocket serverSock;
+
+    // maps each user to a certain quiz
+    private HashMap<String, Quiz> quizzes;
 
     /**
      * Each cookie is mapped to the user's username and password.
@@ -59,6 +64,7 @@ public class Server {
         userManager.initialize();// must be initialized before quizManager
         quizManager.initialize();
         cookies = new HashMap<>();
+        quizzes = new HashMap<>();
 
         // hold the client connection
         Socket client = null;
@@ -166,6 +172,37 @@ public class Server {
         }
     }
 
+
+    // --------------- Following methods are for quizzes in session  ---------------
+
+    /**
+     * Starts a session for an active quiz for a specific user
+     *
+     * @param session A pair of the user's username and the quiz they are starting
+     */
+    public void startActiveQuiz(Pair<String, Quiz> session) {
+        this.quizzes.put(session.first(), session.second());
+    }
+
+    /**
+     * Ends the ongoing session for an active quiz for a specific user
+     *
+     * @param username the user's username
+     */
+    // username, quiz
+    public void endActiveQuiz(String username) {
+        this.quizzes.remove(username);
+    }
+
+    /**
+     * Retrieves the active quiz for a user
+     *
+     * @param username the user's username
+     * @return the ongoing quiz or {@code null} if there is no active quiz
+     */
+    public Quiz getActiveQuiz(String username) {
+        return this.quizzes.getOrDefault(username, null);
+    }
 }
 
 /**

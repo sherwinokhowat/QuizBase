@@ -104,7 +104,7 @@ public class QuizManager extends DatabaseManager {
         .select().from("QUIZZES")
         .where("ID='" + id + "' AND NAME='" + name + "'").toString());
         if (dbResult.size() == 1) {
-            return (Quiz) dbResult.get(1);
+            return (Quiz) dbResult.get(0);
         } else {
             return null;
         }

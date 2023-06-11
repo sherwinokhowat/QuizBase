@@ -28,6 +28,7 @@ public class Quiz implements WebComponent {
         this.creatorId = creatorId;
         this.quizManager = quizManager;
         this.userManager = userManager;
+        this.quizItems = new PriorityQueue<>();
     }
 
     /**
@@ -131,6 +132,10 @@ public class Quiz implements WebComponent {
          this.quizItems.remove(item);
      }
 
+     public QuizItem getNextItem() {
+         return this.quizItems.poll();
+     }
+
      /**
       * Returns the HTML form of a quiz (when being viewed in a list.)
       */
@@ -141,7 +146,8 @@ public class Quiz implements WebComponent {
 
          html.append("<div style='border: 1px solid black; padding: 10px; margin: 13px; width: 140px; height: 90px; background-color: white; font-size: 0.8em; display: flex; flex-direction: column; justify-content: space-between;'>");
          html.append("<h1 style='margin: 0; font-size: 1.2em; flex-grow: 0;'>");
-         html.append(new Hyperlink("/quiz/"+this.name, this.name, false).toHTMLString());
+         // remove this.id if duplicates allowed
+         html.append(new Hyperlink("/quiz/"+this.name+"?"+this.id, this.name, false).toHTMLString());
          html.append("</h1>");
          html.append("<h2 style='margin: 0; color: gray; font-size: 1em; flex-grow: 0;'>Created by: ");
          html.append(((User)userManager.getBy("ID", String.valueOf(this.creatorId))).getUsername());
