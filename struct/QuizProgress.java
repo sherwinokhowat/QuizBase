@@ -58,6 +58,7 @@ public class QuizProgress {
         int idx = 0;
         int currSum = 1;
         while(!((currSum <= randInt) && (randInt < currSum+prob[idx]))) {
+            currSum += prob[idx];
             idx++;
         }
 
