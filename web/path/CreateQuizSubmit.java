@@ -28,14 +28,12 @@ public class CreateQuizSubmit implements HTTPPath {
         int numOfQuestions = Integer.parseInt(request.getPostBody("numOfQuestions"));
 
         if(numOfQuestions == 0) {
-            System.out.println("Quiz had 0 questions.");
             return new HTTPResponse().setStatus(400)
                     .setHeaderField("Content-Type", HTTP.contentType("html"))
                     .appendBody("Quiz must contain at least one question");
         }
 
         int questionNum = 1;
-        System.out.println("Processing made it to while loop.");
         while(questionNum <= highestNumber) {
             String question = request.getPostBody("question"+questionNum);
             if(question == null) {
@@ -66,7 +64,7 @@ public class CreateQuizSubmit implements HTTPPath {
                 }
                 server.getQuizManager().addFlashCard(quiz.getID(), question, answer);
             }
-            System.out.println("Processed question " + questionNum);
+            //System.out.println("Processed question " + questionNum);
             questionNum++;
         }
         
