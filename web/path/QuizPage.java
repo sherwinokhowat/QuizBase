@@ -21,19 +21,18 @@ public class QuizPage extends WebPage implements HTTPPath {
         if(quiz == null) {
             server.startActiveQuiz(new Pair<>(username, server.getQuizManager().getQuiz(Integer.parseInt(id), quizName)));
             quiz = server.getActiveQuiz(username);
-//            System.out.println("quiz: " + quiz);
-//            System.out.println("username: " + username);
-//            System.out.println("id: " + id);
-//            System.out.println("quizName: " + quizName);
         }
 
         QuizItem item = quiz.getNextItem();
         if(item == null) {
-            appendBodyComponents("<p>No more questions!!</p>");
+            appendBodyComponents("<p>This quiz has no questions!</p>");
         } else {
             appendBodyComponents(item.toHTMLString());
+            // here we should be increasing/decreasing the frequency based on
+            // whether the user got the question right or wrong
             quiz.addItem(item);
         }
+
 
         return new HTTPResponse().setStatus(200)
                 .setHeaderField("Content-Type", HTTPResponse.contentType("html"))
