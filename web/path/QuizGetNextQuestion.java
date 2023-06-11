@@ -26,10 +26,14 @@ public class QuizGetNextQuestion extends WebPage implements HTTPPath {
         String path = request.getPathWithoutQueryString();
         int quizID = Integer.parseInt(path.substring("/quiz/".length(), path.length()-"next-question".length()-1));
         QuizProgress progress = server.getQuizProgress(credentials.first(), quizID);
-        String itemHTML = progress.getNextQuizItem().toHTMLString();
-
-        response.appendBody("<form action='/quiz/"+quizID+"/check-answer' method='POST'")
-                .appendBody(itemHTML).appendBody("</form>");
+        QuizItem quizItem = progress.getNextQuizItem();
+        if(quizItem != null) {
+            response.appendBody("<form action='/quiz/"+quizID+"/check-answer' method='POST'")
+                    .appendBody(quizItem.toHTMLString()).appendBody("</form>");
+        } else {
+            response.appendBody("No more questions left!");
+            server.endQuiz(credentials.first(), quizID);
+        }
         return response;
     }
 
