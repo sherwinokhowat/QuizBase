@@ -24,15 +24,15 @@ public class ViewQuizPage extends WebPage implements HTTPPath {
 
         server.startQuiz(username, Integer.parseInt(idRaw));
 
-        // QuizItem item = quiz.getNextItem();
-        // if(item == null) {
-        //     appendBodyComponents("<p>This quiz has no questions!</p>");
-        // } else {
-        //     appendBodyComponents(item.toHTMLString());
-        //     // here we should be increasing/decreasing the frequency based on
-        //     // whether the user got the question right or wrong
-        //     quiz.addItem(item);
-        // }
+        QuizItem item = oldProgress.getNextQuizItem();
+        if(item == null) {
+            appendBodyComponents("<p>This quiz has no questions!</p>");
+        } else {
+             appendBodyComponents(item.toHTMLString());
+            // here we should be increasing/decreasing the frequency based on
+            // whether the user got the question right or wrong
+            quiz.addItem(item);
+        }
 
 
         return new HTTPResponse().setStatus(200)
