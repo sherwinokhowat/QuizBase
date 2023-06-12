@@ -28,8 +28,10 @@ public class QuizCheckUserAnswer extends WebPage implements HTTPPath {
         HTTPResponse response = new HTTPResponse().setStatus(200)
                 .setHeaderField("Content-Type", HTTPResponse.contentType("html"));
         if(result) {
+            // the quiz item that we were testing.decreaseFrequency();
             response.appendBody("Correct!");
         } else {
+            // the quiz item that we were testing.increaseFrequency();
             response.appendBody("Wrong Answer");
         }
         response.appendBody("<br>");
