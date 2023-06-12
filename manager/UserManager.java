@@ -17,6 +17,15 @@ import utility.SQLStatementBuilder;
  */
 public class UserManager extends DatabaseManager {
 
+    /**
+     * Fetches the database for the User with the specified value in the specified column.
+     * Recommended that this is used on columns with unique values.
+     *
+     * @param columnName The column name
+     * @param columnValue The column value. Non-integer objects will be converted to a string
+     * by calling the object's {@code toString()} method.
+     * @return The User or {@code null} if the user does not exist.
+     */
     @Override
     public User getBy(String columnName, Object columnValue) {
         if(columnValue instanceof Integer) {
@@ -44,6 +53,9 @@ public class UserManager extends DatabaseManager {
         super(dbName);
     }
 
+    /**
+     * Initializes the SQL tables associated for users
+     */
     @Override
     public void initialize() {
         StringBuilder statement = new StringBuilder();
@@ -56,10 +68,10 @@ public class UserManager extends DatabaseManager {
     }
 
     /**
-     * Executes an operation that reads from the database
-     *
+     * Retrieves the requested user from the database.
+
      * @param statement An SQL statement.
-     * @return An ArrayList containing all the data.
+     * @return An ArrayList containing the User data.
      */
     @Override
     public ArrayList<User> executeReadOperation(String statement) {
@@ -106,7 +118,7 @@ public class UserManager extends DatabaseManager {
      * Deletes the user from the database
      *
      * @param user The user to delete
-     * @return Whether or not the deletion is successful
+     * @return Whether the deletion is successful
      */
     public boolean deleteUser(User user) {
         return executeWriteOperation(

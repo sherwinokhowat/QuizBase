@@ -25,12 +25,16 @@ public class QuizManager extends DatabaseManager {
      * Constructs a QuizManager class for the specified database
      *
      * @param dbName The name of database to manage (must include {@code .db} file extension)
+     * @param userManager An instance of the User's database manager
      */
     public QuizManager(String dbName, UserManager userManager) {
         super(dbName);
         this.userManager = userManager;
     }
 
+    /**
+     * Initializes the SQL tables
+     */
     @Override
     public void initialize() {
         StringBuilder statement = new StringBuilder();
@@ -60,11 +64,11 @@ public class QuizManager extends DatabaseManager {
     }
 
     /**
-     * Adds a quiz to the database
+     * Adds a quiz to the database.
      *
      * @param creator the id of the user that created it.
-     * @param name The name
-     * @param description The description
+     * @param name The name of the quiz.
+     * @param description The description of the quiz.
      * @return The created Quiz or {@code null} if an error occurred
      */
     public Quiz addQuiz(int creator, String name, String description) {
@@ -81,9 +85,10 @@ public class QuizManager extends DatabaseManager {
     }
 
     /**
-     * Deletes a quiz based on the User who made it and
-     * @param requestor
-     * @param quiz
+     * Deletes a quiz based on the User who made it.
+     *
+     * @param requestor the User who created the quiz.
+     * @param quiz An instance of the quiz.
      * @return whether deletion was successful or not.
      */
     public boolean deleteQuiz (User requestor, Quiz quiz) {
@@ -92,12 +97,12 @@ public class QuizManager extends DatabaseManager {
     }
 
     /**
-     * Adds a Flashcard to the database
+     * Adds a Flashcard to the database.
      *
-     * @param quizID The id of the quiz associated with the Flashcard
-     * @param question The question on the Flashcard
-     * @param answer The answer
-     * @return If the operation was successful
+     * @param quizID The id of the quiz associated with the Flashcard.
+     * @param question The question on the Flashcard.
+     * @param answer The answer on the flashcard.
+     * @return If the operation was successful.
      */
     public boolean addFlashCard(int quizID, String question, String answer) {
         return executeWriteOperation(new SQLStatementBuilder()
@@ -115,7 +120,7 @@ public class QuizManager extends DatabaseManager {
      * @param option3 The third option
      * @param option4 The fourth option
      * @param answer The number of the correct answer
-     * @return If the operation was successful
+     * @return Whether the operation was successful
      */
     public boolean addMultipleChoice(int quizID, String question, String option1, String option2, String option3, String option4, int answer) {
         return executeWriteOperation(new SQLStatementBuilder()
@@ -124,6 +129,15 @@ public class QuizManager extends DatabaseManager {
     }
 
 
+    /**
+     * Fetches the database for the Quiz with the specified value in the specified column.
+     * Recommended that this is used on columns with unique values.
+     *
+     * @param columnName The column name
+     * @param columnValue The column value. Non-integer objects will be converted to a string
+     * by calling the object's {@code toString()} method.
+     * @return The found Quiz or {@null} if it does not exist.
+     */
     @Override
     public Quiz getBy(String columnName, Object columnValue) {
         if(columnValue instanceof Integer) {
@@ -167,6 +181,18 @@ public class QuizManager extends DatabaseManager {
         }
     }
 
+    /**
+     * Returns a list of Quiz objects based on the SQL {@code SELECT} statement. Implementing classes must ensure that
+     *  <ul>
+     *  <li>{@code getReadOperationResultSet(String statement)} is called</li>
+     *  <li>The method correctly parses the ResultSet into the appropriate class object</li>
+     *  <li>At the end of the method, {@code Transaction.close()} is called on the
+     *  Transaction object</li>
+     *  </ul>
+     *
+     * @param statement The SQL statement
+     * @return An array of parsed Quiz objects or {@code null} if an exception occurred.
+     */
     @Override
     public ArrayList<Quiz> executeReadOperation(String statement) {
         Pair<ResultSet, Statement> resultQuiz = getReadOperationResultSet(statement);
@@ -256,7 +282,8 @@ public class QuizManager extends DatabaseManager {
 
     /**
      * Returns all the quizzes created by a user.
-     * @param user The user
+     *
+     * @param user The user.
      * @return an ArrayList containing all the quizzes returned by a user.
      */
     public ArrayList<Quiz> getUserCreatedQuizzes(User user) {
@@ -266,6 +293,7 @@ public class QuizManager extends DatabaseManager {
 
     /**
      * Returns all the quizzes created.
+     *
      * @return an ArrayList containing all the quizzes stored in the database.
      */
     public ArrayList<Quiz> getAllCreatedQuizzes() {
