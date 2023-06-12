@@ -6,7 +6,7 @@ import web.WebComponent;
  * This class represents a flashcard quiz item. Contains a question and respective answer. Contains web component
  * methods since this is a quiz item.
  *
- * @author Sherwin Okhowat
+ * @author Sherwin Okhowat, Avery Chan
  */
 public class Flashcard extends QuizItem {
 
@@ -29,6 +29,7 @@ public class Flashcard extends QuizItem {
 
     /**
      * Converts the component to an HTML string
+     * The method caller should wrap this in a <form> tag as it will not work otherwise. 
      *
      * @return the HTML string representation of the component
      */

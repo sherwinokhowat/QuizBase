@@ -30,6 +30,7 @@ public class QuizProgress {
      * Constructs a QuizProgress object for the provided quiz
      *
      * @param quizID The id of the quiz
+     * @param server The server
      */
     public QuizProgress(int quizID, Server server) {
         this.server = server;
