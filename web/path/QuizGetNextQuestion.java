@@ -1,5 +1,7 @@
 package web.path;
 
+import struct.Flashcard;
+import struct.MultipleChoice;
 import struct.QuizItem;
 import struct.QuizProgress;
 import struct.User;
@@ -20,23 +22,12 @@ public class QuizGetNextQuestion extends WebPage implements HTTPPath {
 
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
-        boolean displayAll;
-        if("quizzes=my".equals(request.getQueryString())) {
-            displayAll = false;
-        } else {
-            displayAll = true;
-        }
         Pair<String, String> credentials = server.checkSessionID(request);
         if(credentials == null) {
             return new HTTPResponse().setStatus(303).setHeaderField("Location", "/login");
         }
         HTTPResponse response = new HTTPResponse().setStatus(200)
                 .setHeaderField("Content-Type", HTTPResponse.contentType("html"));
-        User user = server.getUserManager().authenticateUser(
-                credentials.first(), credentials.second());
-
-        String buttonStyle1 = "margin-right: 10px; background-color: " + (displayAll ? "#FFCCCB" : "#F2F2F2") + "; color: black; padding: 10px; text-decoration: none; border: 1px solid black;";
-        String buttonStyle2 = "background-color:" + (!displayAll ? "#FFCCCB" : "#F2F2F2") + "; color: black; padding: 10px; text-decoration: none; border: 1px solid black;";
 
         addHeader(request, server);
 
@@ -49,15 +40,24 @@ public class QuizGetNextQuestion extends WebPage implements HTTPPath {
 
         // adding an if statement which only does that in response to a post request.
 
-        appendHeadComponents("<script src='/js/flashcard.js'></script>");
+        // appendHeadComponents("<script src='/js/flashcard.js'></script>");
         QuizItem quizItem = progress.getNextQuizItem();
         if(quizItem != null) {
-            appendBodyComponents("<form action='/quiz/"+quizID+"/check-answer' method='POST'", quizItem.toHTMLString(), "</form>");
+            appendBodyComponents("<form action='/quiz/"+quizID+"/check-answer' method='POST'>", quizItem.toHTMLString(), "</form>");
+            if(quizItem instanceof Flashcard) {
+                appendBodyComponents("<script>",
+                        "function showAnswer() {\r\n" + //
+                        "    document.getElementById(\"solution\").style.display = \"block\";\r\n" + //
+                        "}",
+                        "</script>");
+            }
+            response.appendBody(toHTMLString());
+
         } else {
             response.appendBody("No more questions left!");
             server.endQuiz(credentials.first(), quizID);
         }
-        response.appendBody(toHTMLString());
+
         return response;
     }
 

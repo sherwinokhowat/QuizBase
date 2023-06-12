@@ -23,16 +23,18 @@ public class QuizCheckUserAnswer extends WebPage implements HTTPPath {
         String path = request.getPathWithoutQueryString();
         int quizID = Integer.parseInt(path.substring("/quiz/".length(), path.length()-"check-answer".length()-1));
         QuizProgress progress = server.getQuizProgress(credentials.first(), quizID);
-        boolean result = progress.checkUserAnswer(request.getPostBody("answer"));
+        int result = progress.checkUserAnswer(request.getPostBody("answer"));
 
         HTTPResponse response = new HTTPResponse().setStatus(200)
                 .setHeaderField("Content-Type", HTTPResponse.contentType("html"));
-        if(result) {
+        if(result == 1) {
             // the quiz item that we were testing.decreaseFrequency();
             response.appendBody("Correct!");
-        } else {
+        } else if(result == 0) {
             // the quiz item that we were testing.increaseFrequency();
             response.appendBody("Wrong Answer");
+        } else {
+            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/quiz/"+quizID+"/next-question");
         }
         response.appendBody("<br>");
         response.appendBody(new Hyperlink("/quiz/"+quizID+"/next-question", "Next Question", true).toHTMLString());

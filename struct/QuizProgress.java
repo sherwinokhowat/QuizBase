@@ -77,10 +77,11 @@ public class QuizProgress {
      * Checks the users answer and updates the probabilities as neccessary
      *
      * @param response The user's response
-     * @return {@code true} If the response matches the correct answer (not case sensitive).
+     * @return {@code 1} If the response matches the correct answer (not case sensitive),
+     * {@code 0} if it doesn't match, {@code -1} if this is a flashcard item
      * @throws IllegalStateException if this method is not called after {@code getNextQuizItem()}
      */
-    public boolean checkUserAnswer(String response) {
+    public int checkUserAnswer(String response) {
         if(currQuizItem == -1) {
             throw new IllegalStateException();
         }
@@ -88,7 +89,7 @@ public class QuizProgress {
         QuizItem item = server.getQuizManager().getQuizItemBy("ID", quizItemIDS.get(currQuizItem));
         boolean correct = false;
         if(item instanceof Flashcard) {
-            if(((Flashcard)item).getAnswer().toLowerCase().equals(response.toLowerCase())) {
+            if(response.equals("correct")) {
                 correct = true;
             }
         } else if(item instanceof MultipleChoice) {
@@ -103,6 +104,13 @@ public class QuizProgress {
             prob[currQuizItem] = prob[currQuizItem] + 1;
         }
         currQuizItem = -1;
-        return correct;
+
+        if(item instanceof Flashcard) {
+            return 2;
+        } else if(correct) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }

@@ -51,15 +51,17 @@ public class Flashcard extends QuizItem {
      * @return the HTML string representation of the component
      */
     public String toHTMLString() {
-        StringBuilder html = new StringBuilder("<div class='flashcard' id='question" + getId() + "'>");
+        StringBuilder html = new StringBuilder("<div class='flashcard' id='question'>");
         html.append("<h4>" + this.question  + "</h4>"); // + ("?".equals(this.question.substring(this.question.length()-1)) ? "": "?") we might not need this, if there wasn't a "?" there probably wasn't one for a reason.
         html.append("<br>");
-        html.append("<button type='button' onclick='showAnswer(" + getId() + ")'>Show Answer</button>");
+        html.append("<button type='button' onclick='showAnswer()'>Show Answer</button>");
         html.append("<br>");
-        html.append("<div class='hidden-content' style='display:none' id='solution" + getId() + "'>");
+        html.append("<div class='hidden-content' style='display:none' id='solution'>");
         html.append("<h4>" + this.answer + "</h4>");
-        html.append("<input type='submit' name='correctAnswer" + getId() + "' value='Got Correct Answer'><br>");
-        html.append("<input type='submit' name='incorrectAnswer" + getId() + "' value='Got Incorrect Answer'><br>");
+        html.append("<input type='radio' name='answer' value='correct' required>Got Correct Answer<br>");
+        html.append("<input type='radio' name='answer' value='incorrect'>Got Incorrect Answer<br>");
+        html.append("<input type='submit' value='Submit'>");
+
         /*
          * So I'll work on this later:
          * On spaced repetition, after the answer is revealed user must select whether it's correct or incorrect
