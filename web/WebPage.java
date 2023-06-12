@@ -9,7 +9,7 @@ import utility.Pair;
  * {@code WebComponent} or an HTML string representing a completed tag)
  * Contains common functionality for all webpages.
  *
- * @author Ricky Qin, Sherwin Okhowat
+ * @author Ricky Qin and Sherwin Okhowat
  */
 public class WebPage implements WebComponent {
 

@@ -8,10 +8,17 @@ import web.Server;
 /**
  * Class which handles a login related request
  *
- * @author Sherwin Okhowat, Ricky Qin
+ * @author Sherwin Okhowat and Ricky Qin
  */
 public class LoginSubmit implements HTTPPath {
 
+    /**
+     * Processes the submit logistics of the login page. Essentially checks whether the username and password exist in the database
+     *
+     * @param request The request
+     * @param server The server
+     * @return The appropriate HTTPResponse
+     */
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         String username = request.getPostBody("username");

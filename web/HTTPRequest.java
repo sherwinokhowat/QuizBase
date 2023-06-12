@@ -9,9 +9,16 @@ import java.util.StringTokenizer;
 /**
  * Stores all the stuff related to the request (e.g. the file it's asking for, the host, etc. etc. etc.) Only accepts the raw request as the argument.
  *
- * @author Avery Chan, Ricky Qin, Sherwin Okhowat
+ * @author Avery Chan, Ricky Qin, and Sherwin Okhowat
  */
 public class HTTPRequest {
+    private String type; // e.g. POST, GET
+    private String path; // e.g. /index2.html
+    private String body;
+
+    private ArrayList<String> rawRequest;// stores everything, line by line.
+    private HashMap<String, String> fields = new HashMap<String, String>();
+    private HashMap<String, String> postBody = new HashMap<>();// The contents of the body (only for POST)
 
     /**
      * Decodes the provided URL-encoded string
@@ -28,13 +35,7 @@ public class HTTPRequest {
         }
     }
 
-    private String type; // e.g. POST, GET
-    private String path; // e.g. /index2.html
-    private String body;
 
-    private ArrayList<String> rawRequest;// stores everything, line by line.
-    private HashMap<String, String> fields = new HashMap<String, String>();
-    private HashMap<String, String> postBody = new HashMap<>();// The contents of the body (only for POST)
 
     /**
      * Store useful information about the request

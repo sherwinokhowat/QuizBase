@@ -9,14 +9,24 @@ import web.WebPage;
 /**
  * A class representing a page which is used to create quizzes.
  *
- * @author Sherwin Okhowat, Avery Chan
+ * @author Sherwin Okhowat and Avery Chan
  */
 public class CreateQuizPage extends WebPage implements HTTPPath {
+    /**
+     * Constructs a QuizPage and sets the style
+     */
     public CreateQuizPage() {
         // you can change any part of this, i dont mind
         setStyle("background-color: lightblue; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; box-sizing: border-box;");
     }
 
+    /**
+     * Logistics for create a quiz page.
+     *
+     * @param request The request
+     * @param server The server
+     * @return The HTTP Response containing the HTML and CSS
+     */
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         Pair<String, String> credentials = server.checkSessionID(request);

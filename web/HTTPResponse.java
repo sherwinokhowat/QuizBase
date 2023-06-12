@@ -12,7 +12,16 @@ import java.util.Map;
  * @author Ricky Qin
  */
 public class HTTPResponse {
+    private int status;
+    private HashMap<String, String> headerFields = new HashMap<String, String>();
+    private byte[] body = new byte[0];
 
+    /**
+     * Gets the status message via code
+     *
+     * @param code The code of the status message
+     * @return The status message in String format
+     */
     public static String getStatusMessage(int code) {
         switch(code) {
             case 200:
@@ -62,13 +71,12 @@ public class HTTPResponse {
         }
     }
 
-    private int status;
-    private HashMap<String, String> headerFields = new HashMap<String, String>();
-    private byte[] body = new byte[0];
-
-    public HTTPResponse() {
-    }
-
+    /**
+     * Sets the status
+     *
+     * @param status The status
+     * @return This HTTPResponse
+     */
     public HTTPResponse setStatus(int status) {
         this.status = status;
         return this;
@@ -85,6 +93,12 @@ public class HTTPResponse {
         return this;
     }
 
+    /**
+     * Appends to the body of the HTML
+     *
+     * @param str The string to append
+     * @return This HTTPResponse
+     */
     public HTTPResponse appendBody(String str) {
         try {
             return appendBody(str.getBytes("utf-8"));
@@ -94,6 +108,12 @@ public class HTTPResponse {
         }
     }
 
+    /**
+     * Helper function which appends to the body of the HTML
+     *
+     * @param bytes The bytes to append
+     * @return This hTTP Response
+     */
     public HTTPResponse appendBody(byte[] bytes) {
         byte[] newBody = new byte[body.length + bytes.length];
         for(int i = 0; i < body.length; i++) {
@@ -108,6 +128,7 @@ public class HTTPResponse {
 
     /**
      * Writes and flushes this HTTP Response to the output stream
+     *
      * @param output
      */
     public void writeResponse(DataOutputStream output) {

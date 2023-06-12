@@ -34,6 +34,13 @@ public class SignUpPage extends WebPage implements HTTPPath {
     }
 
 
+    /**
+     * Processes the request for signing up
+     *
+     * @param request The request
+     * @param server The server
+     * @return A post request for signing up
+     */
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         Pair<String, String> credentials = server.checkSessionID(request);

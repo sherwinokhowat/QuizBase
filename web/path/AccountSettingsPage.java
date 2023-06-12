@@ -12,10 +12,19 @@ import manager.UserManager;
  * @author Sherwin Okhowat
  */
 public class AccountSettingsPage extends WebPage implements HTTPPath {
+    /**
+     * Constructs an AccountSettingsPage
+     */
     public AccountSettingsPage() {
         setStyle("background-color: lightblue; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; box-sizing: border-box;");
     }
 
+    /**
+     * Whenever a request is generated for this page, this method figures out what to do with it.
+     * @param request The request
+     * @param server The server
+     * @return The HTTP Response containing the HTML and CSS
+     */
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         Pair<String, String> credentials = server.checkSessionID(request);

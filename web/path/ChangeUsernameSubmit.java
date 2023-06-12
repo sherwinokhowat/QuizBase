@@ -13,6 +13,13 @@ import manager.UserManager;
  */
 public class ChangeUsernameSubmit implements HTTPPath {
 
+    /**
+     * Logistics for changing a username. Checks if the passwords match, and updates accordingly.
+     *
+     * @param request The request
+     * @param server The server
+     * @return The HTTP Response containing the HTML and CSS
+     */
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         Pair<String, String> credentials = server.checkSessionID(request);

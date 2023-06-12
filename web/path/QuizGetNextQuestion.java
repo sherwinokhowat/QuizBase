@@ -12,14 +12,26 @@ import web.Server;
 import web.WebPage;
 
 /**
+ * Class used to get the next quiz question
+ *
  * @author Ricky Qin
  */
 public class QuizGetNextQuestion extends WebPage implements HTTPPath {
 
+    /**
+     * Constructs the QuizGetNextQuestion
+     */
     public QuizGetNextQuestion() {
         setStyle("background-color: lightblue; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; box-sizing: border-box;");
     }
 
+    /**
+     * Processes the get next question functionality accordingly.
+     *
+     * @param request The request
+     * @param server The server
+     * @return The appropriate HTTP Response
+     */
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         Pair<String, String> credentials = server.checkSessionID(request);

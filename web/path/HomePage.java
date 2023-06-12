@@ -17,10 +17,20 @@ import web.WebPage;
  */
 public class HomePage extends WebPage implements HTTPPath {
 
+    /**
+     * Constructs a HomePage and sets the style
+     */
     public HomePage() {
         setStyle("background-color: lightblue; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; box-sizing: border-box;");
     }
 
+    /**
+     * Displays everything related to the homepage
+     *
+     * @param request The request
+     * @param server The server
+     * @return The HTTPResponse containing the HTML and CSS
+     */
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         Pair<String, String> credentials = server.checkSessionID(request);

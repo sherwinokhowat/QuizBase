@@ -10,10 +10,17 @@ import web.WebPage;
 /**
  * Class which handles a signup related request
  *
- * @author Sherwin Okhowat, Ricky Qin
+ * @author Sherwin Okhowat and Ricky Qin
  */
 public class SignUpSubmit implements HTTPPath {
 
+    /**
+     * Processes the submit logistics of the sign-up page. Essentially adds the username and password to the database
+     *
+     * @param request The request
+     * @param server The server
+     * @return The appropriate GET HTTPResponse
+     */
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         String username = request.getPostBody("username");

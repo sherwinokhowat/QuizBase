@@ -8,10 +8,19 @@ import web.HTTPResponse;
 import web.Server;
 
 /**
+ * Class that handles the submit for creating a quiz
+ *
  * @author Ricky Qin
  */
 public class CreateQuizSubmit implements HTTPPath {
 
+    /**
+     * Logistics for create handling the submit button on the create a quiz page.
+     *
+     * @param request The request
+     * @param server The server
+     * @return The HTTP Response containing the HTML
+     */
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         Pair<String, String> credentials = server.checkSessionID(request);

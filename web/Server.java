@@ -18,7 +18,7 @@ import struct.QuizProgress;
 /**
  * The Server class, responsible for managing client and database connections.
  *
- * @author Ricky Qin, Avery Chan
+ * @author Ricky Qin, Avery Chan, and Sherwin Okhowat
  */
 public class Server {
 
@@ -171,7 +171,7 @@ public class Server {
      * Starts a session for an active quiz for a specific user
      *
      * @param username the username
-     * @param quizName The name of the quiz
+     * @param id The ID of the quiz
      */
     public void startQuiz(String username, int id) {
         this.quizzes.put(new Pair<>(username, id), new QuizProgress(id, this));
@@ -181,7 +181,7 @@ public class Server {
      * Retrieves a User's progress on a Quiz
      *
      * @param username the username
-     * @param quizName The name of the quiz
+     * @param id The ID of the quiz
      * @return the QuizProgress {@code null} if there is no active quiz
      */
     public QuizProgress getQuizProgress(String username, int id) {
@@ -192,10 +192,10 @@ public class Server {
      * Ends the ongoing session for an active quiz for a specific user
      *
      * @param username the username
-     * @param quizName The name of the quiz
+     * @param id The name of the quiz
      */
-    public void endQuiz(String username, int quizID) {
-        this.quizzes.remove(new Pair<>(username, quizID));
+    public void endQuiz(String username, int id) {
+        this.quizzes.remove(new Pair<>(username, id));
     }
 }
 

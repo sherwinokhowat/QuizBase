@@ -6,8 +6,18 @@ import web.HTTPRequest;
 import web.HTTPResponse;
 import web.Server;
 
+/**
+ * A class that handles the changing password functionality
+ */
 public class ChangePasswordSubmit implements HTTPPath {
 
+    /**
+     * Logistics for changing a password. Checks if the passwords match, and updates accordingly
+     *
+     * @param request The request
+     * @param server The server
+     * @return The HTTP Response  containing the HTML and CSS
+     */
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         Pair<String, String> credentials = server.checkSessionID(request);

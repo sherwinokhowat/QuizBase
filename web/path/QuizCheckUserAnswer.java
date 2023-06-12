@@ -9,10 +9,19 @@ import web.Server;
 import web.WebPage;
 
 /**
+ * Class which implements the functionality for checking the User's answer
+ *
  * @author Ricky Qin
  */
 public class QuizCheckUserAnswer extends WebPage implements HTTPPath {
 
+    /**
+     * Essentially checks whether the answer was right or wrong and handles it accordingly.
+     *
+     * @param request The request
+     * @param server The server
+     * @return The appropriate HTTPResponse
+     */
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         Pair<String, String> credentials = server.checkSessionID(request);

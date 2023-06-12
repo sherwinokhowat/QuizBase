@@ -9,12 +9,12 @@ import web.WebPage;
 /**
  * Class representing the signup page of the server
  *
- * @author Sherwin Okhowat, Ricky Qin
+ * @author Sherwin Okhowat and Ricky Qin
  */
 public class LoginPage extends WebPage implements HTTPPath {
 
     /**
-     * Constructs a LoginPage
+     * Constructs a LoginPage and adds the necessary HTML and CSS to the body components
      */
     public LoginPage() {
         appendBodyComponents("<div style='height: 165px;'></div>", "<img src='../images/logo.png' style='width: 400px; height: auto;'>",
@@ -34,6 +34,13 @@ public class LoginPage extends WebPage implements HTTPPath {
     }
 
 
+    /**
+     * Processes the request for a HomePage by checking whether the user is logged in
+     *
+     * @param request The request
+     * @param server The server
+     * @return An appropriate HTTPResponse
+     */
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         Pair<String, String> credentials = server.checkSessionID(request);

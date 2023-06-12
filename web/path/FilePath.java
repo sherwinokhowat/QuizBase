@@ -14,14 +14,18 @@ import web.Server;
  * e.g. if the file is QuizBase/images/x.png and the program sends a request for /images/x.png,
  * then this program handles the request.
  *
- * @author Avery Chan, Ricky Qin
+ * @author Avery Chan and Ricky Qin
  */
 
 public class FilePath implements HTTPPath {
 
-    public FilePath () {
-    }
-
+    /**
+     * Handles a FilePath process request
+     *
+     * @param request The request
+     * @param server The server
+     * @return The HTTPResponse for a file
+     */
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         HTTPResponse response = new HTTPResponse().setStatus(200);

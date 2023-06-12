@@ -1,17 +1,26 @@
 package web.path;
 
 import web.*;
-import struct.Quiz;
 import utility.Pair;
-import struct.QuizItem;
-import struct.QuizProgress;
 
+/**
+ * A class which represents the viewing of a quiz page
+ *
+ * @author Ricky Qin
+ */
 public class ViewQuizPage extends WebPage implements HTTPPath {
 
     public ViewQuizPage() {
         setStyle("background-color: lightblue; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; box-sizing: border-box;");
     }
 
+    /**
+     * Processes the request for viewing a quiz page
+     *
+     * @param request The request
+     * @param server The server
+     * @return GET HTTPResponse
+     */
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         Pair<String, String> credentials = server.checkSessionID(request);
