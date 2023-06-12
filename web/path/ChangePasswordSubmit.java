@@ -8,6 +8,8 @@ import web.Server;
 
 /**
  * A class that handles the changing password functionality
+ *
+ * @author Sherwin Okhowat
  */
 public class ChangePasswordSubmit implements HTTPPath {
 
