@@ -68,14 +68,14 @@ public class WebPage implements WebComponent {
 
         if (credentials == null) {
             System.out.println("The header shouldn't be added before the user has been logged in.");
-            return;
         } else {
             String buttonStyle = "background-color: #F2F2F2; color: black; margin-top: 4px; padding: 10px; text-decoration: none; border: 1px solid black; align-self: start; width: 120px;";
 
-
             appendBodyComponents("<div style='display: flex; justify-content: space-between; width: 100%; padding: 20px;'>",
+                    "<div style='display: flex; flex-direction: column; align-items: start;'>",
                     "<a href='/home'><img src='/images/logo.png' style='width: 340px; height: auto;'></a>",
-                    "<div style='text-align: right; font-size: 1.5em; padding-top: 35px; padding-right: 35px;'>" + credentials.first() + "</div>",
+                    "<div style='text-align: left; font-size: 20px; padding-top: 5px;'>" + credentials.first() + "</div>",
+                    "</div>",
                     "<div class='button-container' style='display: flex; flex-direction: column;'>",
                     new Hyperlink("/signout", "Sign Out", false).setStyle(buttonStyle),
                     new Hyperlink("/account-settings", "Account Settings", false).setStyle(buttonStyle),
@@ -84,6 +84,7 @@ public class WebPage implements WebComponent {
             appendBodyComponents("<hr style='border: 2px solid black; width: 100%;'>");
         }
     }
+
 
 
     /**

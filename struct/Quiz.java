@@ -125,13 +125,13 @@ public class Quiz implements WebComponent {
          final int MAX_DESC_LENGTH = 110;
          StringBuilder html = new StringBuilder();
 
-         html.append("<div style='border: 1px solid black; padding: 10px; margin: 13px; width: 140px; height: 90px; background-color: white; font-size: 0.8em; display: flex; flex-direction: column; justify-content: space-between;'>");
-         html.append("<h1 style='margin: 0; font-size: 1.2em; flex-grow: 0;'>");
+         html.append("<div style='border: 1px solid black; padding: 10px; margin: 13px; width: 153px; height: 90px; background-color: white; font-size: 12.8px; display: flex; flex-direction: column; justify-content: space-between;'>");
+         html.append("<h1 style='margin: 0; font-size: 19.2px; flex-grow: 0;'>");
          // remove this.id if duplicates allowed
          // html.append(new Hyperlink("/quiz/"+this.name+"?"+this.id, this.name, false).toHTMLString());
          html.append(new Hyperlink("/quiz/"+this.getID(), this.name, false).toHTMLString());
          html.append("</h1>");
-         html.append("<h2 style='margin: 0; color: gray; font-size: 1em; flex-grow: 0;'>Created by: ");
+         html.append("<h2 style='margin: 0; color: gray; font-size: 16px; flex-grow: 0;'>Created by: ");
          html.append(userManager.getBy("ID", this.creatorId).getUsername());
          html.append("</h2>");
 
@@ -139,7 +139,7 @@ public class Quiz implements WebComponent {
                  this.description.substring(0, MAX_DESC_LENGTH) + "..." :
                  this.description;
 
-         html.append("<p style='margin: 0; font-size: 0.8em; flex-grow: 1;'>");
+         html.append("<p style='margin: 0; font-size: 12.8px; flex-grow: 1;'>");
          html.append(shortenedDescription);
          html.append("</p>");
          html.append("</div>");
