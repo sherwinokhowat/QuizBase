@@ -39,10 +39,12 @@ public class Flashcard extends QuizItem {
         html.append("<br>");
         html.append("<button type='button' onclick='showAnswer()'>Show Answer</button>");
         html.append("<br>");
-        html.append("</div>");
-
         html.append("<div class='hidden-content' style='display:none' id='solution'>");
         html.append("<h4>" + this.answer + "</h4>");
+        html.append("</div>");
+        html.append("</div>");
+
+        html.append("<div class='hidden-content' style='display:none' id='feedback'>");
         html.append("<input type='radio' name='answer' value='correct' required>Got Correct Answer<br>");
         html.append("<input type='radio' name='answer' value='incorrect'>Got Incorrect Answer<br>");
         html.append("<input type='submit' value='Submit'>");
