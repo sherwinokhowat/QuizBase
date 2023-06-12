@@ -19,16 +19,16 @@ public class ViewQuizPage extends WebPage implements HTTPPath {
             return new HTTPResponse().setStatus(303).setHeaderField("Location", "/home");
         }
 
-        String idRaw = request.getPathWithoutQueryString().substring("/quiz/".length());
+        addHeader(request, server);
+
+        int quizID = Integer.parseInt(request.getPathWithoutQueryString().substring("/quiz/".length()));
 
         // Optional: confirm if user wants to restart quiz since old progress will be overriden
-        // returns the id: 3, 5, 7...
-        // String id = request.getQueryString();
-        // String username = server.checkSessionID(request).first();
-
         // QuizProgress oldProgress = server.getQuizProgress(credentials.first(), Integer.parseInt(idRaw));
 
-        appendBodyComponents(new Hyperlink(idRaw+"/start", "Start Quiz", true));
+        int numItems = server.getQuizManager().getQuizItemIDS(quizID).size();
+        appendBodyComponents("Number of items: "+numItems, "<br>");
+        appendBodyComponents(new Hyperlink(quizID+"/start", "Start Quiz", true));
 
         return new HTTPResponse().setStatus(200)
                 .setHeaderField("Content-Type", HTTPResponse.contentType("html"))

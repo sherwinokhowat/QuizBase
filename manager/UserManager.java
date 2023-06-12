@@ -18,7 +18,7 @@ import utility.SQLStatementBuilder;
 public class UserManager extends DatabaseManager {
 
     @Override
-    public Object getBy(String columnName, Object columnValue) {
+    public User getBy(String columnName, Object columnValue) {
         if(columnValue instanceof Integer) {
             columnValue = ((Integer)columnValue).toString();
         } else {
@@ -132,9 +132,6 @@ public class UserManager extends DatabaseManager {
             boolean isSuccessful = executeWriteOperation(new SQLStatementBuilder().update("USERS")
                     .set(new Pair<>("USERNAME", newUsername))
                     .where("USERNAME=" + SQLStatementBuilder.toStringLiteral(oldUsername)).toString());
-            if (isSuccessful) {
-                user.setUsername(newUsername);
-            }
             return isSuccessful;
         }
         return false;

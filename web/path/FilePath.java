@@ -14,7 +14,7 @@ import web.Server;
  * e.g. if the file is QuizBase/images/x.png and the program sends a request for /images/x.png,
  * then this program handles the request.
  *
- * @author Avery Chan
+ * @author Avery Chan, Ricky Qin
  */
 
 public class FilePath implements HTTPPath {
