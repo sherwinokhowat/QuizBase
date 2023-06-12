@@ -74,7 +74,7 @@ public class WebPage implements WebComponent {
 
             // header
             appendBodyComponents("<div style='display: flex; justify-content: space-between; width: 100%; padding: 20px;'>",
-                    "<a href='/home'><img src='/images/logo.png' style='width: 150px; height: auto;'></a>",
+                    "<a href='/home'><img src='/images/logo.png' style='width: 340px; height: auto;'></a>",
                     "<div style='text-align: right; font-size: 1.5em; padding-top: 35px; padding-right: 35px;'>" + credentials.first() + "</div>",
                     new Hyperlink("/signout", "Sign Out", false).setStyle(signOutButtonStyle),
                     "</div>");

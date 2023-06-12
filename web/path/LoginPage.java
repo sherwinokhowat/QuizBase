@@ -17,7 +17,7 @@ public class LoginPage extends WebPage implements HTTPPath {
      * Constructs a LoginPage
      */
     public LoginPage() {
-        appendBodyComponents("<img src='../images/logo.png' style='width: 400px; height: auto;'>",
+        appendBodyComponents("<div style='height: 165px;'></div>", "<img src='../images/logo.png' style='width: 400px; height: auto;'>",
 
                 "<form style='display: flex; flex-direction: column; width: 200px; margin-top: 50px; padding: 20px;' action='/login/submit' method='POST' style='background-color: lightgray;'>",
                 "<input style='margin-bottom: 3px;' type='text' id='username' name='username' placeholder='Username' minlength='3'>",
