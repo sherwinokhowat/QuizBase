@@ -45,10 +45,9 @@ public class Server {
     /**
      * Starts this server.
      *
-     * @param port The port number
      * @param dbName The database name (must include {@code .db} file extension)
      */
-    public void start(int port, String dbName) {
+    public void start(String dbName) {
         userManager = new UserManager(dbName);
         quizManager = new QuizManager(dbName, userManager);
         userManager.connectToDatabase();
@@ -197,12 +196,13 @@ public class Server {
     public void endQuiz(String username, int id) {
         this.quizzes.remove(new Pair<>(username, id));
     }
-}
 
 /**
  * Inner class - thread for client connection
+ *
+ * @author Sherwin Okhowat, Avery Chan, and Ricky Qin
  */
-class ConnectionHandler implements Runnable {
+  private class ConnectionHandler implements Runnable {
 
     private DataOutputStream output;// assign printwriter to network stream
     private BufferedReader input;// Stream for network input
@@ -212,7 +212,7 @@ class ConnectionHandler implements Runnable {
     /**
      * Constructs a ConnectionHandler
      *
-     * @param sock the socket belonging to this client connection
+     * @param sock   the socket belonging to this client connection
      * @param server The running server
      */
     ConnectionHandler(Socket sock, Server server) {
@@ -224,7 +224,7 @@ class ConnectionHandler implements Runnable {
             this.output = new DataOutputStream(client.getOutputStream());
             InputStreamReader stream = new InputStreamReader(client.getInputStream());
             this.input = new BufferedReader(stream);
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -241,13 +241,13 @@ class ConnectionHandler implements Runnable {
         try {
             // check for incoming responses
             int contentLength = 0;
-            while(input.ready()) {
+            while (input.ready()) {
                 String line = input.readLine();
                 request.add(line);
-                if(line.startsWith("Content-Length:")) {// get the length of the body content, if it exists
-                    contentLength = Integer.parseInt(line.substring(line.indexOf(" ")+1));
-                } else if(line.equals("")) {// indicates end of header
-                    if(contentLength > 0) {
+                if (line.startsWith("Content-Length:")) {// get the length of the body content, if it exists
+                    contentLength = Integer.parseInt(line.substring(line.indexOf(" ") + 1));
+                } else if (line.equals("")) {// indicates end of header
+                    if (contentLength > 0) {
                         // we must read the body byte by byte, since it may not end in a newline
                         char[] chars = new char[contentLength];
                         input.read(chars, 0, contentLength);
@@ -257,9 +257,9 @@ class ConnectionHandler implements Runnable {
                 }
             }
 
-            if(request.size() != 0) {
+            if (request.size() != 0) {
                 // process request here
-                System.out.println("["+Thread.currentThread()+"] received Request:");
+                System.out.println("[" + Thread.currentThread() + "] received Request:");
                 System.out.println(request);
                 System.out.println();
                 HTTPRequest requestObj = new HTTPRequest(request);
@@ -282,9 +282,9 @@ class ConnectionHandler implements Runnable {
      * @return The response
      */
     private HTTPResponse processRequest(HTTPRequest request) {
-        if(request.getType().equals("GET")) {
+        if (request.getType().equals("GET")) {
             String path = request.getPathWithoutQueryString();
-            switch(path) {
+            switch (path) {
                 case "/":
                     return new RootPage().processRequest(request, server);
                 case "/login":
@@ -300,14 +300,14 @@ class ConnectionHandler implements Runnable {
                 case "/account-settings":
                     return new AccountSettingsPage().processRequest(request, server);
                 default: {
-                    if(path.startsWith("/images/")) {
+                    if (path.startsWith("/images/")) {
                         return new FilePath().processRequest(request, server);
-                    } else if(path.startsWith("/js/")) {
+                    } else if (path.startsWith("/js/")) {
                         return new FilePath().processRequest(request, server);
-                    } else if(path.startsWith("/quiz/")) {
-                        if(path.endsWith("/next-question")) {
+                    } else if (path.startsWith("/quiz/")) {
+                        if (path.endsWith("/next-question")) {
                             return new QuizGetNextQuestion().processRequest(request, server);
-                        } else if(path.endsWith("/start")) {
+                        } else if (path.endsWith("/start")) {
                             return new StartQuiz().processRequest(request, server);
                         } else {
                             return new ViewQuizPage().processRequest(request, server);
@@ -316,9 +316,9 @@ class ConnectionHandler implements Runnable {
                     return new HTTPResponse().setStatus(404);
                 }
             }
-        } else if(request.getType().equals("POST")) {
+        } else if (request.getType().equals("POST")) {
             String path = request.getPathWithoutQueryString();
-            switch(path) {
+            switch (path) {
                 case "/login/submit":
                     return new LoginSubmit().processRequest(request, server);
                 case "/signup/submit":
@@ -330,7 +330,7 @@ class ConnectionHandler implements Runnable {
                 case "/account-settings/change-password-submit":
                     return new ChangePasswordSubmit().processRequest(request, server);
                 default: {
-                    if(path.startsWith("/quiz/") && path.endsWith("/check-answer")) {
+                    if (path.startsWith("/quiz/") && path.endsWith("/check-answer")) {
                         return new QuizCheckUserAnswer().processRequest(request, server);
                     } else {
                         return new HTTPResponse().setStatus(400);
@@ -341,4 +341,5 @@ class ConnectionHandler implements Runnable {
             return new HTTPResponse().setStatus(501);
         }
     }
+}
 }
