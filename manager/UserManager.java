@@ -133,7 +133,7 @@ public class UserManager extends DatabaseManager {
      * @param oldUsername    the user's current username
      * @param newUsername the user's requested username change
      * @param password    the user's current password
-     * @return
+     * @return whether the username change was successful or not.
      */
     public boolean changeUsername(String oldUsername, String newUsername, String password) {
         User user = authenticateUser(oldUsername, password);

@@ -40,9 +40,13 @@ public class ChangePasswordSubmit implements HTTPPath {
             return response;
         }
 
+        String username = credentials.first();
+
         boolean successfulChange = manager.changePassword(credentials.first(), newPassword, oldPassword);
 
         if(successfulChange) {
+            server.deleteSessionID(request);
+            server.createSessionID(username, newPassword);
             return new HTTPResponse().setStatus(303).setHeaderField("Location", "/account-settings");
         } else {
             HTTPResponse response = new HTTPResponse().setStatus(200)
