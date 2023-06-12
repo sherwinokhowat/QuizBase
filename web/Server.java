@@ -45,10 +45,9 @@ public class Server {
     /**
      * Starts this server.
      *
-     * @param port The port number
      * @param dbName The database name (must include {@code .db} file extension)
      */
-    public void start(int port, String dbName) {
+    public void start(String dbName) {
         userManager = new UserManager(dbName);
         quizManager = new QuizManager(dbName, userManager);
         userManager.connectToDatabase();
