@@ -35,7 +35,7 @@ public class SignUpSubmit implements HTTPPath {
         HTTPResponse response = new HTTPResponse().setStatus(200)
                 .setHeaderField("Content-Type", HTTPResponse.contentType("html"));
         if(user == null) {
-            response.appendBody("Unable to sign up! This may be because your username has already been taken, credentials are invalid or a network error occurred.");
+            response.appendBody("<html><head><meta http-equiv='refresh' content='3;url=/signup' /></head><body><p>Unable to sign up! This may be because your username has already been taken, credentials are invalid or a network error occurred.<br>Redirecting you back... </p></body></html>");
         } else {
             WebPage webPage = new WebPage().appendBodyComponents("Sign up successful!", WebPage.BR_TAG,
                     new Hyperlink("../../login", "Log in", true));
