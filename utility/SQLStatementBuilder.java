@@ -341,6 +341,7 @@ public class SQLStatementBuilder {
         if(set == null || set.size() == 0) {
             throw new SQLStatementBuilderException("Invalid or missing SET clause");
         }
+        str.append("SET ");
         for(int i = 0; i < set.size(); i++) {
             str.append(set.get(i).first());
             str.append(" = ");
