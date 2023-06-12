@@ -12,8 +12,8 @@ import java.util.ArrayList;
  */
 public class SQLStatementBuilder {
 
-    public static String ASCENDING = "ASC";
-    public static String DESCENDING = "DESC";
+    private static String ASCENDING = "ASC";
+    private static String DESCENDING = "DESC";
 
     private static int INSERT_INTO = 1;
     private static int SELECT = 2;
@@ -148,8 +148,7 @@ public class SQLStatementBuilder {
     /**
      * Appends the {@code ORDER BY} clause to this statement
      *
-     * @param fields Some number of Pair objects. The first value is the column to sort by and the
-     * second value is one of {@code SQLStatement.ASC} or {@code SQLStatement.DESC}.
+     * @param cols The columns
      * @return This SQL statement
      */
     public SQLStatementBuilder orderBy(Pair<String, String>... cols) {
@@ -309,7 +308,7 @@ public class SQLStatementBuilder {
             for(int i = 0; i < orderBy.length; i++) {
                 str.append(orderBy[i].first());
                 str.append(" ");
-                str.append(orderBy[i].second() == ASCENDING ? "ASC" : "DESC");
+                str.append(orderBy[i].second().equals(ASCENDING) ? "ASC" : "DESC");
                 if(i != orderBy.length-1) {
                     str.append(", ");
                 }

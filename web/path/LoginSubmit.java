@@ -32,7 +32,7 @@ public class LoginSubmit implements HTTPPath {
         HTTPResponse response = new HTTPResponse().setStatus(200)
                 .setHeaderField("Content-Type", HTTPResponse.contentType("html"));
         if(user == null) {
-            response.appendBody("Invalid credentials!");
+            response.appendBody("<html><head><meta http-equiv='refresh' content='3;url=/login' /></head><body><p>Invalid Credentials! Redirecting you back... </p></body></html>");
         } else {
             response.setStatus(303).setHeaderField("Location", "/home");
             response.setHeaderField("Set-Cookie",
