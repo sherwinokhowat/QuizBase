@@ -11,6 +11,10 @@ import web.WebComponent;
 public abstract class QuizItem implements WebComponent {
     private int id;
 
+    /**
+     * Creates a QuizItem object. 
+     * @param id The ID of the QuizItem (according to the database)
+     */
     public QuizItem(int id) {
         this.id = id;
     }
@@ -25,6 +29,10 @@ public abstract class QuizItem implements WebComponent {
     }
 
 
+    /**
+     * Returns the HTML code representing the {@code QuizItem} object, which controls how it's displayed to the user.
+     * @return a string containing the HTML code 
+     */
     @Override
     public abstract String toHTMLString();
 }

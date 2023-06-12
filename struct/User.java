@@ -14,7 +14,7 @@ public class User {
     /**
      * Constructs a User object
      *
-     * @param id the unique id
+     * @param id the unique id (according to the {@code USERS} database)
      * @param username the user's username
      */
     public User(int id, String username) {

@@ -17,7 +17,6 @@ import utility.Pair;
 public abstract class DatabaseManager {
 
     protected String dbName = null;
-
     protected Connection connection = null;
 
     /**
@@ -107,7 +106,7 @@ public abstract class DatabaseManager {
     }
 
     /**
-     * Runs a SQL {@code SELECT} statement. Implementing classes must ensure that
+     * Runs a SQL {@code SELECT} statement, returning all entries that meet a condition. Implementing classes must ensure that
      * <ul>
      *  <li>{@code getReadOperationResultSet(String statement)} is called</li>
      *  <li>The method correctly parses the ResultSet into the appropriate class object</li>
@@ -115,7 +114,7 @@ public abstract class DatabaseManager {
      * Transaction object</li>
      * </ul>
      *
-     * @param statement The SQL statement
+     * @param statement The SQL statement outlning the condition
      * @return An array of parsed objects or {@code null} if an exception occurred.
      */
     public abstract ArrayList<? extends Object> executeReadOperation(String statement);

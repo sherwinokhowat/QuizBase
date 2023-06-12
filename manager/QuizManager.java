@@ -12,7 +12,7 @@ import utility.SQLStatementBuilder;
 /**
  * A class that manages {@code Quiz} and {@code QuizItem} objects
  *
- * @author Ricky Qin and Sherwin Okhowat
+ * @author Ricky Qin, Avery Chan, and Sherwin Okhowat
  */
 public class QuizManager extends DatabaseManager {
 
@@ -33,7 +33,7 @@ public class QuizManager extends DatabaseManager {
     }
 
     /**
-     * Initializes the SQL tables
+     * Initializes the SQL tables {@code QUIZZES} and {@code QUIZ_ITEMS}.
      */
     @Override
     public void initialize() {
@@ -97,7 +97,7 @@ public class QuizManager extends DatabaseManager {
     }
 
     /**
-     * Adds a Flashcard to the database.
+     * Adds a Flashcard question to the database.
      *
      * @param quizID The id of the quiz associated with the Flashcard.
      * @param question The question on the Flashcard.
@@ -111,7 +111,7 @@ public class QuizManager extends DatabaseManager {
     }
 
     /**
-     * Adds a Multiple Choice to the database
+     * Adds a Multiple Choice question to the database
      *
      * @param quizID The id of the quiz associated with the Multiple Choice
      * @param question The question on the Multiple Choice
@@ -119,7 +119,7 @@ public class QuizManager extends DatabaseManager {
      * @param option2 The second option
      * @param option3 The third option
      * @param option4 The fourth option
-     * @param answer The number of the correct answer
+     * @param answer The number of the correct answer (from 1-4)
      * @return Whether the operation was successful
      */
     public boolean addMultipleChoice(int quizID, String question, String option1, String option2, String option3, String option4, int answer) {
@@ -182,6 +182,7 @@ public class QuizManager extends DatabaseManager {
     }
 
     /**
+     * Executes read operations on the {@code QUIZZES} database.
      * Returns a list of Quiz objects based on the SQL {@code SELECT} statement. Implementing classes must ensure that
      *  <ul>
      *  <li>{@code getReadOperationResultSet(String statement)} is called</li>
@@ -215,6 +216,7 @@ public class QuizManager extends DatabaseManager {
     }
 
     /**
+     * Executes read operations on the {@code QUIZ_ITEMS} database. 
      * Runs a SQL {@code SELECT} statement to select QuizItems. Implementing classes must ensure that
      * <ul>
      *  <li>{@code getReadOperationResultSet(String statement)} is called</li>

@@ -63,7 +63,7 @@ public class Quiz implements WebComponent {
 
 
     /**
-     * Converts the component to an HTML string
+     * Converts the Quiz to an HTML string. This code shows how a quiz is represented on the home page.
      *
      * @return the HTML string representation of the component
      */
