@@ -46,7 +46,9 @@ public class QuizCheckUserAnswer extends WebPage implements HTTPPath {
             return new HTTPResponse().setStatus(303).setHeaderField("Location", "/quiz/"+quizID+"/next-question");
         }
         response.appendBody("<br>");
-        response.appendBody(new Hyperlink("/quiz/"+quizID+"/next-question", "Next Question", true).toHTMLString());
+        response.appendBody("<html><head><meta http-equiv='refresh' content='3;url=/quiz/" + quizID+ "/next-question' /></head><body><p>Redirecting you to the next question... </p></body></html>");
+
+//        response.appendBody(new Hyperlink("/quiz/"+quizID+"/next-question", "Next Question", true).toHTMLString());
         return response;
     }
 
