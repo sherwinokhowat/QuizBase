@@ -33,24 +33,25 @@ public class Flashcard extends QuizItem {
      * @return the HTML string representation of the component
      */
     public String toHTMLString() {
-        StringBuilder html = new StringBuilder("<div class='flashcard' id='question'>");
+        StringBuilder html = new StringBuilder("<div class='flashcard' id='question' style='border: 1px solid black; padding: 10px; margin: 13px; width: auto; height: auto; background-color: white;'>");
         html.append("<h4>" + this.question  + "</h4>"); // + ("?".equals(this.question.substring(this.question.length()-1)) ? "": "?") we might not need this, if there wasn't a "?" there probably wasn't one for a reason.
         html.append("<br>");
         html.append("<button type='button' onclick='showAnswer()'>Show Answer</button>");
         html.append("<br>");
+        html.append("</div>");
+
         html.append("<div class='hidden-content' style='display:none' id='solution'>");
         html.append("<h4>" + this.answer + "</h4>");
         html.append("<input type='radio' name='answer' value='correct' required>Got Correct Answer<br>");
         html.append("<input type='radio' name='answer' value='incorrect'>Got Incorrect Answer<br>");
         html.append("<input type='submit' value='Submit'>");
+        html.append("</div>");
 
         /*
          * So I'll work on this later:
          * On spaced repetition, after the answer is revealed user must select whether it's correct or incorrect
          * On a classic quiz, the user has to type their answer, though having flashcards in a 'classic quiz' defeats the purpose
          */
-        html.append("</div>");
-        html.append("</div>");
         return html.toString();
         // so the user will have to press "Show Answer", which will show the answer, as well as a 'Incorrect'/'Correct' slider
     }

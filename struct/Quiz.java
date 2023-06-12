@@ -72,7 +72,7 @@ public class Quiz implements WebComponent {
          final int MAX_DESC_LENGTH = 110;
          StringBuilder html = new StringBuilder();
 
-         html.append("<div style='border: 1px solid black; padding: 10px; margin: 13px; width: 153px; height: 90px; background-color: white; font-size: 12.8px; display: flex; flex-direction: column; justify-content: space-between;'>");
+         html.append("<div style='border: 1px solid black; padding: 10px; margin: 13px; width: 153px; height: 150px; background-color: white; font-size: 12.8px; display: flex; flex-direction: column; justify-content: space-between;'>");
          html.append("<h1 style='margin: 0; font-size: 19.2px; flex-grow: 0;'>");
          // remove this.id if duplicates allowed
          // html.append(new Hyperlink("/quiz/"+this.name+"?"+this.id, this.name, false).toHTMLString());
