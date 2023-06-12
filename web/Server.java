@@ -3,20 +3,7 @@ package web;
 import manager.QuizManager;
 import manager.UserManager;
 import utility.Pair;
-import web.path.CreateQuizPage;
-import web.path.CreateQuizSubmit;
-import web.path.HomePage;
-import web.path.FilePath;
-import web.path.LoginPage;
-import web.path.LoginSubmit;
-import web.path.QuizCheckUserAnswer;
-import web.path.QuizGetNextQuestion;
-import web.path.ViewQuizPage;
-import web.path.RootPage;
-import web.path.SignOut;
-import web.path.SignUpPage;
-import web.path.SignUpSubmit;
-import web.path.StartQuiz;
+import web.path.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -310,6 +297,8 @@ class ConnectionHandler implements Runnable {
                     return new HomePage().processRequest(request, server);
                 case "/create-quiz":
                     return new CreateQuizPage().processRequest(request, server);
+                case "/account-settings":
+                    return new AccountSettingsPage().processRequest(request, server);
                 default: {
                     if(path.startsWith("/images/")) {
                         return new FilePath().processRequest(request, server);
@@ -336,6 +325,10 @@ class ConnectionHandler implements Runnable {
                     return new SignUpSubmit().processRequest(request, server);
                 case "/create-quiz/submit":
                     return new CreateQuizSubmit().processRequest(request, server);
+                case "/account-settings/change-username-submit":
+                    return new ChangeUsernameSubmit().processRequest(request, server);
+                case "/account-settings/change-password-submit":
+                    return new ChangePasswordSubmit().processRequest(request, server);
                 default: {
                     if(path.startsWith("/quiz/") && path.endsWith("/check-answer")) {
                         return new QuizCheckUserAnswer().processRequest(request, server);

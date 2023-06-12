@@ -118,17 +118,20 @@ public class UserManager extends DatabaseManager {
      * Changes the user's respective username in the database and placeholder user
      * object after authenticating the user
      *
-     * @param username    the user's current username
+     * @param oldUsername    the user's current username
      * @param newUsername the user's requested username change
      * @param password    the user's current password
      * @return
      */
-    public boolean changeUsername(String username, String newUsername, String password) {
-        User user = authenticateUser(username, password);
+    public boolean changeUsername(String oldUsername, String newUsername, String password) {
+        User user = authenticateUser(oldUsername, password);
+        System.out.println("SQL Statement"+ new SQLStatementBuilder().update("USERS")
+                .set(new Pair<>("USERNAME", SQLStatementBuilder.toStringLiteral(newUsername)))
+                .where("USERNAME=" + SQLStatementBuilder.toStringLiteral(oldUsername)).toString());
         if (user != null) {
             boolean isSuccessful = executeWriteOperation(new SQLStatementBuilder().update("USERS")
                     .set(new Pair<>("USERNAME", newUsername))
-                    .where("USERNAME=" + SQLStatementBuilder.toStringLiteral(username)).toString());
+                    .where("USERNAME=" + SQLStatementBuilder.toStringLiteral(oldUsername)).toString());
             if (isSuccessful) {
                 user.setUsername(newUsername);
             }
@@ -142,15 +145,16 @@ public class UserManager extends DatabaseManager {
      * the user
      *
      * @param username    the user's current username
-     * @param password    the user's current password
+     * @param oldPassword    the user's current password
      * @param newPassword the user's requested password change
      * @return whether the password change was successful
      */
-    public boolean changePassword(String username, String password, String newPassword) {
-        if (this.authenticateUser(username, password) != null) {
+    public boolean changePassword(String username, String newPassword, String oldPassword) {
+        if (this.authenticateUser(username, oldPassword) != null) {
             // change password in the database
             boolean isSuccessful = executeWriteOperation(new SQLStatementBuilder().update("USERS")
                     .set(new Pair<>("PASSWORD", newPassword))
+
                     .where("USERNAME=" + SQLStatementBuilder.toStringLiteral(username)).toString());
             return isSuccessful;
         }
