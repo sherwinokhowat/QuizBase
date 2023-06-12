@@ -60,8 +60,8 @@ public class WebPage implements WebComponent {
 
     /**
      * Adds the header to the web page.
-     * @param request 
-     * @param server
+     * @param request The request
+     * @param server The server
      */
     public void addHeader(HTTPRequest request, Server server) {
         Pair<String, String> credentials = server.checkSessionID(request);

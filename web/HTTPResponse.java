@@ -86,7 +86,7 @@ public class HTTPResponse {
      * Adds a field to the header (excluding Content-Length)
      * @param name The name
      * @param value The field
-     * @return
+     * @return This HTTPResponse
      */
     public HTTPResponse setHeaderField(String name, String value) {
         headerFields.put(name, value);
