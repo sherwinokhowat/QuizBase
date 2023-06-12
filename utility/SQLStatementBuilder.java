@@ -185,7 +185,7 @@ public class SQLStatementBuilder {
             if(cols[i].second() instanceof Integer) {
                 set.add(new Pair<>(cols[i].first(), ((Integer)cols[i].second()).toString()));
             } else {
-                set.add(new Pair<>(cols[i].first(), toStringLiteral(cols[i].toString())));
+                set.add(new Pair<>(cols[i].first(), toStringLiteral(cols[i].second().toString())));
             }
         }
         return this;
