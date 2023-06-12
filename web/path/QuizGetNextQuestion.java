@@ -53,7 +53,6 @@ public class QuizGetNextQuestion extends WebPage implements HTTPPath {
         QuizItem quizItem = progress.getNextQuizItem();
         if(quizItem != null) {
             appendBodyComponents("<form action='/quiz/"+quizID+"/check-answer' method='POST'", quizItem.toHTMLString(), "</form>");
-            response.appendBody(toHTMLString());
         } else {
             response.appendBody("No more questions left!");
             server.endQuiz(credentials.first(), quizID);
