@@ -31,8 +31,8 @@ public class CreateQuizSubmit implements HTTPPath {
                     .appendBody("Quiz must contain at least one question");
         }
 
-        User user = (User)(server.getUserManager().getBy("USERNAME", credentials.first()));
-        Quiz quiz = (Quiz)(server.getQuizManager().addQuiz(user.getID(), name, description));
+        User user = server.getUserManager().getBy("USERNAME", credentials.first());
+        Quiz quiz = server.getQuizManager().addQuiz(user.getID(), name, description);
 
         int questionNum = 1;
         while(questionNum <= highestNumber) {

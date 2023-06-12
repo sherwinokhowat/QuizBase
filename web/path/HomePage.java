@@ -23,15 +23,16 @@ public class HomePage extends WebPage implements HTTPPath {
 
     @Override
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
+        Pair<String, String> credentials = server.checkSessionID(request);
+        if(credentials == null) {
+            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/login");
+        }
+
         boolean displayAll;
         if("quizzes=my".equals(request.getQueryString())) {
             displayAll = false;
         } else {
             displayAll = true;
-        }
-        Pair<String, String> credentials = server.checkSessionID(request);
-        if(credentials == null) {
-            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/login");
         }
         HTTPResponse response = new HTTPResponse().setStatus(200)
                 .setHeaderField("Content-Type", HTTPResponse.contentType("html"));

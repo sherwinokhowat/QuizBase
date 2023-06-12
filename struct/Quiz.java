@@ -132,7 +132,7 @@ public class Quiz implements WebComponent {
          html.append(new Hyperlink("/quiz/"+this.getID(), this.name, false).toHTMLString());
          html.append("</h1>");
          html.append("<h2 style='margin: 0; color: gray; font-size: 1em; flex-grow: 0;'>Created by: ");
-         html.append(((User)userManager.getBy("ID", this.creatorId)).getUsername());
+         html.append(userManager.getBy("ID", this.creatorId).getUsername());
          html.append("</h2>");
 
          String shortenedDescription = this.description.length() > MAX_DESC_LENGTH ?

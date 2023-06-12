@@ -125,7 +125,7 @@ public class QuizManager extends DatabaseManager {
 
 
     @Override
-    public Object getBy(String columnName, Object columnValue) {
+    public Quiz getBy(String columnName, Object columnValue) {
         if(columnValue instanceof Integer) {
             columnValue = ((Integer)columnValue).toString();
         } else {
