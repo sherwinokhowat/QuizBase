@@ -26,7 +26,7 @@ public class QuizCheckUserAnswer extends WebPage implements HTTPPath {
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         Pair<String, String> credentials = server.checkSessionID(request);
         if(credentials == null) {
-            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/home");
+            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/login");
         }
 
         String path = request.getPathWithoutQueryString();

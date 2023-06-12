@@ -78,8 +78,7 @@ public class MultipleChoice extends QuizItem {
      * @return This MultipleChoice QuizItem
      */
     public WebComponent setStyle(String style) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setStyle'");
+        return this;
     }
 
 }

@@ -12,7 +12,7 @@ import web.Server;
 public class RootPage implements HTTPPath {
 
     /**
-     * Redirects the user to the rootpage which is the login page
+     * Redirects the user to the starting page which is the login page
      *
      * @param request The request
      * @param server The server

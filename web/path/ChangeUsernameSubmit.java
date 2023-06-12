@@ -45,8 +45,9 @@ public class ChangeUsernameSubmit implements HTTPPath {
         if(successfulChange) {
             // add to "USER"
             server.deleteSessionID(request);
-            server.createSessionID(newUsername, password);
-            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/account-settings");
+            String newSessionID = server.createSessionID(newUsername, password);
+            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/account-settings")
+                    .setHeaderField("Set-Cookie", "sessionId="+newSessionID+"; Path=/");
         } else {
             HTTPResponse response = new HTTPResponse().setStatus(200)
                     .setHeaderField("Content-Type", HTTPResponse.contentType("html"));
@@ -55,4 +56,3 @@ public class ChangeUsernameSubmit implements HTTPPath {
         }
     }
 }
-

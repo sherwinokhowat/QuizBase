@@ -25,15 +25,12 @@ public class ViewQuizPage extends WebPage implements HTTPPath {
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         Pair<String, String> credentials = server.checkSessionID(request);
         if(credentials == null) {
-            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/home");
+            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/login");
         }
 
         addHeader(request, server);
 
         int quizID = Integer.parseInt(request.getPathWithoutQueryString().substring("/quiz/".length()));
-
-        // Optional: confirm if user wants to restart quiz since old progress will be overriden
-        // QuizProgress oldProgress = server.getQuizProgress(credentials.first(), Integer.parseInt(idRaw));
 
         int numItems = server.getQuizManager().getQuizItemIDS(quizID).size();
         appendBodyComponents("Number of items: "+numItems, "<br>");
@@ -43,5 +40,4 @@ public class ViewQuizPage extends WebPage implements HTTPPath {
                 .setHeaderField("Content-Type", HTTPResponse.contentType("html"))
                 .appendBody(toHTMLString());
     }
-
 }

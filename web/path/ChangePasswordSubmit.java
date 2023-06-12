@@ -46,8 +46,9 @@ public class ChangePasswordSubmit implements HTTPPath {
 
         if(successfulChange) {
             server.deleteSessionID(request);
-            server.createSessionID(username, newPassword);
-            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/account-settings");
+            String newSessionID = server.createSessionID(username, newPassword);
+            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/account-settings")
+                    .setHeaderField("Set-Cookie", "sessionId="+newSessionID+"; Path=/");
         } else {
             HTTPResponse response = new HTTPResponse().setStatus(200)
                     .setHeaderField("Content-Type", HTTPResponse.contentType("html"));

@@ -13,7 +13,7 @@ import web.WebPage;
 /**
  * Class representing the homepage of the program
  *
- * @author Sherwin Okhowat
+ * @author Sherwin Okhowat, Ricky Qin
  */
 public class HomePage extends WebPage implements HTTPPath {
 

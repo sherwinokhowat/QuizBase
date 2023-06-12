@@ -1,10 +1,8 @@
 package web.path;
 
 import struct.Flashcard;
-import struct.MultipleChoice;
 import struct.QuizItem;
 import struct.QuizProgress;
-import struct.User;
 import utility.Pair;
 import web.HTTPRequest;
 import web.HTTPResponse;
@@ -38,6 +36,7 @@ public class QuizGetNextQuestion extends WebPage implements HTTPPath {
         if(credentials == null) {
             return new HTTPResponse().setStatus(303).setHeaderField("Location", "/login");
         }
+
         HTTPResponse response = new HTTPResponse().setStatus(200)
                 .setHeaderField("Content-Type", HTTPResponse.contentType("html"));
 

@@ -23,12 +23,11 @@ public class StartQuiz implements HTTPPath {
     public HTTPResponse processRequest(HTTPRequest request, Server server) {
         Pair<String, String> credentials = server.checkSessionID(request);
         if(credentials == null) {
-            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/home");
+            return new HTTPResponse().setStatus(303).setHeaderField("Location", "/login");
         }
 
         String path = request.getPathWithoutQueryString();
         String idRaw = path.substring("/quiz/".length(), path.length()-"/start".length());
-
 
         server.startQuiz(credentials.first(), Integer.parseInt(idRaw));
 
