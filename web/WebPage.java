@@ -9,7 +9,7 @@ import utility.Pair;
  * {@code WebComponent} or an HTML string representing a completed tag)
  * Contains common functionality for all webpages.
  *
- * @author Ricky Qin
+ * @author Ricky Qin, Sherwin Okhowat
  */
 public class WebPage implements WebComponent {
 
@@ -70,18 +70,21 @@ public class WebPage implements WebComponent {
             System.out.println("The header shouldn't be added before the user has been logged in.");
             return;
         } else {
-            String signOutButtonStyle = "background-color: #F2F2F2; color: black; padding: 10px; text-decoration: none; border: 1px solid black; align-self: start;";
+            String buttonStyle = "background-color: #F2F2F2; color: black; margin-top: 4px; padding: 10px; text-decoration: none; border: 1px solid black; align-self: start; width: 120px;";
 
-            // header
+
             appendBodyComponents("<div style='display: flex; justify-content: space-between; width: 100%; padding: 20px;'>",
                     "<a href='/home'><img src='/images/logo.png' style='width: 340px; height: auto;'></a>",
                     "<div style='text-align: right; font-size: 1.5em; padding-top: 35px; padding-right: 35px;'>" + credentials.first() + "</div>",
-                    new Hyperlink("/signout", "Sign Out", false).setStyle(signOutButtonStyle),
-                    "</div>");
-            // line
+                    "<div class='button-container' style='display: flex; flex-direction: column;'>",
+                    new Hyperlink("/signout", "Sign Out", false).setStyle(buttonStyle),
+                    new Hyperlink("/account-settings", "Account Settings", false).setStyle(buttonStyle),
+                    "</div></div>");
+
             appendBodyComponents("<hr style='border: 2px solid black; width: 100%;'>");
         }
     }
+
 
     /**
      * Sets the "style" attribute of the body of this WebPage

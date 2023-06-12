@@ -30,16 +30,15 @@ public class AccountSettingsPage extends WebPage implements HTTPPath {
         addHeader(request, server);
 
         appendBodyComponents(
-                "<h2>Change Username</h2>",
-                "<form style='display: flex; flex-direction: column; width: 200px; margin-top: 50px; padding: 20px;' action='/account-settings/change-username-submit' method='POST'>",
+                "<h3 style='margin: 0; padding-top: 0;'>Change Username</h3>",
+                "<form style='display: flex; flex-direction: column; width: 200px; padding: 3px;' action='/account-settings/change-username-submit' method='POST'>",
                 "<input type='text' id='newUsername' name='newUsername' minlength='3'; placeholder='New Username'>",
                 "<input type='password' id='password' name='password' placeholder='Password'>",
                 "<input type='submit' value='Change Username'>",
                 "</form>",
 
-                "<h2>Change Password</h2>",
-                "<form style='display: flex; flex-direction: column; width: 200px; margin-top: 50px; padding: 20px;' action='/account-settings/change-password-submit' method='POST'>",
-                "<input type='text' id='username' name='username' placeholder='Username'>",
+                "<h3 style='margin: 0; padding-top: 0;'>Change Password</h3>",
+                "<form style='display: flex; flex-direction: column; width: 200px; padding: 3px;' action='/account-settings/change-password-submit' method='POST'>",
                 "<input type='password' id='oldPassword' name='oldPassword' placeholder='Old Password'>",
                 "<input type='password' id='newPassword' name='newPassword' minlength='3'; placeholder='New Password'>",
                 "<input type='submit' value='Change Password'>",
