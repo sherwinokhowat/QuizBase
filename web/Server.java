@@ -3,7 +3,7 @@ package web;
 import manager.QuizManager;
 import manager.UserManager;
 import utility.Pair;
-import web.path.*;
+import web.path.*; // can we use * here?
 
 import java.util.ArrayList;
 import java.util.HashMap;

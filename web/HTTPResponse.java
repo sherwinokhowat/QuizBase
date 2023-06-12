@@ -129,7 +129,7 @@ public class HTTPResponse {
     /**
      * Writes and flushes this HTTP Response to the output stream
      *
-     * @param output
+     * @param output the output stream.
      */
     public void writeResponse(DataOutputStream output) {
         try {

@@ -9,7 +9,7 @@ import utility.Pair;
  * {@code WebComponent} or an HTML string representing a completed tag)
  * Contains common functionality for all webpages.
  *
- * @author Ricky Qin and Sherwin Okhowat
+ * @author Ricky Qin, Avery Chan and Sherwin Okhowat
  */
 public class WebPage implements WebComponent {
 
@@ -60,7 +60,7 @@ public class WebPage implements WebComponent {
 
     /**
      * Adds the header to the web page.
-     * @param request
+     * @param request 
      * @param server
      */
     public void addHeader(HTTPRequest request, Server server) {
@@ -88,7 +88,7 @@ public class WebPage implements WebComponent {
 
 
     /**
-     * Sets the "style" attribute of the body of this WebPage
+     * Sets the "style" attribute of the body of this WebPage. Used for general style rules, not for one specific element.
      *
      * @param style The style
      * @return This WebPage
@@ -99,6 +99,10 @@ public class WebPage implements WebComponent {
         return this;
     }
 
+    /**
+     * Returns the HTML code that makes up the website.
+     * @return the HTML code that makes up the website.
+     */
     @Override
     public String toHTMLString() {
         StringBuilder str = new StringBuilder();
