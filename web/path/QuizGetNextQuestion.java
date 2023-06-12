@@ -58,7 +58,7 @@ public class QuizGetNextQuestion extends WebPage implements HTTPPath {
             if(quizItem instanceof Flashcard) {
                 appendBodyComponents("<script>",
                         "function showAnswer() {\r\n" + //
-                        "    document.getElementById(\"solution\").style.display = \"block\";\r\n" + //
+                        "    document.getElementById(\"solution\").style.display = \"block\";\r\n" + "    document.getElementById(\"feedback\").style.display = \"block\";\r\n" + //
                         "}",
                         "</script>");
             }
