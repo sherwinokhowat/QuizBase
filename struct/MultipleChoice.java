@@ -16,20 +16,19 @@ public class MultipleChoice extends QuizItem {
     private int correctIndex;
 
     /**
-     * Constructor for a multiple choice quiz item
+     * Constructs a MultipleChoice QuizItem
      *
-     * @param id           the multiple choice question's id
-     * @param frequency    the frequency in which this multiple choice question
-     *                     should appear
-     * @param question     the multiple choice question
-     * @param answerTwo    the second answer option
-     * @param answerThree  the third answer option
-     * @param answerFour   the fourth answer option
-     * @param correctIndex the correct index of the answer in the array
+     * @param id The ID of this MultipleChoice QuizItem
+     * @param question The question
+     * @param answerOne The first answer option
+     * @param answerTwo The second answer option
+     * @param answerThree The third answer option
+     * @param answerFour The fourth answer option
+     * @param correctIndex The correct index of the answer
      */
-    public MultipleChoice(int id, int quizID, String question, String answerOne, String answerTwo,
+    public MultipleChoice(int id, String question, String answerOne, String answerTwo,
             String answerThree, String answerFour, int correctIndex) {
-        super(id, quizID);
+        super(id);
         this.question = question;
         this.answerOptions = new String[4];
         this.answerOptions[0] = answerOne;
@@ -38,18 +37,6 @@ public class MultipleChoice extends QuizItem {
         this.answerOptions[3] = answerFour;
         this.correctIndex = correctIndex;
     }
-
-    /**
-     * Sets the correct index of the answer
-     *
-     * @param index the correct index of the answer
-     */
-    public void setCorrectIndex(int index) {
-        if (index < 4 && index >= 0) {
-            this.correctIndex = index;
-        }
-    }
-
 
 
     /**
@@ -61,22 +48,7 @@ public class MultipleChoice extends QuizItem {
         return this.correctIndex;
     }
 
-    /**
-     * Returns the array of answer options
-     *
-     * @return the array of answer options
-     */
-    public String[] getAnswerOptions() {
-        return this.answerOptions;
-    }
 
-    /**
-     * Gets the question
-     * @return the question
-     */
-    public String getQuestion() {
-        return question;
-    }
 
     /**
      * Converts the component to an HTML string
@@ -99,7 +71,12 @@ public class MultipleChoice extends QuizItem {
         return html.toString();
     }
 
-    @Override
+    /**
+     * Cannot set style of MultipleChoice as it is already determined. This method does not do anything.
+     *
+     * @param style The Style
+     * @return This MultipleChoice QuizItem
+     */
     public WebComponent setStyle(String style) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setStyle'");

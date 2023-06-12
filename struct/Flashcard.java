@@ -14,36 +14,18 @@ public class Flashcard extends QuizItem {
     private String answer;
 
     /**
-     * Constructor for a flashcard
+     * Constructs a Flashcard
      *
-     * @param id the flashcard's id
-     * @param frequency the frequency in which this flashcard should appear
-     * @param question the question this flashcard bears
-     * @param answer the answer this flashcard bears
+     * @param id The ID of the QuizItem
+     * @param question The question
+     * @param answer The answer
      */
-    public Flashcard(int id, int quizID, String question, String answer) {
-        super(id, quizID);
+    public Flashcard(int id, String question, String answer) {
+        super(id);
         this.question = question;
         this.answer = answer;
     }
 
-    /**
-     * Returns the question that this flashcard bears
-     *
-     * @return the question
-     */
-    public String getQuestion() {
-        return this.question;
-    }
-
-    /**
-     * Returns the answer that this flashcard bears
-     *
-     * @return the answer
-     */
-    public String getAnswer() {
-        return this.answer;
-    }
 
     /**
      * Converts the component to an HTML string
@@ -73,9 +55,14 @@ public class Flashcard extends QuizItem {
         // so the user will have to press "Show Answer", which will show the answer, as well as a 'Incorrect'/'Correct' slider
     }
 
+    /**
+     * Cannot set style of Flashcard as it is already determined. This method does not do anything.
+     *
+     * @param style The Style
+     * @return This Flashcard
+     */
     @Override
     public WebComponent setStyle(String style) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setStyle'");
+        return this;
     }
 }

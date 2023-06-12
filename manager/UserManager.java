@@ -83,7 +83,7 @@ public class UserManager extends DatabaseManager {
                 int id = rs.getInt("ID");
                 String username = rs.getString("USERNAME");
 
-                User user = new User(id, username, this);
+                User user = new User(id, username);
                 list.add(user);
             }
             result.second().close();

@@ -10,19 +10,16 @@ import manager.UserManager;
 public class User {
     private String username;
     private int id;
-    private UserManager userManager;
 
     /**
-     * Default constructor for a user
+     * Constructs a User object
      *
      * @param id the unique id
      * @param username the user's username
-     * @param manager the user manager
      */
-    public User(int id, String username, UserManager userManager) {
+    public User(int id, String username) {
         this.id = id;
         this.username = username;
-        this.userManager = userManager;
     }
 
     /**

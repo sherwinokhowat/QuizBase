@@ -238,14 +238,14 @@ public class QuizManager extends DatabaseManager {
                 String question = rs.getString("QUESTION");
                 if(type == FLASHCARD) {
                     String answer = rs.getString("OPTION_1");
-                    items.add(new Flashcard(id, quizID, question, answer));
+                    items.add(new Flashcard(id, question, answer));
                 } else if (type == MULTIPLE_CHOICE) {
                     String option1 = rs.getString("OPTION_1");
                     String option2 = rs.getString("OPTION_2");
                     String option3 = rs.getString("OPTION_3");
                     String option4 = rs.getString("OPTION_4");
                     int answer = rs.getInt("CORRECT_ANSWER");
-                    items.add(new MultipleChoice(id, quizID, question, option1, option2, option3, option4, answer));
+                    items.add(new MultipleChoice(id, question, option1, option2, option3, option4, answer));
                 }
             }
             resultQuiz.second().close();
