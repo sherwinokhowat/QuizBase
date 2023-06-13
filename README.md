@@ -1,10 +1,1 @@
-# QuizBase
-
-For Windows, run the following commands on the command line:
-
-```
-dir src /b /s *.java > sources.txt
-javac -d ./out/ @sources.txt
-cd out
-java -cp ".;../sqlite-jdbc-3.21.0.jar" Main
-```
+This project is a web-based quiz application (similar to Quizlet), built with a server-side focus that utilizes multi-threading for efficient request handling and stores information regarding to Users, Quizzes, QuizItems, and more using SQL database.
